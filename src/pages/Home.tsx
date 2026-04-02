@@ -49,22 +49,22 @@ const Home = () => {
   const contactRef = useScrollAnimation();
 
   const achievements = [
-    { image: '/achieve.jpeg',       title: 'Academic Excellence',  description: '98% pass rate with distinction in board examinations' },
-    { image: '/achieve1.jpeg',    description: 'State-level winners in basketball and athletics' },
-    { image: '/achieve2.jpeg',     title: 'Science Fair Winners', description: 'National recognition in innovation and research' },
-    { image: '/achieve3.jpeg',     title: 'Board Results',        description: 'Top 10 school in the region for 5 consecutive years' },
-    { image: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800',     title: 'Leadership Program',   description: "Develop tomorrow's leaders" },
-    { image: 'https://images.pexels.com/photos/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=800',     title: 'Community Impact',     description: 'Social responsibility initiatives' },
-  ];
+  { image: '/achieve.jpeg',  title: 'NAFED Agriculture Pledge',   description: 'Certified by NAFED & MyGov for supporting Cooperative Agriculture — January 2026' },
+  { image: '/achieve1.jpeg', title: 'Javelin Champion',           description: 'Student Sanikumar Sav won 2nd place at taluka-level Javelin competition, featured in Dainik Sakal & Pudhari' },
+  { image: '/achieve2.jpeg', title: 'Hindi Olympiad Excellence',  description: 'Students excelled in national Hindi Olympiad, proving rural students compete at par with city schools' },
+  { image: '/achieve3.jpeg', title: 'Blood Donation Pledge',      description: 'Certified by NBTC & Ministry of Health for promoting voluntary blood donation culture' },
+  { image: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800', title: 'Leadership Program',  description: "Developing tomorrow's leaders through quality education" },
+  { image: 'https://images.pexels.com/photos/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=800', title: 'Community Impact',   description: 'Active social responsibility and community outreach initiatives' },
+];
 
   const activities = [
-    { image: '/activity.jpeg',  title: 'Sports & Athletics',   description: 'State-of-the-art facilities for various sports' },
-    { image: '/activity2.jpeg',                       title: 'Science Labs',         description: 'Modern laboratories for hands-on learning' },
-    { image: '/activity3.jpeg',                     title: 'Cultural Events',      description: 'Annual festivals and talent showcases' },
-    { image: '/activity4.jpeg',                     title: 'Community Service',    description: 'Regular outreach and social initiatives' },
-    { image: 'https://images.pexels.com/photos/5582863/pexels-photo-5582863.jpeg?auto=compress&cs=tinysrgb&w=800',                     title: 'Art & Creativity',     description: 'Express yourself through art' },
-    { image: 'https://images.pexels.com/photos/3808517/pexels-photo-3808517.jpeg?auto=compress&cs=tinysrgb&w=800',                     title: 'Music & Performances', description: 'Showcase your talents' },
-  ];
+  { image: '/activity.jpeg',  title: 'Best from Waste',       description: 'Students crafted creative objects from waste, showcasing innovation and environmental responsibility' },
+  { image: '/activity2.jpeg', title: 'Health & Medical Camp', description: 'Free medical checkup camp organized for all students by visiting healthcare professionals' },
+  { image: '/activity3.jpeg', title: 'Constitution Day — Art',description: 'Drawing competition celebrating भारतीय संविधान दिन with student artwork on national themes' },
+  { image: '/activity4.jpeg', title: 'Constitution Day Speech',description: 'Students delivered speeches and cultural performances on भारतीय संविधान दिन, 26 November 2025' },
+  { image: 'https://images.pexels.com/photos/5582863/pexels-photo-5582863.jpeg?auto=compress&cs=tinysrgb&w=800', title: 'Art & Creativity',      description: 'Students express creativity through art, craft and cultural activities' },
+  { image: 'https://images.pexels.com/photos/3808517/pexels-photo-3808517.jpeg?auto=compress&cs=tinysrgb&w=800', title: 'Music & Performances', description: 'Annual talent showcases and cultural performances by students' },
+];
 
   const admissionSteps = [
     { number: '01', title: 'Application Form',        description: 'Fill out the online admission form with required details',    icon: BookOpen },
@@ -183,11 +183,13 @@ const Home = () => {
             <div className="float-b absolute bottom-32 right-16 w-48 h-48 rounded-full bg-red-300/10 blur-2xl pointer-events-none"></div>
             <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
               <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
-                Welcome to Manpadale Highschool
+                Welcome to Manpadle Highschool, Manpadle
               </h1>
-              <p className="hero-sub text-xl md:text-2xl mb-8 text-red-100">
-                Nurturing Minds, Building Futures
-              </p>
+<p className="hero-sub text-xl md:text-2xl mb-8 text-red-100">
+  <b>न हि ज्ञानेन सदृशं पवित्रमिह विद्यते।</b> <br />
+  <b>Our goal is to nurture students into cultured, value-driven, and exemplary personalities.</b>
+</p>
+
               <div className="hero-btns flex flex-col sm:flex-row gap-4 justify-center">
                 <Button onClick={() => navigate('/admission')}>
                   Apply for Admission
@@ -220,11 +222,10 @@ const Home = () => {
                   </span>
                 </div>
                 <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  About Manpadale Highschool
+                  About Manpadle Highschool
                 </h2>
                 <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                  Our school is a community-driven educational institute in the rural, mountainous region of Manpadale. We focus on holistic development — intellectual, physical, emotional, moral, and social growth of every student.
-                </p>
+                  Welcome to <b>Manpadle Highschool</b> — a place where every child is known, cared for, and encouraged to do their best. Manpadale Highschool was started to give good education to children  in our village and nearby areas. Our school runs from Class 5 to 10  and is managed by <b>Late Buvasaheb Patil Shikshan Prasarak Mandal</b>,  Manpadale and awarded with the <b>Dalit Mitra Puraskar</b>. We believe every child deserves a chance to study. That is why we  provide <b>free admission</b>, <b>free uniform</b>, and <b>free books</b> to all students.  Our teachers work hard every day to help each child grow and succeed. here change the starting</p>
                 <div className="grow-line h-0.5 bg-red-200 mx-auto mb-8 rounded-full"></div>
                 <Button onClick={() => navigate('/about')} variant="outline">
                   Know More About Us
@@ -328,7 +329,7 @@ const Home = () => {
                         <img
                           src={achievement.image}
                           alt={achievement.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                          className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-1000"
                         />
                       </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-800/75 via-gray-800/10 to-transparent flex items-end p-5">
@@ -377,7 +378,7 @@ const Home = () => {
                         <img
                           src={activity.image}
                           alt={activity.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                          className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-1000"
                         />
                       </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-800/75 via-gray-800/10 to-transparent flex items-end p-5">

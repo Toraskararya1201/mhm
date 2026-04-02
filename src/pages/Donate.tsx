@@ -330,33 +330,59 @@ const Donate = () => {
       <div className="min-h-screen pt-20 bg-slate-50">
 
         {/* 1. HERO */}
-        <section className="relative py-24 bg-gradient-to-br from-red-700 to-red-900 text-white overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <div className="slide1 absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1600')` }} />
-            <div className="slide2 absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&q=80&w=1600')` }} />
-            <div className="slide3 absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=1600')` }} />
-            <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-red-900/50" />
-          </div>
+<section className="relative py-24 bg-gradient-to-br from-red-700 to-red-900 text-white overflow-hidden">
+  <div className="absolute inset-0 z-0">
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <Heart className="w-16 h-16 mx-auto mb-6 text-pink-300 heart-beat" />
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 hero-title drop-shadow-lg">
-              Support Our <span className="text-red-200">Mission</span>
-            </h1>
-            <p className="text-xl text-gray-100 max-w-3xl mx-auto hero-sub mb-8 drop-shadow">
-              Your contribution helps us provide quality education and create opportunities for deserving students
-            </p>
-            <div className="hero-btn">
-              <button onClick={scrollToForm} className="hero-cta-btn">
-                <span>Express Your Interest</span>
-                <span>→</span>
-              </button>
-            </div>
-          </div>
+    {/* Slide 1 */}
+    <div className="slide1 absolute inset-0">
+      <img
+        src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1600"
+        alt="Students learning"
+        className="w-full h-full object-cover object-top"
+      />
+    </div>
 
-          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 pulse-blob"></div>
-          <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-red-400 rounded-full mix-blend-multiply filter blur-3xl opacity-10 pulse-blob"></div>
-        </section>
+    {/* Slide 2 */}
+    <div className="slide2 absolute inset-0">
+      <img
+        src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&q=80&w=1600"
+        alt="Classroom"
+        className="w-full h-full object-cover object-top"
+      />
+    </div>
+
+    {/* Slide 3 */}
+    <div className="slide3 absolute inset-0">
+      <img
+        src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=1600"
+        alt="School building"
+        className="w-full h-full object-cover object-top"
+      />
+    </div>
+
+    {/* Overlay */}
+    <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-red-900/50" />
+  </div>
+
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+    <Heart className="w-16 h-16 mx-auto mb-6 text-pink-300 heart-beat" />
+    <h1 className="text-4xl md:text-5xl font-bold mb-6 hero-title drop-shadow-lg">
+      Support Our <span className="text-red-200">Mission</span>
+    </h1>
+    <p className="text-xl text-gray-100 max-w-3xl mx-auto hero-sub mb-8 drop-shadow">
+      Your contribution helps us provide quality education and create opportunities for deserving students
+    </p>
+    <div className="hero-btn">
+      <button onClick={scrollToForm} className="hero-cta-btn">
+        <span>Express Your Interest</span>
+        <span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 pulse-blob"></div>
+  <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-red-400 rounded-full mix-blend-multiply filter blur-3xl opacity-10 pulse-blob"></div>
+</section>
 
         {/* 2. WHY YOUR SUPPORT MATTERS */}
         <section className="py-16 bg-white">
@@ -366,7 +392,7 @@ const Donate = () => {
                 Why Your Support Matters
               </h2>
               <div className="space-y-4 text-lg text-gray-600 leading-relaxed">
-                <p>At Greenfield High School, we believe that quality education should be accessible to all students, regardless of their financial background. Your generous donations help us bridge the gap and create equal opportunities for every child to excel.</p>
+                <p>At Manpadle High School, we believe that quality education should be accessible to all students, regardless of their financial background. Your generous donations help us bridge the gap and create equal opportunities for every child to excel.</p>
                 <p>Over the years, contributions from alumni, parents, and well-wishers have enabled us to provide scholarships to deserving students, upgrade our facilities, and introduce innovative learning programs. Every donation, big or small, makes a tangible difference in a student's life.</p>
                 <p>We maintain complete transparency in how donations are utilized. Annual reports detailing fund allocation and impact are shared with all donors, ensuring your trust in our commitment to educational excellence.</p>
               </div>
@@ -451,7 +477,7 @@ const Donate = () => {
                     </p>
                     <p className="text-gray-400 text-sm mt-2">
                       For urgent enquiries, call us at{' '}
-                      <a href="tel:+911234567890" className="text-red-600 font-semibold hover:underline">+91 12345 67890</a>{' '}
+                      <a href="tel:+91 9657630464 | +91 9527794050" className="text-red-600 font-semibold hover:underline">+91 12345 67890</a>{' '}
                       or email{' '}
                       <a href="mailto:donations@greenfieldhigh.com" className="text-red-600 font-semibold hover:underline">donations@greenfieldhigh.com</a>
                     </p>
@@ -600,7 +626,7 @@ const Donate = () => {
                 </a>
                 <a href="tel:+911234567890" className="flex items-center justify-center px-6 py-3 bg-white rounded-xl shadow hover:shadow-lg transition-all border border-red-100">
                   <Phone className="w-5 h-5 mr-2 text-red-600" />
-                  <span className="font-medium text-gray-900">+91 12345 67890</span>
+                  <span className="font-medium text-gray-900">+91 9657630464 | +91 9527794050</span>
                 </a>
               </div>
             </div>

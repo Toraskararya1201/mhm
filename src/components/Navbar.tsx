@@ -178,7 +178,7 @@ const Navbar = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-lg md:text-xl font-bold text-gray-900">
-                Manpadale Highschool Manpadale
+                Manpadle Highschool Manpadle
               </span>
               <span className="text-xs text-gray-600 hidden sm:block">
                 Excellence in Education

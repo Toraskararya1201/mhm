@@ -120,9 +120,9 @@ const Admission = () => {
   };
 
   const steps = [
-    { icon: FileText, title: 'Fill Application Form', description: 'Complete the online admission form with accurate information.', ref: step1Ref },
-    { icon: CheckCircle, title: 'Document Verification', description: 'Submit required documents including birth certificate and records.', ref: step2Ref },
-    { icon: MessageSquare, title: 'Enrollment Confirmation', description: 'Complete formalities and receive your confirmation.', ref: step3Ref },
+    { icon: FileText,      title: 'Fill Application Form',    description: 'Complete the online admission form with accurate information.',             ref: step1Ref },
+    { icon: CheckCircle,   title: 'Document Verification',    description: 'Submit required documents including birth certificate and records.',        ref: step2Ref },
+    { icon: MessageSquare, title: 'Enrollment Confirmation',  description: 'Complete formalities and receive your confirmation.',                       ref: step3Ref },
   ];
 
   const requirements = [
@@ -134,11 +134,11 @@ const Admission = () => {
   ];
 
   const importantDates = [
-    { event: 'Admission Opens', date: 'January 15, 2024' },
-    { event: 'Application Deadline', date: 'March 31, 2024' },
-    { event: 'Entrance Test', date: 'April 10-15, 2024' },
-    { event: 'Results Announcement', date: 'April 25, 2024' },
-    { event: 'Admission Confirmation', date: 'May 1-15, 2024' },
+    { event: 'Admission Opens',        date: 'June 1, 2026' },
+    { event: 'Application Deadline',   date: 'June 15, 2026' },
+    { event: 'Entrance Test',          date: 'June 20, 2026' },
+    { event: 'Results Announcement',   date: 'June 25, 2026' },
+    { event: 'Admission Confirmation', date: 'June 30, 2026' },
   ];
 
   return (
@@ -216,7 +216,6 @@ const Admission = () => {
         .animate-in-view .list-item:nth-child(4) { transition-delay: 0.35s; }
         .animate-in-view .list-item:nth-child(5) { transition-delay: 0.45s; }
 
-        /* ── Process card hover effects ── */
         .process-card {
           position: relative;
           overflow: hidden;
@@ -236,9 +235,7 @@ const Admission = () => {
           box-shadow: 0 24px 48px -8px rgba(220,38,38,0.18), 0 8px 16px -4px rgba(0,0,0,0.08);
           background-color: #fff7f7;
         }
-        .process-card:hover::before {
-          opacity: 1;
-        }
+        .process-card:hover::before { opacity: 1; }
         .process-card .card-icon-wrap {
           transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), background-color 0.3s ease, box-shadow 0.3s ease;
         }
@@ -247,55 +244,43 @@ const Admission = () => {
           background-color: #b91c1c;
           box-shadow: 0 8px 20px rgba(185,28,28,0.35);
         }
-        .process-card .card-number {
-          transition: color 0.3s ease, transform 0.3s ease;
-        }
-        .process-card:hover .card-number {
-          color: #fecaca;
-          transform: scale(1.1);
-        }
-        .process-card .card-title {
-          transition: color 0.3s ease;
-        }
-        .process-card:hover .card-title {
-          color: #dc2626;
-        }
+        .process-card .card-number { transition: color 0.3s ease, transform 0.3s ease; }
+        .process-card:hover .card-number { color: #fecaca; transform: scale(1.1); }
+        .process-card .card-title { transition: color 0.3s ease; }
+        .process-card:hover .card-title { color: #dc2626; }
         .process-card .card-bottom-bar {
           position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 0%;
-          height: 4px;
+          bottom: 0; left: 0;
+          width: 0%; height: 4px;
           background: linear-gradient(90deg, #dc2626, #f87171);
           border-radius: 0 0 0.75rem 0.75rem;
           transition: width 0.4s ease;
         }
-        .process-card:hover .card-bottom-bar {
-          width: 100%;
-        }
+        .process-card:hover .card-bottom-bar { width: 100%; }
       `}</style>
 
       <div className="min-h-screen pt-20 bg-slate-50">
 
         {/* 1. HERO */}
-        <section className="relative py-20 bg-gradient-to-br from-red-700 to-red-900 text-white overflow-hidden">
+        <section className="relative py-14 bg-gradient-to-br from-red-700 to-red-900 text-white overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 hero-title">Admissions 2024-25</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 hero-title">Admissions</h1>
             <p className="text-xl text-red-100 max-w-3xl mx-auto hero-sub">
-              Begin your educational journey with Greenfield High School
+              Begin your educational journey with{' '}
+              <span className="notranslate" translate="no">Manpadle High School</span>
             </p>
           </div>
           <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 pulse-blob"></div>
         </section>
 
         {/* 2. OVERVIEW */}
-        <section className="py-16 bg-white">
+        <section className="py-10 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mb-10">
               <div ref={overviewRef as any} className="scroll-left">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6 border-l-4 border-red-600 pl-4">Admission Overview</h2>
-                <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                  Greenfield High School welcomes applications from students seeking admission. Our process is designed to be transparent, fair, and inclusive.
+                <h2 className="text-3xl font-bold text-gray-900 mb-4 border-l-4 border-red-600 pl-4">Admission Overview</h2>
+                <p className="text-lg text-gray-600 leading-relaxed mb-4">
+                  <span className="notranslate" translate="no">Manpadle High School</span> welcomes applications from students seeking admission. Our process is designed to be transparent, fair, and inclusive.
                 </p>
                 <p className="text-lg text-gray-600 leading-relaxed">
                   We assess students based on their academic potential and alignment with our school's values.
@@ -311,7 +296,7 @@ const Admission = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div ref={docsRef as any} className="scroll-left bg-red-50 rounded-2xl p-8 border border-red-100 shadow-sm">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
                   <FileText className="w-6 h-6 mr-3 text-red-600" /> Required Documents
@@ -343,10 +328,10 @@ const Admission = () => {
         </section>
 
         {/* 3. APPLICATION PROCESS */}
-        <section className="py-16 bg-slate-50">
+        <section className="py-10 bg-slate-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div ref={processTitle as any} className="scroll-animate text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Application Process</h2>
+            <div ref={processTitle as any} className="scroll-animate text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Application Process</h2>
               <p className="text-gray-600">Follow these three steps to secure enrollment</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -356,9 +341,7 @@ const Admission = () => {
                   ref={step.ref as any}
                   className={`process-card scroll-animate delay-${(index + 1) * 100} bg-white rounded-xl p-8 shadow-md h-full flex flex-col`}
                 >
-                  {/* Animated bottom bar */}
                   <div className="card-bottom-bar"></div>
-
                   <div className="flex items-center justify-between mb-4">
                     <span className="card-number text-4xl font-bold text-red-50 inline-block">
                       {String(index + 1).padStart(2, '0')}
@@ -376,16 +359,15 @@ const Admission = () => {
         </section>
 
         {/* 4. ENQUIRY FORM */}
-        <section className="py-16 bg-white">
+        <section className="py-10 bg-white">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div ref={formRef as any} className="scroll-animate">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Admission Enquiry Form</h2>
+              <div className="text-center mb-6">
+                <h2 className="text-3xl font-bold text-gray-900 mb-3">Admission Enquiry Form</h2>
                 <p className="text-gray-600">Submit your details and we will get back to you soon.</p>
               </div>
               <div className="bg-red-50 rounded-3xl shadow-2xl p-8 border border-gray-100">
 
-                {/* SUCCESS */}
                 {submitStatus === 'success' ? (
                   <div className="text-center py-12">
                     <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm success-icon">
@@ -397,12 +379,12 @@ const Admission = () => {
                     </p>
                     <p className="text-gray-400 text-sm mt-2">
                       For urgent enquiries, call us at{' '}
-                      <a href="tel:+911234567890" className="text-red-600 font-semibold hover:underline">
-                        +91 12345 67890
+                      <a href="tel:+919657630464" className="text-red-600 font-semibold hover:underline">
+                        +91 9657630464 | +91 9527794050
                       </a>{' '}
                       or email{' '}
-                      <a href="mailto:admissions@greenfieldhigh.com" className="text-red-600 font-semibold hover:underline">
-                        admissions@greenfieldhigh.com
+                      <a href="mailto:admissions@manpadale.edu.in" className="text-red-600 font-semibold hover:underline">
+                        admissions@manpadale.edu.in
                       </a>
                     </p>
                     <AutoReset key={resetKey} onReset={handleReset} />
@@ -506,6 +488,7 @@ const Admission = () => {
             </div>
           </div>
         </section>
+
       </div>
     </>
   );
