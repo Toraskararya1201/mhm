@@ -19,21 +19,22 @@ function useReveal(options = {}) {
 
 const About = () => {
   const facilities = [
-    { icon: BookOpen,     title: 'Smart Classrooms', description: 'Interactive digital boards for enhanced learning.' },
-    { icon: Library,      title: 'Digital Library',  description: 'Extensive collection of global journals and resources.' },
-    { icon: FlaskConical, title: 'Science Labs',      description: 'Well-equipped Physics, Chemistry, and Biology labs.' },
-    { icon: Dumbbell,     title: 'Sports Complex',    description: 'Multi-sport facility including athletics track.' },
-    { icon: Monitor,      title: 'Computer Lab',      description: 'High-speed internet and latest software.' },
-    { icon: Users,        title: 'Auditorium',        description: 'Modern space for performances and gatherings.' },
-  ];
+  { icon: BookOpen,     title: 'Free Education',          description: 'Free admission, uniforms, and textbooks for all students.' },
+  { icon: Monitor,      title: 'Digital Classrooms',      description: 'Digital learning support integrated into every classroom.' },
+  { icon: Target,       title: 'Academic Guidance',       description: 'Regular tests and personal attention to every student.' },
+  { icon: FlaskConical, title: 'Scholarship Preparation', description: 'Dedicated prep for NMMS and other scholarship exams.' },
+  { icon: Eye,          title: 'Student Safety',          description: 'CCTV surveillance ensuring a secure campus environment.' },
+  { icon: Dumbbell,     title: 'Sports & Physical Training', description: 'Regular sports activities and physical training sessions.' },
+  { icon: Users,        title: 'Cultural Programs',       description: 'Festivals, educational tours, and personality development sessions.' },
+  { icon: BookOpen,     title: 'Awareness Activities',    description: 'Social awareness programs and community outreach events.' },
+];
 
   const faculty = [
-    { name: 'Dr. Sarah Mitchell',   subject: 'Principal',     qualification: 'Ph.D. in Education' },
-    { name: 'Prof. James Anderson', subject: 'Mathematics',   qualification: 'M.Sc. Mathematics' },
-    { name: 'Dr. Emily Roberts',    subject: 'Science',       qualification: 'Ph.D. in Physics' },
-    { name: 'Mr. David Chen',       subject: 'English',       qualification: 'M.A. English Literature' },
-    { name: 'Ms. Priya Sharma',     subject: 'Social Studies',qualification: 'M.A. History' },
-    { name: 'Mr. Robert Wilson',    subject: 'P.E. Trainer',  qualification: 'M.P.Ed.' },
+    { name: 'Shri Patil A.A.',   subject: 'Principal',     qualification: 'B.A., B.Ed. in Education' },
+    { name: 'Shrimati Patil D.S.', subject: 'Teacher',   qualification: 'M.Sc., B.Ed. in Education' },
+    { name: 'Sau. Gujar S.G.',    subject: 'Teacher',       qualification: 'M.A., B.Ed. in Education' },
+    { name: 'Shrimati Kamble P.R.',  subject: 'Teacher',       qualification: 'B.A., B.Ed. in Education' },
+    { name: 'Sau. Khot S.K.',     subject: 'Teacher',qualification: 'M.A., B.Ed. in Education' },
   ];
 
   /* individual reveal refs */
@@ -131,7 +132,7 @@ const About = () => {
           </div>
 
           {/* ── HEADER ── */}
-          <section className="relative pt-12 pb-12 z-10">
+          <section className="relative pt-8 pb-8 z-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div ref={heroRef} className="text-center">
                 <span className="hero-badge inline-block text-red-700 font-black uppercase tracking-[0.5em] text-[10px] mb-4 opacity-80">
@@ -149,7 +150,7 @@ const About = () => {
           </section>
 
           {/* ── OUR STORY ── */}
-          <section className="pb-24 relative z-10">
+          <section className="pb-14 relative z-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
 
@@ -180,9 +181,8 @@ const About = () => {
                     <span className="bg-red-600 text-white px-4 py-1 inline-block mt-2">Innovation.</span>
                   </h2>
                   <div className="space-y-6 text-gray-700/90 leading-relaxed text-lg tracking-wide font-medium">
-                    <p>Founded in 1985, <span className="text-gray-900 font-bold">Greenfield High School</span> began as a small institution with a big vision: to provide quality education that nurtures both mind and character.</p>
-                    <p>Our journey has been marked by continuous innovation in teaching methodologies and infrastructure development.</p>
-                    <p>Today, we stand proud as an institution that consistently produces outstanding results while maintaining a warm, inclusive environment.</p>
+                    <p>Founded in 1985, <span className="text-gray-900 font-bold">Manpadale High School</span> Manpadale High School, located in the village of Manpadale, Taluka Hatkanangale, District Kolhapur, has been a trusted center of learning for rural students for many years. Our school is run by Ke. Buvasaheb Patil Shikshan Prasarak Mandal, an organization honored with the Dalit Mitra Puraskar for its contribution to education and social development. We offer education from Class 5 to Class 10, with a strong focus on building not just academic knowledge, but also discipline, values, and confidence in every student.</p>
+                    <p>We understand the challenges faced by rural families. That is why we ensure that no child is denied education due to financial limitations. Our goal is to create a supportive environment where every student feels encouraged to learn and grow.</p>
                   </div>
                 </div>
 
@@ -192,7 +192,7 @@ const About = () => {
         </div>
 
         {/* ── VISION & MISSION ── */}
-        <section className="py-12 bg-gray-50/50">
+        <section className="py-8 bg-gray-50/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div ref={visionRef} className="stagger-grid flex flex-col lg:flex-row gap-6 justify-center">
 
@@ -204,7 +204,7 @@ const About = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-base font-black text-gray-900 uppercase tracking-widest mb-1 group-hover:text-red-600 transition-colors">Our Vision</h3>
-                    <p className="text-gray-500 text-[12px] leading-relaxed tracking-wide">To be a leading center of excellence, nurturing future leaders through holistic education and innovation for a better tomorrow.</p>
+                    <p className="text-gray-500 text-[12px] leading-relaxed tracking-wide">To create a supportive and inspiring environment where every student gains knowledge, confidence, and values to shape a better future and contribute meaningfully to society.</p>
                   </div>
                 </div>
               </div>
@@ -217,7 +217,7 @@ const About = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-base font-black text-gray-900 uppercase tracking-widest mb-1 group-hover:text-red-600 transition-colors">Our Mission</h3>
-                    <p className="text-gray-500 text-[12px] leading-relaxed tracking-wide">Providing quality education that balances academic rigor with character building, ensuring every student achieves their full potential.</p>
+                    <p className="text-gray-500 text-[12px] leading-relaxed tracking-wide">To provide quality education to every child while supporting their overall growth and ensuring that no student is held back due to financial or social challenges.</p>
                   </div>
                 </div>
               </div>
@@ -227,10 +227,10 @@ const About = () => {
         </section>
 
         {/* ── FACILITIES ── */}
-        <section className="py-24 bg-white">
+        <section className="py-14 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div ref={facilitiesRef} className="reveal relative mb-20">
+            <div ref={facilitiesRef} className="reveal relative mb-10">
               <span className="absolute -top-12 left-0 text-7xl md:text-9xl font-black text-gray-50 uppercase tracking-tighter select-none -z-0">
                 Campus
               </span>
@@ -241,7 +241,7 @@ const About = () => {
                     <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">Resources</span>
                   </div>
                   <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
-                    World-Class <span className="text-red-600">Facilities.</span>
+                    What We <span className="text-red-600">Offer.</span>
                   </h2>
                 </div>
                 <p className="text-gray-400 text-sm max-w-xs md:text-right font-medium tracking-wide leading-relaxed border-l-2 md:border-l-0 md:border-r-2 border-red-100 pl-4 md:pl-0 md:pr-4">
@@ -267,13 +267,13 @@ const About = () => {
         </section>
 
         {/* ── PRINCIPAL'S MESSAGE ── */}
-        <section className="py-24 bg-[#FDFCF6] relative overflow-hidden">
+        <section className="py-14 bg-[#FDFCF6] relative overflow-hidden">
           <div className="float-a absolute top-0 left-0 w-72 h-72 bg-red-50 rounded-full blur-[100px] opacity-60 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
           <div className="float-b absolute bottom-0 right-0 w-96 h-96 bg-red-50 rounded-full blur-[120px] opacity-50 translate-x-1/3 translate-y-1/3 pointer-events-none"></div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-            <div ref={principalRef} className="reveal flex items-center gap-4 mb-16">
+            <div ref={principalRef} className="reveal flex items-center gap-4 mb-10">
               <div className="grow-line h-[2px] bg-red-600"></div>
               <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">Leadership</span>
             </div>
@@ -295,7 +295,7 @@ const About = () => {
                   <div className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2 mb-4">
                     <span className="text-white/70 text-[10px] font-bold uppercase tracking-[0.4em]">Principal's Desk</span>
                   </div>
-                  <h3 className="text-2xl font-black text-white tracking-tight leading-tight">Dr. Sarah Mitchell</h3>
+                  <h3 className="text-2xl font-black text-white tracking-tight leading-tight">Mr. Arunsingh Patil</h3>
                   <p className="text-red-300 text-[11px] font-bold uppercase tracking-widest mt-1">Principal · Ph.D. in Education</p>
                   <div className="h-[2px] w-10 bg-red-400 mt-4"></div>
                 </div>
@@ -313,10 +313,9 @@ const About = () => {
                 </h2>
                 <Quote className="w-8 h-8 text-red-200 mb-4 flex-shrink-0" />
                 <div className="space-y-5 text-gray-600 leading-relaxed text-[15px] tracking-wide font-medium relative z-10">
-                  <p><span className="text-gray-900 font-bold">Dear Students, Parents and Well-Wishers,</span></p>
-                  <p>At Greenfield, we believe education is far more than marks and milestones. It is about shaping curious minds, compassionate hearts and resilient characters — equipping every student to face a rapidly changing world with confidence and purpose.</p>
-                  <p>Our dedicated faculty, world-class facilities and vibrant community come together each day with one shared goal: to help every child discover their fullest potential. We nurture not just achievers, but thoughtful human beings who lead with integrity and serve with humility.</p>
-                  <p>Every milestone we celebrate here reaffirms our belief that the most powerful investment we can make is in the education of our children.</p>
+                  <p><span className="text-gray-900 font-bold">Dear Students, Parents</span></p>
+                  <p>Education is the strongest tool to change our future, and every child deserves that opportunity. At Manpadale High School, we believe that no dream should stop because of financial difficulties or lack of resources. That is why we provide free admission, books, and uniforms — so every child can learn with dignity and confidence.</p>
+                  <p>To all students, remember that your background does not decide your future — your efforts do. No matter the challenges, keep learning, keep growing, and never lose hope. Our school is always here to guide and support you in every step of your journey.</p>
                 </div>
                 <div className="mt-10 flex items-center gap-5 pt-6 border-t border-gray-100 relative z-10">
                   <div>
@@ -336,16 +335,16 @@ const About = () => {
         </section>
 
         {/* ── FACULTY ── */}
-        <section className="py-24 bg-gray-50/50">
+        <section className="py-14 bg-gray-50/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div ref={facultyHdRef} className="reveal relative mb-24 text-center">
+            <div ref={facultyHdRef} className="reveal relative mb-12 text-center">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-red-50 rounded-full blur-3xl opacity-60 -z-10"></div>
               <div className="inline-block px-4 py-1.5 bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-6 shadow-lg shadow-red-200">
                 Expert Mentors
               </div>
               <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter mb-6">
-                Our Professional <span className="text-red-600">Faculty</span>
+                Our<span className="text-red-600">Faculty</span>
               </h2>
               <div className="flex justify-center items-center gap-4">
                 <div className="h-[1px] w-12 bg-gray-200"></div>
@@ -354,23 +353,77 @@ const About = () => {
               </div>
             </div>
 
-            <div ref={facultyGrdRef} className="stagger-grid flex flex-wrap justify-center gap-8">
-              {faculty.map((teacher, idx) => (
-                <div key={idx} className="card-lift group relative bg-white border border-gray-100 rounded-xl p-6 transition-all duration-300 hover:border-red-600 shadow-sm hover:shadow-xl w-[240px] text-center overflow-hidden">
-                  <div className="absolute top-0 left-0 w-8 h-8">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-red-600 rounded-tr-full"></div>
-                    <div className="absolute top-0 left-0 w-1 h-full bg-red-600 rounded-br-full"></div>
-                  </div>
-                  <div className="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
-                    <Users className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 leading-tight group-hover:text-red-600 transition-colors">{teacher.name}</h3>
-                  <p className="text-red-600 text-[11px] font-bold uppercase tracking-widest mt-1 mb-3">{teacher.subject}</p>
-                  <div className="h-px w-8 bg-gray-200 mx-auto transition-all duration-300 group-hover:w-16 group-hover:bg-red-200"></div>
-                  <p className="text-gray-500 text-[11px] mt-3 italic">{teacher.qualification}</p>
-                </div>
-              ))}
-            </div>
+            <div ref={facultyGrdRef} className="stagger-grid max-w-4xl mx-auto">
+
+  {/* TOP ROW (3 cards) */}
+  <div className="flex justify-center gap-6 flex-wrap mb-8">
+  {faculty.slice(0, 3).map((teacher, idx) => (
+    <div
+      key={idx}
+      className="group relative border border-gray-200 rounded-lg p-5 text-center bg-white transition duration-300 hover:shadow-md hover:border-red-300 h-[220px] w-full max-w-[250px] flex flex-col justify-between"
+    >
+      {/* Corners */}
+      <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-red-500 rounded-tl-lg"></div>
+      <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-red-500 rounded-br-lg"></div>
+
+      {/* Avatar */}
+      <div className="w-14 h-14 mx-auto rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-700 group-hover:bg-red-50 group-hover:text-red-600 transition">
+        {teacher.name.split(' ')[1][0]}
+      </div>
+
+      {/* Name */}
+      <h3 className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition">
+        {teacher.name}
+      </h3>
+
+      {/* Role */}
+      <p className="text-[10px] text-gray-500 uppercase tracking-wide">
+        {teacher.subject}
+      </p>
+
+      {/* Qualification */}
+      <p className="text-xs text-gray-600 leading-tight">
+        {teacher.qualification}
+      </p>
+    </div>
+  ))}
+</div>
+
+  {/* BOTTOM ROW (2 centered cards, SAME SIZE) */}
+  <div className="flex justify-center gap-6">
+    {faculty.slice(3, 5).map((teacher, idx) => (
+      <div
+        key={idx}
+        className="group relative border border-gray-200 rounded-lg p-5 text-center bg-white transition duration-300 hover:shadow-md hover:border-red-300 h-[220px] w-full max-w-[250px] flex flex-col justify-between"
+      >
+        {/* Corners */}
+        <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-red-500 rounded-tl-lg"></div>
+        <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-red-500 rounded-br-lg"></div>
+
+        {/* Avatar */}
+        <div className="w-14 h-14 mx-auto rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-700 group-hover:bg-red-50 group-hover:text-red-600 transition">
+          {teacher.name.split(' ')[1][0]}
+        </div>
+
+        {/* Name */}
+        <h3 className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition">
+          {teacher.name}
+        </h3>
+
+        {/* Role */}
+        <p className="text-[10px] text-gray-500 uppercase tracking-wide">
+          {teacher.subject}
+        </p>
+
+        {/* Qualification */}
+        <p className="text-xs text-gray-600 leading-tight">
+          {teacher.qualification}
+        </p>
+      </div>
+    ))}
+  </div>
+
+</div>
 
           </div>
         </section>
