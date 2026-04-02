@@ -49,19 +49,19 @@ const Home = () => {
   const contactRef = useScrollAnimation();
 
   const achievements = [
-    { image: 'https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=800',       title: 'Academic Excellence',  description: '98% pass rate with distinction in board examinations' },
-    { image: 'https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?auto=compress&cs=tinysrgb&w=800', title: 'Sports Champions',    description: 'State-level winners in basketball and athletics' },
-    { image: 'https://images.pexels.com/photos/2280571/pexels-photo-2280571.jpeg?auto=compress&cs=tinysrgb&w=800',     title: 'Science Fair Winners', description: 'National recognition in innovation and research' },
-    { image: 'https://images.pexels.com/photos/1205651/pexels-photo-1205651.jpeg?auto=compress&cs=tinysrgb&w=800',     title: 'Board Results',        description: 'Top 10 school in the region for 5 consecutive years' },
+    { image: '/achieve.jpeg',       title: 'Academic Excellence',  description: '98% pass rate with distinction in board examinations' },
+    { image: '/achieve1.jpeg',    description: 'State-level winners in basketball and athletics' },
+    { image: '/achieve2.jpeg',     title: 'Science Fair Winners', description: 'National recognition in innovation and research' },
+    { image: '/achieve3.jpeg',     title: 'Board Results',        description: 'Top 10 school in the region for 5 consecutive years' },
     { image: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800',     title: 'Leadership Program',   description: "Develop tomorrow's leaders" },
     { image: 'https://images.pexels.com/photos/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=800',     title: 'Community Impact',     description: 'Social responsibility initiatives' },
   ];
 
   const activities = [
-    { image: 'https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?auto=compress&cs=tinysrgb&w=800',  title: 'Sports & Athletics',   description: 'State-of-the-art facilities for various sports' },
-    { image: 'https://images.pexels.com/photos/167491/pexels-photo-167491.jpeg?auto=compress&cs=tinysrgb&w=800',                       title: 'Science Labs',         description: 'Modern laboratories for hands-on learning' },
-    { image: 'https://images.pexels.com/photos/1590003/pexels-photo-1590003.jpeg?auto=compress&cs=tinysrgb&w=800',                     title: 'Cultural Events',      description: 'Annual festivals and talent showcases' },
-    { image: 'https://images.pexels.com/photos/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=800',                     title: 'Community Service',    description: 'Regular outreach and social initiatives' },
+    { image: '/activity.jpeg',  title: 'Sports & Athletics',   description: 'State-of-the-art facilities for various sports' },
+    { image: '/activity2.jpeg',                       title: 'Science Labs',         description: 'Modern laboratories for hands-on learning' },
+    { image: '/activity3.jpeg',                     title: 'Cultural Events',      description: 'Annual festivals and talent showcases' },
+    { image: '/activity4.jpeg',                     title: 'Community Service',    description: 'Regular outreach and social initiatives' },
     { image: 'https://images.pexels.com/photos/5582863/pexels-photo-5582863.jpeg?auto=compress&cs=tinysrgb&w=800',                     title: 'Art & Creativity',     description: 'Express yourself through art' },
     { image: 'https://images.pexels.com/photos/3808517/pexels-photo-3808517.jpeg?auto=compress&cs=tinysrgb&w=800',                     title: 'Music & Performances', description: 'Showcase your talents' },
   ];
@@ -173,11 +173,11 @@ const Home = () => {
           <section className="relative h-screen flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0">
               <img
-                src="https://images.pexels.com/photos/256395/pexels-photo-256395.jpeg?auto=compress&cs=tinysrgb&w=1920"
+                src="/school.jpeg"
                 alt="School Building"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-red-900/90 to-red-800/70"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-red-900/20 to-red-800/10"></div>
             </div>
             <div className="float-a absolute top-24 left-12 w-32 h-32 rounded-full bg-white/5 blur-xl pointer-events-none"></div>
             <div className="float-b absolute bottom-32 right-16 w-48 h-48 rounded-full bg-red-300/10 blur-2xl pointer-events-none"></div>

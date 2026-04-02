@@ -138,7 +138,7 @@ const About = () => {
                   Est. 1985
                 </span>
                 <h1 className="hero-h1 text-5xl md:text-7xl font-black text-gray-900 mb-6 tracking-tighter">
-                  About <span className="text-red-600">Greenfield</span>
+                  About <span className="text-red-600">Manpadle Highschool</span>
                 </h1>
                 <p className="hero-sub text-lg md:text-xl text-gray-600/80 max-w-2xl mx-auto font-medium leading-relaxed tracking-wide">
                   Building excellence through quality education and holistic development for over{' '}
@@ -158,7 +158,7 @@ const About = () => {
                   <div className="absolute -inset-4 border border-red-600/10 rounded-[2rem] scale-95 group-hover:scale-100 transition-transform duration-700"></div>
                   <div className="relative overflow-hidden rounded-2xl shadow-2xl">
                     <img
-                      src="https://images.pexels.com/photos/207692/pexels-photo-207692.jpeg?auto=compress&cs=tinysrgb&w=800"
+                      src="/mainschool.jpeg"
                       alt="School Campus"
                       className="w-full h-[480px] object-cover grayscale-[15%] group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
                     />
@@ -285,7 +285,7 @@ const About = () => {
               <div className="principal-left revealed lg:col-span-4 relative bg-gray-900 flex flex-col justify-end min-h-[380px]"
                    ref={el => { if (el) { const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting){el.classList.add('revealed');obs.unobserve(el);} },{threshold:0.1}); obs.observe(el); } }}>
                 <img
-                  src="https://images.pexels.com/photos/5212317/pexels-photo-5212317.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  src="/Principal.png"
                   alt="Principal"
                   className="absolute inset-0 w-full h-full object-cover object-top opacity-70"
                 />
@@ -320,8 +320,8 @@ const About = () => {
                 </div>
                 <div className="mt-10 flex items-center gap-5 pt-6 border-t border-gray-100 relative z-10">
                   <div>
-                    <p className="text-2xl font-black text-gray-900 italic tracking-tight" style={{ fontFamily:'Georgia, serif' }}>Dr. Sarah Mitchell</p>
-                    <p className="text-red-600 text-[11px] font-bold uppercase tracking-widest mt-0.5">Principal, Greenfield High School</p>
+                    <p className="text-2xl font-black text-gray-900 italic tracking-tight" style={{ fontFamily:'Georgia, serif' }}>Mr. Arunsingh Patil</p>
+                    <p className="text-red-600 text-[11px] font-bold uppercase tracking-widest mt-0.5">Principal, Manpadle High School</p>
                   </div>
                   <div className="ml-auto w-14 h-14 rounded-full border-2 border-red-600 flex items-center justify-center flex-shrink-0">
                     <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center">

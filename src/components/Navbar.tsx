@@ -172,7 +172,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16 md:h-20">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
+          <Link to="/mainlogo.jpeg" className="flex items-center space-x-3 group">
             <div className="bg-gradient-to-br from-red-600 to-red-700 p-2 rounded-lg group-hover:scale-110 transition-transform duration-300">
               <GraduationCap className="w-6 h-6 md:w-8 md:h-8 text-white" />
             </div>
