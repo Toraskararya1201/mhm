@@ -9,9 +9,12 @@ import Donate from './pages/Donate';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
+  
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Fixed: 'instant' breaks on mobile/Safari. This ensures it reliably snaps to the top.
+    window.scrollTo(0, 0);
   }, [pathname]);
+  
   return null;
 }
 
@@ -93,7 +96,8 @@ function FloatingButtons() {
 function App() {
   return (
     <Router>
-      <div className="min-h-screen flex flex-col scroll-smooth">
+      {/* Fixed: Removed 'scroll-smooth' from this wrapper. It breaks page transitions! */}
+      <div className="min-h-screen flex flex-col">
         <ScrollToTop />
         <Navbar />
         <main className="flex-grow">

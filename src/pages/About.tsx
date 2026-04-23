@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { BookOpen, Users, Target, Eye, Library, FlaskConical, Monitor, Dumbbell, Quote } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-/* ─── scroll-reveal hook (same as Home) ─── */
+/* ─── scroll-reveal hook ─── */
 function useReveal(options = {}) {
   const ref = useRef(null);
   useEffect(() => {
@@ -26,10 +26,10 @@ const About = () => {
     { icon: Monitor,      title: t('about_page.facility2_title'), description: t('about_page.facility2_desc') },
     { icon: Target,       title: t('about_page.facility3_title'), description: t('about_page.facility3_desc') },
     { icon: FlaskConical, title: t('about_page.facility4_title'), description: t('about_page.facility4_desc') },
-    { icon: Eye,           title: t('about_page.facility5_title'), description: t('about_page.facility5_desc') },
-    { icon: Dumbbell,      title: t('about_page.facility6_title'), description: t('about_page.facility6_desc') },
-    { icon: Users,         title: t('about_page.facility7_title'), description: t('about_page.facility7_desc') },
-    { icon: BookOpen,      title: t('about_page.facility8_title'), description: t('about_page.facility8_desc') },
+    { icon: Eye,          title: t('about_page.facility5_title'), description: t('about_page.facility5_desc') },
+    { icon: Dumbbell,     title: t('about_page.facility6_title'), description: t('about_page.facility6_desc') },
+    { icon: Users,        title: t('about_page.facility7_title'), description: t('about_page.facility7_desc') },
+    { icon: BookOpen,     title: t('about_page.facility8_title'), description: t('about_page.facility8_desc') },
   ];
 
   const faculty = [
@@ -101,20 +101,6 @@ const About = () => {
         @keyframes numPop { 0%{opacity:0;transform:scale(.5) translateY(10px)} 80%{transform:scale(1.1)} 100%{opacity:1;transform:scale(1) translateY(0)} }
         .num-pop { animation:numPop .7s cubic-bezier(.4,0,.2,1) .6s both; }
 
-        /* ── MOBILE FIXES ── */
-
-        /* Fix 1: On mobile, the principal card becomes a column.
-           The photo panel drops its absolute positioning so the face is fully visible.
-           The info (name + badge) moves to a separate bar below the photo — no overlap. */
-        @media (max-width: 1023px) {
-          .principal-photo-panel {
-            min-height: unset !important;
-          }
-        }
-
-        /* Fix 2: "MESSAGE" bg text was absolute and clipped by overflow:hidden on mobile.
-           We hide the absolute version on mobile and render an inline version instead
-           so the full word is always visible. */
         .message-bg-text-desktop { display: block; }
         .message-bg-text-mobile  { display: none;  }
 
@@ -140,14 +126,14 @@ const About = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div ref={heroRef} className="text-center">
                 <span className="hero-badge inline-block text-red-700 font-black uppercase tracking-[0.5em] text-[10px] mb-4 opacity-80">
-                  {t('about_page.est_badge')}
+                  {t('about_page.est_badge', 'EST. 1989')}
                 </span>
                 <h1 className="hero-h1 text-5xl md:text-7xl font-black text-gray-900 mb-6 tracking-tighter">
-                  {t('about_page.title')} <span className="text-red-600">{t('about_page.title_accent')}</span>
+                  {t('about_page.title', 'About Our')} <span className="text-red-600">{t('about_page.title_accent', 'School')}</span>
                 </h1>
                 <p className="hero-sub text-lg md:text-xl text-gray-600/80 max-w-2xl mx-auto font-medium leading-relaxed tracking-wide">
-                  {t('about_page.subtitle')}{' '}
-                  <span className="text-gray-900 font-bold underline decoration-red-200 decoration-4">{t('about_page.subtitle_years')}</span>.
+                  {t('about_page.subtitle', 'A legacy of excellence spanning over')}{' '}
+                  <span className="text-gray-900 font-bold underline decoration-red-200 decoration-4">{t('about_page.subtitle_years', '35 years')}</span>.
                 </p>
               </div>
             </div>
@@ -168,17 +154,17 @@ const About = () => {
                   </div>
                   <div className="num-pop absolute -bottom-6 -left-6 bg-red-600 text-white px-8 py-6 rounded-2xl shadow-xl hidden md:block border-4 border-[#FDFCF6]">
                     <p className="text-4xl font-black leading-none tracking-tighter">35+</p>
-                    <p className="text-[11px] uppercase tracking-widest font-bold mt-1">{t('about_page.years_of_legacy')}</p>
+                    <p className="text-[11px] uppercase tracking-widest font-bold mt-1">{t('about_page.years_of_legacy', 'Years of Legacy')}</p>
                   </div>
                 </div>
                 <div ref={storyTxtRef} className="reveal-right lg:col-span-7 lg:pl-10">
                   <div className="flex items-center gap-4 mb-8">
                     <div className="grow-line h-[2px] bg-red-600"></div>
-                    <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[11px]">{t('about_page.institution_label')}</span>
+                    <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[11px]">{t('about_page.institution_label', 'OUR INSTITUTION')}</span>
                   </div>
                   <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8 tracking-tighter leading-[1.1]">
-                    {t('about_page.story_heading')} <br/>
-                    <span className="bg-red-600 text-white px-4 py-1 inline-block mt-2">{t('about_page.story_heading_accent')}</span>
+                    {t('about_page.story_heading', 'Building the future,')} <br/>
+                    <span className="bg-red-600 text-white px-4 py-1 inline-block mt-2">{t('about_page.story_heading_accent', 'one student at a time.')}</span>
                   </h2>
                   <div className="space-y-6 text-gray-700/90 leading-relaxed text-lg tracking-wide font-medium">
                     <p>{t('about_page.story_p1')}</p>
@@ -201,7 +187,7 @@ const About = () => {
                     <Eye className="w-7 h-7" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-base font-black text-gray-900 uppercase tracking-widest mb-1 group-hover:text-red-600 transition-colors">{t('about_page.vision_label')}</h3>
+                    <h3 className="text-base font-black text-gray-900 uppercase tracking-widest mb-1 group-hover:text-red-600 transition-colors">{t('about_page.vision_label', 'Our Vision')}</h3>
                     <p className="text-gray-500 text-[12px] leading-relaxed tracking-wide">{t('about_page.vision_text')}</p>
                   </div>
                 </div>
@@ -213,7 +199,7 @@ const About = () => {
                     <Target className="w-7 h-7" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-base font-black text-gray-900 uppercase tracking-widest mb-1 group-hover:text-red-600 transition-colors">{t('about_page.mission_label')}</h3>
+                    <h3 className="text-base font-black text-gray-900 uppercase tracking-widest mb-1 group-hover:text-red-600 transition-colors">{t('about_page.mission_label', 'Our Mission')}</h3>
                     <p className="text-gray-500 text-[12px] leading-relaxed tracking-wide">{t('about_page.mission_text')}</p>
                   </div>
                 </div>
@@ -233,10 +219,10 @@ const About = () => {
                 <div>
                   <div className="flex items-center gap-3 mb-4">
                     <div className="grow-line h-1.5 bg-red-600 rounded-full"></div>
-                    <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">{t('about_page.facilities_resources_label')}</span>
+                    <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">{t('about_page.facilities_resources_label', 'FACILITIES & RESOURCES')}</span>
                   </div>
                   <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
-                    {t('about_page.facilities_title')} <span className="text-red-600">{t('about_page.facilities_title_accent')}</span>
+                    {t('about_page.facilities_title', 'World-Class')} <span className="text-red-600">{t('about_page.facilities_title_accent', 'Infrastructure')}</span>
                   </h2>
                 </div>
                 <p className="text-gray-400 text-sm max-w-xs md:text-right font-medium tracking-wide leading-relaxed border-l-2 md:border-l-0 md:border-r-2 border-red-100 pl-4 md:pl-0 md:pr-4">
@@ -268,58 +254,64 @@ const About = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div ref={principalRef} className="reveal flex items-center gap-4 mb-10">
               <div className="grow-line h-[2px] bg-red-600"></div>
-              <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">{t('about_page.principal_label')}</span>
+              <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">{t('about_page.principal_label', 'LEADERSHIP')}</span>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch rounded-3xl overflow-hidden shadow-2xl shadow-gray-200/60">
 
               {/* ── LEFT: Photo panel ── */}
               <div
-                className="principal-photo-panel principal-left lg:col-span-4 relative bg-gray-900 flex flex-col justify-end min-h-[380px]"
+                className="principal-photo-panel principal-left lg:col-span-4 relative bg-[#e3ae58] flex flex-col justify-end min-h-[480px] lg:min-h-[450px]"
                 ref={el => { if (el) { const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting){el.classList.add('revealed');obs.unobserve(el);} },{threshold:0.1}); obs.observe(el); } }}
               >
-                {/*
-                  DESKTOP: image is absolute, fills the whole tall panel.
-                  MOBILE:  image is a normal block (height auto) so the full face shows,
-                           then the info bar sits below it — no overlap possible.
-                */}
+                {/* Background Image (Absolute & Full Cover on all screens) */}
                 <img
                   src="/Principal.png"
                   alt="Principal"
-                  className="absolute inset-0 w-full h-full object-cover object-top opacity-70 hidden lg:block"
+                  className="absolute inset-0 w-full h-full object-cover object-top opacity-100 lg:opacity-90 z-0"
                 />
 
-                {/* Mobile-only photo — natural block flow */}
-                <img
-                  src="/Principal.png"
-                  alt="Principal"
-                  className="block lg:hidden w-full object-cover object-top opacity-90"
-                  style={{ height: '300px' }}
-                />
+                {/* Mobile-only bottom gradient overlay — matched to the soft coral/pink hue from the screenshot */}
+                <div
+                  className="absolute inset-x-0 bottom-0 h-[260px] bg-gradient-to-t from-[#cf7b72]/95 via-[#cf7b72]/70 to-transparent lg:hidden pointer-events-none z-0"
+                ></div>
 
-                {/* Desktop gradient + info overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-red-900/95 via-red-900/40 to-transparent hidden lg:block"></div>
-                <div className="relative z-10 p-8 hidden lg:block">
-                  <div className="text-red-400/30 text-[120px] font-serif leading-none absolute top-4 right-6 select-none pointer-events-none">"</div>
-                  <div className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2 mb-4">
-                    <span className="text-white/70 text-[10px] font-bold uppercase tracking-[0.4em]">{t('about_page.principal_desk')}</span>
-                  </div>
-                  <h3 className="text-2xl font-black text-white tracking-tight leading-tight">{t('about_page.principal_name')}</h3>
-                  <p className="text-red-300 text-[11px] font-bold uppercase tracking-widest mt-1">{t('about_page.principal_title_role')}</p>
-                  <div className="h-[2px] w-10 bg-red-400 mt-4"></div>
-                </div>
+                {/* Desktop gradient overlay */}
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-red-900/55 via-red-900/20 to-transparent hidden lg:block pointer-events-none z-0"
+                ></div>
 
-                {/*
-                  Mobile-only info bar — rendered BELOW the photo in normal document flow.
-                  Badge and name can never overlap the face.
-                */}
-                <div className="block lg:hidden bg-gradient-to-r from-red-900 to-red-800 px-5 py-4">
-                  <div className="inline-block bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 mb-2">
-                    <span className="text-white/70 text-[10px] font-bold uppercase tracking-[0.35em]">{t('about_page.principal_desk')}</span>
+                {/* Shared info overlay (Forced to sit above absolute background image via z-10) */}
+                <div className="relative z-10 p-6 lg:p-8 w-full mt-auto">
+                  {/* Mobile Quote Marks (Matches the orange-ish quote in the screenshot) */}
+                  <div className="absolute bottom-6 right-4 text-[#ff9b9b] text-[80px] font-serif leading-none select-none pointer-events-none lg:hidden opacity-80" style={{ transform: 'translateY(15px)' }}>
+                    ”
                   </div>
-                  <h3 className="text-xl font-black text-white tracking-tight leading-tight">{t('about_page.principal_name')}</h3>
-                  <p className="text-red-300 text-[11px] font-bold uppercase tracking-widest mt-0.5">{t('about_page.principal_title_role')}</p>
-                  <div className="h-[2px] w-8 bg-red-400 mt-3"></div>
+                  
+                  {/* Desktop Quote Marks */}
+                  <div className="text-red-400/30 text-[120px] font-serif leading-none absolute top-4 right-6 select-none pointer-events-none hidden lg:block">
+                    "
+                  </div>
+
+                  {/* Glassmorphism Badge */}
+                  <div className="inline-block bg-white/10 backdrop-blur-md border border-white/40 rounded-2xl px-4 py-1.5 mb-2 shadow-sm">
+                    <span className="text-white text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-md">
+                      {t('about_page.principal_desk', "PRINCIPAL'S DESK")}
+                    </span>
+                  </div>
+
+                  {/* Name */}
+                  <h3 className="text-[28px] sm:text-3xl lg:text-2xl font-black text-white tracking-tight leading-none mb-1.5 drop-shadow-md">
+                    {t('about_page.principal_name', 'Mr. Arunsingh Patil')}
+                  </h3>
+
+                  {/* Role / Subtitle */}
+                  <p className="text-[#fca5a5] text-[10px] font-bold uppercase tracking-widest drop-shadow-sm mb-2 lg:mb-0">
+                    {t('about_page.principal_title_role', 'PRINCIPAL · PH.D. IN EDUCATION')}
+                  </p>
+
+                  {/* Red line (desktop only) */}
+                  <div className="h-[2px] w-8 lg:w-10 bg-red-400 mt-3 lg:mt-4 hidden lg:block"></div>
                 </div>
               </div>
 
@@ -328,17 +320,6 @@ const About = () => {
                 className="principal-message-panel principal-right lg:col-span-8 bg-white px-10 py-12 flex flex-col justify-center relative overflow-hidden"
                 ref={el => { if (el) { const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting){el.classList.add('revealed');obs.unobserve(el);} },{threshold:0.1}); obs.observe(el); } }}
               >
-                {/*
-                  FIX — "MESSAGE" background text:
-
-                  DESKTOP: absolute, top-right corner, large. Works fine because the panel
-                           is tall enough and overflow:hidden simply clips a tiny bit at top.
-
-                  MOBILE:  absolute + overflow:hidden = the "M" gets clipped/hidden.
-                           Solution: hide the absolute version, show an inline version ABOVE
-                           the heading that sits in normal document flow — always fully visible.
-                */}
-
                 {/* Desktop version (absolute, hidden on mobile) */}
                 <span
                   className="message-bg-text-desktop absolute -top-4 right-4 text-8xl font-black uppercase select-none pointer-events-none"
@@ -356,7 +337,7 @@ const About = () => {
                 </span>
 
                 <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter mb-8 relative z-10">
-                  {t('about_page.principal_section_heading')} <span className="text-red-600">{t('about_page.principal_section_accent')}</span>
+                  {t('about_page.principal_section_heading', "A Message from our")} <span className="text-red-600">{t('about_page.principal_section_accent', 'Principal')}</span>
                 </h2>
                 <Quote className="w-8 h-8 text-red-200 mb-4 flex-shrink-0" />
                 <div className="space-y-5 text-gray-600 leading-relaxed text-[15px] tracking-wide font-medium relative z-10">
@@ -366,13 +347,13 @@ const About = () => {
                 </div>
                 <div className="mt-10 flex items-center gap-5 pt-6 border-t border-gray-100 relative z-10">
                   <div>
-                    <p className="text-2xl font-black text-gray-900 italic tracking-tight" style={{ fontFamily:'Georgia, serif' }}>{t('about_page.principal_signature')}</p>
-                    <p className="text-red-600 text-[11px] font-bold uppercase tracking-widest mt-0.5">{t('about_page.principal_role_footer')}</p>
+                    <p className="text-2xl font-black text-gray-900 italic tracking-tight" style={{ fontFamily:'Georgia, serif' }}>{t('about_page.principal_signature', 'Mr. Arunsingh Patil')}</p>
+                    <p className="text-red-600 text-[11px] font-bold uppercase tracking-widest mt-0.5">{t('about_page.principal_role_footer', 'Principal, Shri V. D. Mane High School')}</p>
                   </div>
                   <div className="ml-auto w-14 h-14 rounded-full border-2 border-red-600 flex items-center justify-center flex-shrink-0">
                     <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center">
                       <span className="text-white text-[8px] font-black uppercase tracking-wider text-center leading-tight">
-                        {t('about_page.principal_seal')}
+                        {t('about_page.principal_seal', 'SEAL')}
                       </span>
                     </div>
                   </div>
@@ -388,14 +369,14 @@ const About = () => {
             <div ref={facultyHdRef} className="reveal relative mb-12 text-center">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-red-50 rounded-full blur-3xl opacity-60 -z-10"></div>
               <div className="inline-block px-4 py-1.5 bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-6 shadow-lg shadow-red-200">
-                {t('about_page.faculty_label')}
+                {t('about_page.faculty_label', 'OUR EDUCATORS')}
               </div>
               <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter mb-6">
-                {t('about_page.faculty_title')}<span className="text-red-600">{t('about_page.faculty_title_accent')}</span>
+                {t('about_page.faculty_title', 'Meet Our')} <span className="text-red-600">{t('about_page.faculty_title_accent', 'Faculty')}</span>
               </h2>
               <div className="flex justify-center items-center gap-4">
                 <div className="h-[1px] w-12 bg-gray-200"></div>
-                <p className="text-gray-500 text-sm font-medium tracking-widest uppercase">{t('about_page.faculty_subtitle')}</p>
+                <p className="text-gray-500 text-sm font-medium tracking-widest uppercase">{t('about_page.faculty_subtitle', 'Dedicated to Excellence')}</p>
                 <div className="h-[1px] w-12 bg-gray-200"></div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, GraduationCap, Languages } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, Languages } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Navbar = () => {
@@ -8,6 +8,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const location = useLocation();
+  const navigate = useNavigate(); // ADDED
 
   // ── i18next language toggle ──
   const { t, i18n } = useTranslation();
@@ -70,7 +71,7 @@ const Navbar = () => {
   const scrollToSection = (id: string) => {
     if (location.pathname !== '/') {
       sessionStorage.setItem('scrollTo', id);
-      window.location.href = '/';
+      navigate('/'); // Fixed: Replaced window.location.href which was causing a full reload
     } else {
       const element = document.getElementById(id);
       if (element) {
@@ -128,10 +129,19 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16 md:h-20">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="bg-gradient-to-br from-red-600 to-red-700 p-2 rounded-lg group-hover:scale-110 transition-transform duration-300">
-              <GraduationCap className="w-6 h-6 md:w-8 md:h-8 text-white" />
-            </div>
+          <Link 
+            to="/" 
+            onClick={() => {
+              window.scrollTo(0, 0); // Forced reset on click
+              setIsOpen(false);
+            }} 
+            className="flex items-center space-x-3 group"
+          >
+            <img
+              src="/mainlogo.jpeg"
+              alt="School Logo"
+              className="w-10 h-10 md:w-12 md:h-12 rounded-lg object-contain group-hover:scale-110 transition-transform duration-300"
+            />
             <div className="flex flex-col">
               <span className="text-lg md:text-xl font-bold text-gray-900">
                 {t('navbar.school_name')}
@@ -229,7 +239,6 @@ const Navbar = () => {
               )}
             </div>
           ))}
-          <TranslateButton mobile />
         </div>
       </div>
     </nav>
