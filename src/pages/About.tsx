@@ -40,7 +40,6 @@ const About = () => {
     { name: 'Sau. Khot S.K.',     subject: 'Teacher', qualification: 'M.A., B.Ed. in Education' },
   ];
 
-  /* individual reveal refs */
   const heroRef       = useReveal();
   const storyImgRef   = useReveal();
   const storyTxtRef   = useReveal();
@@ -53,7 +52,6 @@ const About = () => {
 
   return (
     <>
-      {/* ─── Global animation styles ─── */}
       <style>{`
         .reveal          { opacity:0; transform:translateY(36px); transition:opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1); }
         .reveal.revealed { opacity:1; transform:none; }
@@ -102,6 +100,29 @@ const About = () => {
 
         @keyframes numPop { 0%{opacity:0;transform:scale(.5) translateY(10px)} 80%{transform:scale(1.1)} 100%{opacity:1;transform:scale(1) translateY(0)} }
         .num-pop { animation:numPop .7s cubic-bezier(.4,0,.2,1) .6s both; }
+
+        /* ── MOBILE FIXES ── */
+
+        /* Fix 1: On mobile, the principal card becomes a column.
+           The photo panel drops its absolute positioning so the face is fully visible.
+           The info (name + badge) moves to a separate bar below the photo — no overlap. */
+        @media (max-width: 1023px) {
+          .principal-photo-panel {
+            min-height: unset !important;
+          }
+        }
+
+        /* Fix 2: "MESSAGE" bg text was absolute and clipped by overflow:hidden on mobile.
+           We hide the absolute version on mobile and render an inline version instead
+           so the full word is always visible. */
+        .message-bg-text-desktop { display: block; }
+        .message-bg-text-mobile  { display: none;  }
+
+        @media (max-width: 1023px) {
+          .message-bg-text-desktop { display: none !important; }
+          .message-bg-text-mobile  { display: block !important; }
+          .principal-message-panel { padding: 1.75rem 1.25rem !important; }
+        }
       `}</style>
 
       <div className="min-h-screen bg-white">
@@ -109,7 +130,6 @@ const About = () => {
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
                style={{ backgroundImage:`url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }}>
           </div>
-
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="float-a absolute top-0 right-[-10%] w-[40%] h-[500px] bg-red-100/30 rounded-full blur-[120px]"></div>
             <div className="float-b absolute bottom-0 left-[-5%] w-[30%] h-[400px] bg-gray-200/40 rounded-full blur-[100px]"></div>
@@ -151,7 +171,6 @@ const About = () => {
                     <p className="text-[11px] uppercase tracking-widest font-bold mt-1">{t('about_page.years_of_legacy')}</p>
                   </div>
                 </div>
-
                 <div ref={storyTxtRef} className="reveal-right lg:col-span-7 lg:pl-10">
                   <div className="flex items-center gap-4 mb-8">
                     <div className="grow-line h-[2px] bg-red-600"></div>
@@ -187,7 +206,6 @@ const About = () => {
                   </div>
                 </div>
               </div>
-
               <div className="card-lift flex-1 max-w-[550px] group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
                 <div className="flex items-center p-6 gap-6">
@@ -226,7 +244,6 @@ const About = () => {
                 </p>
               </div>
             </div>
-
             <div ref={facilGridRef} className="stagger-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {facilities.map((item, idx) => (
                 <div key={idx} className="card-lift group flex items-center bg-white p-5 rounded-xl border border-gray-100 hover:border-red-600 shadow-sm transition-all duration-300">
@@ -255,15 +272,34 @@ const About = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch rounded-3xl overflow-hidden shadow-2xl shadow-gray-200/60">
-              <div className="principal-left lg:col-span-4 relative bg-gray-900 flex flex-col justify-end min-h-[380px]"
-                   ref={el => { if (el) { const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting){el.classList.add('revealed');obs.unobserve(el);} },{threshold:0.1}); obs.observe(el); } }}>
+
+              {/* ── LEFT: Photo panel ── */}
+              <div
+                className="principal-photo-panel principal-left lg:col-span-4 relative bg-gray-900 flex flex-col justify-end min-h-[380px]"
+                ref={el => { if (el) { const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting){el.classList.add('revealed');obs.unobserve(el);} },{threshold:0.1}); obs.observe(el); } }}
+              >
+                {/*
+                  DESKTOP: image is absolute, fills the whole tall panel.
+                  MOBILE:  image is a normal block (height auto) so the full face shows,
+                           then the info bar sits below it — no overlap possible.
+                */}
                 <img
                   src="/Principal.png"
                   alt="Principal"
-                  className="absolute inset-0 w-full h-full object-cover object-top opacity-70"
+                  className="absolute inset-0 w-full h-full object-cover object-top opacity-70 hidden lg:block"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-red-900/95 via-red-900/40 to-transparent"></div>
-                <div className="relative z-10 p-8">
+
+                {/* Mobile-only photo — natural block flow */}
+                <img
+                  src="/Principal.png"
+                  alt="Principal"
+                  className="block lg:hidden w-full object-cover object-top opacity-90"
+                  style={{ height: '300px' }}
+                />
+
+                {/* Desktop gradient + info overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-red-900/95 via-red-900/40 to-transparent hidden lg:block"></div>
+                <div className="relative z-10 p-8 hidden lg:block">
                   <div className="text-red-400/30 text-[120px] font-serif leading-none absolute top-4 right-6 select-none pointer-events-none">"</div>
                   <div className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2 mb-4">
                     <span className="text-white/70 text-[10px] font-bold uppercase tracking-[0.4em]">{t('about_page.principal_desk')}</span>
@@ -272,14 +308,53 @@ const About = () => {
                   <p className="text-red-300 text-[11px] font-bold uppercase tracking-widest mt-1">{t('about_page.principal_title_role')}</p>
                   <div className="h-[2px] w-10 bg-red-400 mt-4"></div>
                 </div>
+
+                {/*
+                  Mobile-only info bar — rendered BELOW the photo in normal document flow.
+                  Badge and name can never overlap the face.
+                */}
+                <div className="block lg:hidden bg-gradient-to-r from-red-900 to-red-800 px-5 py-4">
+                  <div className="inline-block bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 mb-2">
+                    <span className="text-white/70 text-[10px] font-bold uppercase tracking-[0.35em]">{t('about_page.principal_desk')}</span>
+                  </div>
+                  <h3 className="text-xl font-black text-white tracking-tight leading-tight">{t('about_page.principal_name')}</h3>
+                  <p className="text-red-300 text-[11px] font-bold uppercase tracking-widest mt-0.5">{t('about_page.principal_title_role')}</p>
+                  <div className="h-[2px] w-8 bg-red-400 mt-3"></div>
+                </div>
               </div>
 
-              <div className="principal-right lg:col-span-8 bg-white px-10 py-12 flex flex-col justify-center relative"
-                   ref={el => { if (el) { const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting){el.classList.add('revealed');obs.unobserve(el);} },{threshold:0.1}); obs.observe(el); } }}>
-                <span className="absolute -top-4 right-4 text-8xl font-black uppercase select-none pointer-events-none"
-                      style={{ WebkitTextStroke:'1px #fee2e2', color:'transparent' }}>
-                  Message
+              {/* ── RIGHT: Message panel ── */}
+              <div
+                className="principal-message-panel principal-right lg:col-span-8 bg-white px-10 py-12 flex flex-col justify-center relative overflow-hidden"
+                ref={el => { if (el) { const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting){el.classList.add('revealed');obs.unobserve(el);} },{threshold:0.1}); obs.observe(el); } }}
+              >
+                {/*
+                  FIX — "MESSAGE" background text:
+
+                  DESKTOP: absolute, top-right corner, large. Works fine because the panel
+                           is tall enough and overflow:hidden simply clips a tiny bit at top.
+
+                  MOBILE:  absolute + overflow:hidden = the "M" gets clipped/hidden.
+                           Solution: hide the absolute version, show an inline version ABOVE
+                           the heading that sits in normal document flow — always fully visible.
+                */}
+
+                {/* Desktop version (absolute, hidden on mobile) */}
+                <span
+                  className="message-bg-text-desktop absolute -top-4 right-4 text-8xl font-black uppercase select-none pointer-events-none"
+                  style={{ WebkitTextStroke:'1px #fee2e2', color:'transparent' }}
+                >
+                  MESSAGE
                 </span>
+
+                {/* Mobile version (inline, hidden on desktop) */}
+                <span
+                  className="message-bg-text-mobile text-[3rem] font-black uppercase select-none pointer-events-none tracking-tighter mb-1"
+                  style={{ WebkitTextStroke:'1px #fee2e2', color:'transparent', lineHeight: 1 }}
+                >
+                  MESSAGE
+                </span>
+
                 <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter mb-8 relative z-10">
                   {t('about_page.principal_section_heading')} <span className="text-red-600">{t('about_page.principal_section_accent')}</span>
                 </h2>
@@ -328,48 +403,29 @@ const About = () => {
             <div ref={facultyGrdRef} className="stagger-grid max-w-4xl mx-auto">
               <div className="flex justify-center gap-6 flex-wrap mb-8">
                 {faculty.slice(0, 3).map((teacher, idx) => (
-                  <div
-                    key={idx}
-                    className="group relative border border-gray-200 rounded-lg p-5 text-center bg-white transition duration-300 hover:shadow-md hover:border-red-300 h-[220px] w-full max-w-[250px] flex flex-col justify-between"
-                  >
+                  <div key={idx} className="group relative border border-gray-200 rounded-lg p-5 text-center bg-white transition duration-300 hover:shadow-md hover:border-red-300 h-[220px] w-full max-w-[250px] flex flex-col justify-between">
                     <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-red-500 rounded-tl-lg"></div>
                     <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-red-500 rounded-br-lg"></div>
                     <div className="w-14 h-14 mx-auto rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-700 group-hover:bg-red-50 group-hover:text-red-600 transition">
                       {teacher.name.split(' ')[1][0]}
                     </div>
-                    <h3 className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition">
-                      {teacher.name}
-                    </h3>
-                    <p className="text-[10px] text-gray-500 uppercase tracking-wide">
-                      {teacher.subject}
-                    </p>
-                    <p className="text-xs text-gray-600 leading-tight">
-                      {teacher.qualification}
-                    </p>
+                    <h3 className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition">{teacher.name}</h3>
+                    <p className="text-[10px] text-gray-500 uppercase tracking-wide">{teacher.subject}</p>
+                    <p className="text-xs text-gray-600 leading-tight">{teacher.qualification}</p>
                   </div>
                 ))}
               </div>
-
               <div className="flex justify-center gap-6">
                 {faculty.slice(3, 5).map((teacher, idx) => (
-                  <div
-                    key={idx}
-                    className="group relative border border-gray-200 rounded-lg p-5 text-center bg-white transition duration-300 hover:shadow-md hover:border-red-300 h-[220px] w-full max-w-[250px] flex flex-col justify-between"
-                  >
+                  <div key={idx} className="group relative border border-gray-200 rounded-lg p-5 text-center bg-white transition duration-300 hover:shadow-md hover:border-red-300 h-[220px] w-full max-w-[250px] flex flex-col justify-between">
                     <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-red-500 rounded-tl-lg"></div>
                     <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-red-500 rounded-br-lg"></div>
                     <div className="w-14 h-14 mx-auto rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-700 group-hover:bg-red-50 group-hover:text-red-600 transition">
                       {teacher.name.split(' ')[1][0]}
                     </div>
-                    <h3 className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition">
-                      {teacher.name}
-                    </h3>
-                    <p className="text-[10px] text-gray-500 uppercase tracking-wide">
-                      {teacher.subject}
-                    </p>
-                    <p className="text-xs text-gray-600 leading-tight">
-                      {teacher.qualification}
-                    </p>
+                    <h3 className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition">{teacher.name}</h3>
+                    <p className="text-[10px] text-gray-500 uppercase tracking-wide">{teacher.subject}</p>
+                    <p className="text-xs text-gray-600 leading-tight">{teacher.qualification}</p>
                   </div>
                 ))}
               </div>
