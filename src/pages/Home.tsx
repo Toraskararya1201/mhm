@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import Button from '../components/Button';
 import { supabase } from '../lib/supabase';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import { useTranslation } from 'react-i18next';
+
+import { useTranslation, Trans } from 'react-i18next';
 
 /* ─── tiny hook: triggers CSS class when element enters viewport ─── */
 function useReveal(options = {}) {
@@ -246,7 +247,7 @@ const Home = () => {
                   >
                     About Us
                   </span>
-                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-5">
+                <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-5">
                     {t('home.about_badge')}
                   </span>
                 </div>
@@ -254,7 +255,12 @@ const Home = () => {
                   {t('home.about_title')}
                 </h2>
                 <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                  {t('home.about_description')}</p>
+  <Trans
+    i18nKey="home.about_description"
+    components={{ b: <span className="font-semibold text-gray-900" /> }}
+  />
+</p>
+
                 <div className="grow-line h-0.5 bg-red-200 mx-auto mb-8 rounded-full"></div>
                 <Button onClick={() => navigate('/about')} variant="outline">
                   {t('home.about_btn')}

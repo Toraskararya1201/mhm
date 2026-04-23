@@ -20,7 +20,8 @@
 
     "about_badge": "Who We Are",
     "about_title": "About Manpadle Highschool",
-    "about_description": "Welcome to Manpadle Highschool — a place where every child is known, cared for, and encouraged to do their best. Manpadale Highschool was started to give good education to children in our village and nearby areas. Our school runs from Class 5 to 10 and is managed by Late Buvasaheb Patil Shikshan Prasarak Mandal, Manpadale and awarded with the Dalit Mitra Puraskar. We believe every child deserves a chance to study. That is why we provide free admission, free uniform, and free books to all students. Our teachers work hard every day to help each child grow and succeed.",
+    "about_description": "Welcome to <b>Manpadle Highschool</b> — a place where every child is known, cared for, and encouraged to do their best. <b>Manpadale Highschool</b> was started to give good education to children in our village and nearby areas. Our school runs from <b>Class 5 to 10</b> and is managed by <b>Late Buvasaheb Patil Shikshan Prasarak Mandal, Manpadale</b> and awarded with the <b>Dalit Mitra Puraskar</b>. We believe <b>every child deserves a chance to study</b>. That is why we provide <b>free admission, free uniform, and free books</b> to all students. Our teachers work hard every day to help each child grow and succeed.",
+
     "about_btn": "Know More About Us",
 
     "admission_badge": "How to Join",
@@ -109,16 +110,16 @@
   },
 
   "about_page": {
-    "est_badge": "Est. 1985",
+    "est_badge": "Est. 2000",
     "title": "About",
     "title_accent": "Manpadle Highschool",
     "subtitle": "Building excellence through quality education and holistic development for over",
-    "subtitle_years": "35 years",
+    "subtitle_years": "26 years",
     "years_of_legacy": "Years of Legacy",
     "institution_label": "The Institution",
     "story_heading": "A Tradition of",
     "story_heading_accent": "Innovation.",
-    "story_p1": "Founded in 1985, Manpadale High School, located in the village of Manpadale, Taluka Hatkanangale, District Kolhapur, has been a trusted center of learning for rural students for many years. Our school is run by Ke. Buvasaheb Patil Shikshan Prasarak Mandal, an organization honored with the Dalit Mitra Puraskar for its contribution to education and social development. We offer education from Class 5 to Class 10, with a strong focus on building not just academic knowledge, but also discipline, values, and confidence in every student.",
+    "story_p1": "Founded in 2000, Manpadale High School, located in the village of Manpadale, Taluka Hatkanangale, District Kolhapur, has been a trusted center of learning for rural students for many years. Our school is run by Late Buvasaheb Patil Shikshan Prasarak Mandal, an organization honored with the Dalit Mitra Puraskar for its contribution to education and social development. We offer education from Class 5 to Class 10, with a strong focus on building not just academic knowledge, but also discipline, values, and confidence in every student.",
     "story_p2": "We understand the challenges faced by rural families. That is why we ensure that no child is denied education due to financial limitations. Our goal is to create a supportive environment where every student feels encouraged to learn and grow.",
 
     "vision_label": "Our Vision",
@@ -158,7 +159,7 @@
     "principal_p2": "To all students, remember that your background does not decide your future — your efforts do. No matter the challenges, keep learning, keep growing, and never lose hope. Our school is always here to guide and support you in every step of your journey.",
     "principal_signature": "Mr. Arunsingh Patil",
     "principal_role_footer": "Principal, Manpadle High School",
-    "principal_seal": "GHS\n1985",
+    "principal_seal": "MHS\n2000",
 
     "faculty_label": "Expert Mentors",
     "faculty_title": "Our",
