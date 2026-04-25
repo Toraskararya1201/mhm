@@ -4,8 +4,22 @@ import { useState, useEffect, useRef } from 'react';
 import Button from '../components/Button';
 import { supabase } from '../lib/supabase';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
-
 import { useTranslation, Trans } from 'react-i18next';
+
+/* ── TypeScript interfaces ── */
+interface FormData {
+  student_name: string;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+interface FormErrors {
+  student_name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  message?: string | null;
+}
 
 /* ─── tiny hook: triggers CSS class when element enters viewport ─── */
 function useReveal(options: IntersectionObserverInit = {}) {
@@ -47,56 +61,34 @@ function AutoReset({ onReset }: { onReset: () => void }) {
   );
 }
 
-
-/**
- * useManualScroll
- * ---------------
- * Drives an infinite marquee entirely in JS (RAF loop) so we can:
- *   1. Pause on hover
- *   2. Let the user drag freely
- *   3. Apply momentum after drag release
- *   4. Resume auto-scroll from EXACTLY where the drag/momentum left off
- *
- * The element is expected to contain its children duplicated (×2) so the
- * "half-width wrap" trick creates a seamless loop.
- *
- * Props:
- *   direction  – 'left' | 'right'   (default: 'left')
- *   speed      – px per frame @ 60 fps (default: 0.5)
- */
-function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
-  const ref = useRef(null);
+/* ─── JS-driven infinite marquee hook ─── */
+function useManualScroll({ direction = 'left', speed = 0.5 }: { direction?: 'left' | 'right'; speed?: number } = {}) {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    /* ── state ── */
-    let offset = 0;          // current translateX (always negative for left)
-    let autoSpeed = direction === 'left' ? -speed : speed;
+    let offset = 0;
+    const autoSpeed = direction === 'left' ? -speed : speed;
     let isHovered = false;
     let isDragging = false;
     let velocity = 0;
     let momentumActive = false;
-    let rafId = null;
+    let rafId = 0;
 
-    /* drag tracking */
     let dragStartX = 0;
     let dragStartOffset = 0;
     let lastX = 0;
     let lastTime = 0;
 
-    /* ── helpers ── */
-
-    // Half-width of the duplicated strip = the loop boundary
     const halfWidth = () => el.scrollWidth / 2;
 
-    // Wrap offset so it stays within [-halfWidth, 0)
-    const wrapOffset = (v) => {
+    const wrapOffset = (v: number) => {
       const hw = halfWidth();
       if (hw === 0) return v;
-      v = v % hw;                    // bring into (-hw, hw)
-      if (v > 0) v -= hw;            // keep negative (left-direction semantics)
+      v = v % hw;
+      if (v > 0) v -= hw;
       return v;
     };
 
@@ -104,30 +96,23 @@ function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
       el.style.transform = `translateX(${offset}px)`;
     };
 
-    /* ── main RAF loop ── */
     const tick = () => {
       rafId = requestAnimationFrame(tick);
 
-      if (isDragging) {
-        // transform is set live in pointer handlers; nothing to do here
-        return;
-      }
+      if (isDragging) return;
 
       if (momentumActive) {
         velocity *= 0.92;
         offset += velocity;
         offset = wrapOffset(offset);
         applyTransform();
-
         if (Math.abs(velocity) < 0.3) {
           momentumActive = false;
           velocity = 0;
-          // auto-scroll resumes seamlessly from current offset on next frame
         }
         return;
       }
 
-      // auto-scroll (skip if hovered without dragging)
       if (!isHovered) {
         offset += autoSpeed;
         offset = wrapOffset(offset);
@@ -137,7 +122,6 @@ function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
 
     rafId = requestAnimationFrame(tick);
 
-    /* ── hover ── */
     const onMouseEnter = () => { isHovered = true; };
     const onMouseLeave = () => {
       isHovered = false;
@@ -148,8 +132,7 @@ function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
       }
     };
 
-    /* ── mouse drag ── */
-    const onMouseDown = (e) => {
+    const onMouseDown = (e: MouseEvent) => {
       isDragging = true;
       momentumActive = false;
       velocity = 0;
@@ -161,11 +144,11 @@ function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
       e.preventDefault();
     };
 
-    const onMouseMove = (e) => {
+    const onMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
       const now = Date.now();
       const dt = Math.max(now - lastTime, 1);
-      velocity = (e.pageX - lastX) / dt * 16; // scale to ~60fps frame
+      velocity = (e.pageX - lastX) / dt * 16;
       lastX = e.pageX;
       lastTime = now;
       offset = wrapOffset(dragStartOffset + (e.pageX - dragStartX));
@@ -179,8 +162,7 @@ function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
       momentumActive = true;
     };
 
-    /* ── touch drag ── */
-    const onTouchStart = (e) => {
+    const onTouchStart = (e: TouchEvent) => {
       isDragging = true;
       momentumActive = false;
       velocity = 0;
@@ -190,7 +172,7 @@ function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
       lastTime = Date.now();
     };
 
-    const onTouchMove = (e) => {
+    const onTouchMove = (e: TouchEvent) => {
       if (!isDragging) return;
       const now = Date.now();
       const dt = Math.max(now - lastTime, 1);
@@ -207,11 +189,10 @@ function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
       momentumActive = true;
     };
 
-    /* ── listeners ── */
     el.addEventListener('mouseenter', onMouseEnter);
     el.addEventListener('mouseleave', onMouseLeave);
     el.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mousemove', onMouseMove);   // window so fast drags don't escape
+    window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
     el.addEventListener('touchstart', onTouchStart, { passive: true });
     el.addEventListener('touchmove', onTouchMove, { passive: true });
@@ -233,55 +214,54 @@ function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
   return ref;
 }
 
-
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const contactRef = useScrollAnimation();
 
   const achievements = [
-    { image: '/ach2.jpeg',        title: t('home.achievements_card1_title'),  description: t('home.achievements_card1_desc') },
-    { image: '/achieve1.jpeg',    title: t('home.achievements_card2_title'),  description: t('home.achievements_card2_desc') },
-    { image: '/achieve2.jpeg',    title: t('home.achievements_card3_title'),  description: t('home.achievements_card3_desc') },
-    { image: '/achieve3.jpeg',    title: t('home.achievements_card4_title'),  description: t('home.achievements_card4_desc') },
-    { image: '/ach1.jpeg',        title: t('home.achievements_card5_title'),  description: t('home.achievements_card5_desc') },
-    { image: '/achieve.jpeg',     title: t('home.achievements_card6_title'),  description: t('home.achievements_card6_desc') },
+    { image: '/ach2.jpeg',     title: t('home.achievements_card1_title'), description: t('home.achievements_card1_desc') },
+    { image: '/achieve1.jpeg', title: t('home.achievements_card2_title'), description: t('home.achievements_card2_desc') },
+    { image: '/achieve2.jpeg', title: t('home.achievements_card3_title'), description: t('home.achievements_card3_desc') },
+    { image: '/achieve3.jpeg', title: t('home.achievements_card4_title'), description: t('home.achievements_card4_desc') },
+    { image: '/ach1.jpeg',     title: t('home.achievements_card5_title'), description: t('home.achievements_card5_desc') },
+    { image: '/achieve.jpeg',  title: t('home.achievements_card6_title'), description: t('home.achievements_card6_desc') },
   ];
 
- const activitiesRow1 = [
-  { image: '/activity.jpeg',  title: t('home.activity_c1_title'),  description: t('home.activity_c1_desc') },
-  { image: '/activity2.jpeg', title: t('home.activity_c2_title'),  description: t('home.activity_c2_desc') },
-  { image: '/activity3.jpeg', title: t('home.activity_c3_title'),  description: t('home.activity_c3_desc') },
-  { image: '/activity4.jpeg', title: t('home.activity_c4_title'),  description: t('home.activity_c4_desc') },
-  { image: '/act1.jpeg',      title: t('home.activity_c5_title'),  description: t('home.activity_c5_desc') },
-  { image: '/act2.jpeg',      title: t('home.activity_c6_title'),  description: t('home.activity_c6_desc') },
-  { image: '/act20.jpeg',     title: t('home.activity_c7_title'),  description: t('home.activity_c7_desc') },
-  { image: '/act21.jpeg',     title: t('home.activity_c8_title'),  description: t('home.activity_c8_desc') },
-  { image: '/act22.jpeg',     title: t('home.activity_c9_title'),  description: t('home.activity_c9_desc') },
-  { image: '/act23.jpeg',     title: t('home.activity_c10_title'), description: t('home.activity_10_desc') },
-  { image: '/act24.jpeg',     title: t('home.activity_c11_title'), description: t('home.activity_11_desc') },
-  { image: '/act25.jpeg',     title: t('home.activity_c12_title'), description: t('home.activity_12_desc') },
-];
+  const activitiesRow1 = [
+    { image: '/activity.jpeg',  title: t('home.activity_c1_title'),  description: t('home.activity_c1_desc') },
+    { image: '/activity2.jpeg', title: t('home.activity_c2_title'),  description: t('home.activity_c2_desc') },
+    { image: '/activity3.jpeg', title: t('home.activity_c3_title'),  description: t('home.activity_c3_desc') },
+    { image: '/activity4.jpeg', title: t('home.activity_c4_title'),  description: t('home.activity_c4_desc') },
+    { image: '/act1.jpeg',      title: t('home.activity_c5_title'),  description: t('home.activity_c5_desc') },
+    { image: '/act2.jpeg',      title: t('home.activity_c6_title'),  description: t('home.activity_c6_desc') },
+    { image: '/act20.jpeg',     title: t('home.activity_c7_title'),  description: t('home.activity_c7_desc') },
+    { image: '/act21.jpeg',     title: t('home.activity_c8_title'),  description: t('home.activity_c8_desc') },
+    { image: '/act22.jpeg',     title: t('home.activity_c9_title'),  description: t('home.activity_c9_desc') },
+    { image: '/act23.jpeg',     title: t('home.activity_c10_title'), description: t('home.activity_c10_desc') },
+    { image: '/act24.jpeg',     title: t('home.activity_c11_title'), description: t('home.activity_c11_desc') },
+    { image: '/act25.jpeg',     title: t('home.activity_c12_title'), description: t('home.activity_c12_desc') },
+  ];
 
-const activitiesRow2 = [
-  { image: '/act3.jpeg',  title: t('home.activity_c13_title'),  description: t('home.activity_c13_desc') },
-  { image: '/act4.jpeg',  title: t('home.activity_c14_title'),  description: t('home.activity_c14_desc') },
-  { image: '/act5.jpeg',  title: t('home.activity_c15_title'),  description: t('home.activity_c15_desc') },
-  { image: '/act6.jpeg',  title: t('home.activity_c16_title'),  description: t('home.activity_c16_desc') },
-  { image: '/act7.jpeg',  title: t('home.activity_c17_title'),  description: t('home.activity_c17_desc') },
-  { image: '/act8.jpeg',  title: t('home.activity_c18_title'),  description: t('home.activity_c18_desc') },
-  { image: '/act9.jpeg',  title: t('home.activity_c19_title'),  description: t('home.activity_c19_desc') },
-  { image: '/act10.jpeg', title: t('home.activity_c20_title'),  description: t('home.activity_c20_desc') },
-  { image: '/act11.jpeg', title: t('home.activity_c21_title'),  description: t('home.activity_c21_desc') },
-  { image: '/act12.jpeg', title: t('home.activity_c22_title'),  description: t('home.activity_c22_desc') },
-  { image: '/act13.jpeg', title: t('home.activity_c23_title'),  description: t('home.activity_c23_desc') },
-  { image: '/act14.jpeg', title: t('home.activity_c24_title'),  description: t('home.activity_c24_desc') },
-  { image: '/act15.jpeg', title: t('home.activity_c25_title'),  description: t('home.activity_c25_desc') },
-  { image: '/act16.jpeg', title: t('home.activity_c26_title'),  description: t('home.activity_c26_desc') },
-  { image: '/act17.jpeg', title: t('home.activity_c27_title'),  description: t('home.activity_c27_desc') },
-  { image: '/act18.jpeg', title: t('home.activity_c28_title'),  description: t('home.activity_c28_desc') },
-  { image: '/act19.jpeg', title: t('home.activity_c29_title'),  description: t('home.activity_c29_desc') },
-];
+  const activitiesRow2 = [
+    { image: '/act3.jpeg',  title: t('home.activity_c13_title'), description: t('home.activity_c13_desc') },
+    { image: '/act4.jpeg',  title: t('home.activity_c14_title'), description: t('home.activity_c14_desc') },
+    { image: '/act5.jpeg',  title: t('home.activity_c15_title'), description: t('home.activity_c15_desc') },
+    { image: '/act6.jpeg',  title: t('home.activity_c16_title'), description: t('home.activity_c16_desc') },
+    { image: '/act7.jpeg',  title: t('home.activity_c17_title'), description: t('home.activity_c17_desc') },
+    { image: '/act8.jpeg',  title: t('home.activity_c18_title'), description: t('home.activity_c18_desc') },
+    { image: '/act9.jpeg',  title: t('home.activity_c19_title'), description: t('home.activity_c19_desc') },
+    { image: '/act10.jpeg', title: t('home.activity_c20_title'), description: t('home.activity_c20_desc') },
+    { image: '/act11.jpeg', title: t('home.activity_c21_title'), description: t('home.activity_c21_desc') },
+    { image: '/act12.jpeg', title: t('home.activity_c22_title'), description: t('home.activity_c22_desc') },
+    { image: '/act13.jpeg', title: t('home.activity_c23_title'), description: t('home.activity_c23_desc') },
+    { image: '/act14.jpeg', title: t('home.activity_c24_title'), description: t('home.activity_c24_desc') },
+    { image: '/act15.jpeg', title: t('home.activity_c25_title'), description: t('home.activity_c25_desc') },
+    { image: '/act16.jpeg', title: t('home.activity_c26_title'), description: t('home.activity_c26_desc') },
+    { image: '/act17.jpeg', title: t('home.activity_c27_title'), description: t('home.activity_c27_desc') },
+    { image: '/act18.jpeg', title: t('home.activity_c28_title'), description: t('home.activity_c28_desc') },
+    { image: '/act19.jpeg', title: t('home.activity_c29_title'), description: t('home.activity_c29_desc') },
+  ];
 
   const admissionSteps = [
     { number: '01', title: t('home.admission_step1_title'), description: t('home.admission_step1_desc'), icon: BookOpen },
@@ -289,10 +269,9 @@ const activitiesRow2 = [
     { number: '03', title: t('home.admission_step3_title'), description: t('home.admission_step3_desc'), icon: Award },
   ];
 
-  // Each strip gets its own hook instance with correct direction + speed
-  const achievementsRef    = useManualScroll({ direction: 'left',  speed: 1.2 });
-  const activitiesRow1Ref  = useManualScroll({ direction: 'right', speed: 1.2 });
-  const activitiesRow2Ref  = useManualScroll({ direction: 'left',  speed: 1.2 });
+  const achievementsRef   = useManualScroll({ direction: 'left',  speed: 1.2 });
+  const activitiesRow1Ref = useManualScroll({ direction: 'right', speed: 1.2 });
+  const activitiesRow2Ref = useManualScroll({ direction: 'left',  speed: 1.2 });
 
   const aboutRef      = useReveal();
   const admissionRef  = useReveal();
@@ -367,7 +346,6 @@ const activitiesRow2 = [
         .hero-sub    { animation: heroSlide .9s cubic-bezier(.4,0,.2,1) .5s both }
         .hero-btns   { animation: heroBtns  .9s cubic-bezier(.4,0,.2,1) .75s both }
 
-        /* Marquee strips: NO CSS scroll animation — driven 100% by JS RAF */
         .marquee-strip {
           display: flex;
           width: max-content;
@@ -396,10 +374,10 @@ const activitiesRow2 = [
           100% { background-position: 200% center; }
         }
         .hero-name-gradient {
-        background: linear-gradient(90deg, #ffffff 0%, #ffcccc 35%, #ff8888 55%, #ffcccc 75%, #ffffff 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+          background: linear-gradient(90deg, #ffffff 0%, #ffcccc 35%, #ff8888 55%, #ffcccc 75%, #ffffff 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
         .hero-sanskrit-gradient {
           background: linear-gradient(90deg, #ffd6d6, #ffaaaa, #ffd6d6);
@@ -431,27 +409,26 @@ const activitiesRow2 = [
             <div className="float-b absolute bottom-32 right-16 w-48 h-48 rounded-full bg-red-300/10 blur-2xl pointer-events-none"></div>
 
             <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-
-              {/* ── Title ── */}
               <h1
                 className="hero-title font-bold mb-6 leading-tight tracking-tight"
                 style={{ textShadow: '0 4px 32px rgba(0,0,0,0.5)' }}
               >
-                <span className="block text-2xl md:text-3xl lg:text-4xl font-semibold mb-1 tracking-widest uppercase"
-  style={{
-    background: 'linear-gradient(90deg, #ffffff 0%, #ffcccc 35%, #ff8888 55%, #ffcccc 75%, #ffffff 100%)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text',
-  }}>
-  Welcome to
-</span>
+                <span
+                  className="block text-2xl md:text-3xl lg:text-4xl font-semibold mb-1 tracking-widest uppercase"
+                  style={{
+                    background: 'linear-gradient(90deg, #ffffff 0%, #ffcccc 35%, #ff8888 55%, #ffcccc 75%, #ffffff 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  Welcome to
+                </span>
                 <span className="hero-name-gradient block text-4xl md:text-6xl lg:text-7xl">
                   {t('home.hero_title').replace('Welcome to ', '')}
                 </span>
               </h1>
 
-              {/* ── Decorative divider ── */}
               <div className="flex items-center justify-center gap-3 mb-6">
                 <span className="h-px w-14 bg-gradient-to-r from-transparent to-red-400/70 rounded-full" />
                 <span className="w-2 h-2 rounded-full bg-red-400 hero-divider-dot" />
@@ -460,7 +437,6 @@ const activitiesRow2 = [
                 <span className="h-px w-14 bg-gradient-to-l from-transparent to-red-400/70 rounded-full" />
               </div>
 
-              {/* ── Subtitle ── */}
               <p className="hero-sub mb-8" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}>
                 <span
                   className="hero-sanskrit-gradient block font-bold text-xl md:text-2xl mb-2"
@@ -495,7 +471,7 @@ const activitiesRow2 = [
               <div className="max-w-5xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
-                  {/* ── Left: Text + Stats ── */}
+                  {/* Left: Text + Stats */}
                   <div>
                     <div className="relative mb-2">
                       <span
@@ -508,7 +484,6 @@ const activitiesRow2 = [
                         {t('home.about_badge')}
                       </span>
                     </div>
-
                     <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                       {t('home.about_title')} <span className="text-red-600">{t('home.about_title_accent')}</span>
                     </h2>
@@ -518,8 +493,6 @@ const activitiesRow2 = [
                         components={{ b: <span className="font-semibold text-gray-900" /> }}
                       />
                     </p>
-
-                    {/* ── Stats Grid ── */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
                       {[
                         { label: t('home.about_stat1') },
@@ -533,16 +506,14 @@ const activitiesRow2 = [
                         </div>
                       ))}
                     </div>
-
                     <div className="grow-line h-0.5 bg-red-200 mb-6 rounded-full"></div>
-
                     <Button onClick={() => navigate('/about')} variant="outline">
                       {t('home.about_btn')}
                       <ArrowRight className="inline-block ml-2 w-5 h-5" />
                     </Button>
                   </div>
 
-                  {/* ── Right: School Photo ── */}
+                  {/* Right: School Photo */}
                   <div className="relative">
                     <div className="rounded-2xl overflow-hidden border-2 border-red-100 shadow-xl shadow-red-50">
                       <img
@@ -552,41 +523,13 @@ const activitiesRow2 = [
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-red-900/30 to-transparent rounded-2xl"></div>
                     </div>
-                    {/* decorative ring */}
                     <div className="absolute -bottom-4 -right-4 w-28 h-28 rounded-full border-[12px] border-red-100/40 pointer-events-none"></div>
                     <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full border-[8px] border-orange-100/50 pointer-events-none"></div>
                   </div>
 
-                </div>
-              <div className="max-w-3xl mx-auto text-center">
-                <div className="relative mb-2">
-                  <span
-                    className="text-7xl md:text-8xl font-black absolute -top-6 left-1/2 -translate-x-1/2 uppercase select-none pointer-events-none whitespace-nowrap"
-                    style={{ WebkitTextStroke: '1.5px #fddcb5', color: 'transparent' }}
-                  >
-                    {t('home.about_watermark', 'About Us')}
-                  </span>
-                <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-5">
-                    {t('home.about_badge')}
-                  </span>
-                </div>
-                <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  {t('home.about_title')}
-                </h2>
-                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                  <Trans
-                    i18nKey="home.about_description"
-                    components={{ b: <span className="font-semibold text-gray-900" /> }}
-                  />
-                </p>
-
-                <div className="grow-line h-0.5 bg-red-200 mx-auto mb-8 rounded-full"></div>
-                <Button onClick={() => navigate('/about')} variant="outline">
-                  {t('home.about_btn')}
-                  <ArrowRight className="inline-block ml-2 w-5 h-5" />
-                </Button>
-              </div>
-            </div>
+                </div>{/* end grid */}
+              </div>{/* end max-w-5xl */}
+            </div>{/* end reveal wrapper */}
           </section>
 
           {/* ── ADMISSION PROCESS ── */}
@@ -647,11 +590,12 @@ const activitiesRow2 = [
               </div>
             </div>
           </section>
-        </div>
+
+        </div>{/* end gradient wrapper */}
 
         <div className="bg-white">
 
-          {/* ── ACHIEVEMENTS — image cards scrolling LEFT ── */}
+          {/* ── ACHIEVEMENTS ── */}
           <section id="achievements" className="py-12 overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div ref={achieveRef} className="reveal-left mb-10 flex flex-col items-start">
@@ -672,7 +616,6 @@ const activitiesRow2 = [
                 <div className="grow-line h-1 bg-red-600 rounded-full mt-2"></div>
               </div>
               <div className="overflow-hidden">
-                {/* ref goes on the inner strip, NOT the overflow wrapper */}
                 <div ref={achievementsRef} className="marquee-strip py-4" style={{ gap: '0.5rem' }}>
                   {[...achievements, ...achievements].map((achievement, index) => (
                     <div
@@ -701,7 +644,7 @@ const activitiesRow2 = [
             </div>
           </section>
 
-          {/* ── ACTIVITIES — heading RIGHT ── */}
+          {/* ── GALLERY ── */}
           <section id="activities" className="py-12 overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div ref={activitiesRef} className="reveal-right mb-10 flex flex-col items-end text-right">
@@ -900,8 +843,8 @@ const activitiesRow2 = [
             </div>
           </section>
 
-        </div>
-      </div>
+        </div>{/* end bg-white */}
+      </div>{/* end min-h-screen */}
     </>
   );
 };
