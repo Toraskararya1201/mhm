@@ -8,8 +8,8 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useTranslation, Trans } from 'react-i18next';
 
 /* ─── tiny hook: triggers CSS class when element enters viewport ─── */
-function useReveal(options = {}) {
-  const ref = useRef(null);
+function useReveal(options: IntersectionObserverInit = {}) {
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -24,7 +24,7 @@ function useReveal(options = {}) {
 }
 
 /* ─── Auto-reset countdown after success ─── */
-function AutoReset({ onReset }) {
+function AutoReset({ onReset }: { onReset: () => void }) {
   const { t } = useTranslation();
   const [seconds, setSeconds] = useState(10);
   const onResetRef = useRef(onReset);
@@ -46,6 +46,7 @@ function AutoReset({ onReset }) {
     </p>
   );
 }
+
 
 /**
  * useManualScroll
@@ -232,6 +233,7 @@ function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
   return ref;
 }
 
+
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -298,9 +300,9 @@ const activitiesRow2 = [
   const activitiesRef = useReveal();
   const ctaRef        = useReveal();
 
-  const [formData, setFormData] = useState({ student_name: '', email: '', phone: '', message: '' });
-  const [errors, setErrors] = useState({});
-  const [submitStatus, setSubmitStatus] = useState('idle');
+  const [formData, setFormData] = useState<FormData>({ student_name: '', email: '', phone: '', message: '' });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resetKey, setResetKey] = useState(0);
 
@@ -310,9 +312,9 @@ const activitiesRow2 = [
     setSubmitStatus('idle');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newErrors = {};
+    const newErrors: FormErrors = {};
     if (!formData.student_name.trim() || formData.student_name.trim().length < 2)
       newErrors.student_name = t('home.err_name_short');
     else if (/[0-9]/.test(formData.student_name))
@@ -388,6 +390,28 @@ const activitiesRow2 = [
 
         .card-hover { transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
         .card-hover:hover { transform: translateY(-4px) scale(1.01); }
+
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        .hero-name-gradient {
+        background: linear-gradient(90deg, #ffffff 0%, #ffcccc 35%, #ff8888 55%, #ffcccc 75%, #ffffff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        }
+        .hero-sanskrit-gradient {
+          background: linear-gradient(90deg, #ffd6d6, #ffaaaa, #ffd6d6);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: shimmer 5s linear infinite;
+        }
+        .hero-divider-dot {
+          box-shadow: 0 0 10px 3px rgba(255, 100, 100, 0.7);
+        }
       `}</style>
 
       <div className="min-h-screen">
@@ -399,19 +423,54 @@ const activitiesRow2 = [
               <img
                 src="/school.jpeg"
                 alt="School Building"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover opacity-80"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-red-900/20 to-red-800/10"></div>
             </div>
             <div className="float-a absolute top-24 left-12 w-32 h-32 rounded-full bg-white/5 blur-xl pointer-events-none"></div>
             <div className="float-b absolute bottom-32 right-16 w-48 h-48 rounded-full bg-red-300/10 blur-2xl pointer-events-none"></div>
+
             <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-              <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
-                {t('home.hero_title')}
+
+              {/* ── Title ── */}
+              <h1
+                className="hero-title font-bold mb-6 leading-tight tracking-tight"
+                style={{ textShadow: '0 4px 32px rgba(0,0,0,0.5)' }}
+              >
+                <span className="block text-2xl md:text-3xl lg:text-4xl font-semibold mb-1 tracking-widest uppercase"
+  style={{
+    background: 'linear-gradient(90deg, #ffffff 0%, #ffcccc 35%, #ff8888 55%, #ffcccc 75%, #ffffff 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+  }}>
+  Welcome to
+</span>
+                <span className="hero-name-gradient block text-4xl md:text-6xl lg:text-7xl">
+                  {t('home.hero_title').replace('Welcome to ', '')}
+                </span>
               </h1>
-              <p className="hero-sub text-xl md:text-2xl mb-8 text-red-100">
-                <b>{t('home.hero_slogan_sanskrit')}</b> <br />
-                <b>{t('home.hero_slogan_english')}</b>
+
+              {/* ── Decorative divider ── */}
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <span className="h-px w-14 bg-gradient-to-r from-transparent to-red-400/70 rounded-full" />
+                <span className="w-2 h-2 rounded-full bg-red-400 hero-divider-dot" />
+                <span className="w-1.5 h-1.5 rounded-full bg-red-300/60" />
+                <span className="w-1 h-1 rounded-full bg-red-200/40" />
+                <span className="h-px w-14 bg-gradient-to-l from-transparent to-red-400/70 rounded-full" />
+              </div>
+
+              {/* ── Subtitle ── */}
+              <p className="hero-sub mb-8" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}>
+                <span
+                  className="hero-sanskrit-gradient block font-bold text-xl md:text-2xl mb-2"
+                  style={{ letterSpacing: '0.06em' }}
+                >
+                  {t('home.hero_slogan_sanskrit')}
+                </span>
+                <span className="block text-white/75 italic text-sm md:text-base font-medium tracking-wide">
+                  {t('home.hero_slogan_english')}
+                </span>
               </p>
 
               <div className="hero-btns flex flex-col sm:flex-row gap-4 justify-center">
@@ -499,6 +558,33 @@ const activitiesRow2 = [
                   </div>
 
                 </div>
+              <div className="max-w-3xl mx-auto text-center">
+                <div className="relative mb-2">
+                  <span
+                    className="text-7xl md:text-8xl font-black absolute -top-6 left-1/2 -translate-x-1/2 uppercase select-none pointer-events-none whitespace-nowrap"
+                    style={{ WebkitTextStroke: '1.5px #fddcb5', color: 'transparent' }}
+                  >
+                    {t('home.about_watermark', 'About Us')}
+                  </span>
+                <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-5">
+                    {t('home.about_badge')}
+                  </span>
+                </div>
+                <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                  {t('home.about_title')}
+                </h2>
+                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                  <Trans
+                    i18nKey="home.about_description"
+                    components={{ b: <span className="font-semibold text-gray-900" /> }}
+                  />
+                </p>
+
+                <div className="grow-line h-0.5 bg-red-200 mx-auto mb-8 rounded-full"></div>
+                <Button onClick={() => navigate('/about')} variant="outline">
+                  {t('home.about_btn')}
+                  <ArrowRight className="inline-block ml-2 w-5 h-5" />
+                </Button>
               </div>
             </div>
           </section>
@@ -514,7 +600,7 @@ const activitiesRow2 = [
                     className="text-7xl md:text-8xl font-black absolute -top-6 left-1/2 -translate-x-1/2 uppercase select-none pointer-events-none whitespace-nowrap"
                     style={{ WebkitTextStroke: '1.5px #fddcb5', color: 'transparent' }}
                   >
-                    Admission
+                    {t('home.admission_watermark', 'Admission')}
                   </span>
                   <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-4">
                     {t('home.admission_badge')}
@@ -574,7 +660,7 @@ const activitiesRow2 = [
                     className="text-7xl md:text-8xl font-black absolute -top-5 left-0 uppercase select-none pointer-events-none whitespace-nowrap"
                     style={{ WebkitTextStroke: '1.5px #fecaca', color: 'transparent' }}
                   >
-                    Success
+                    {t('home.success_watermark', 'Success')}
                   </span>
                   <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-4">
                     {t('home.achievements_badge')}
@@ -624,7 +710,7 @@ const activitiesRow2 = [
                     className="text-7xl md:text-8xl font-black absolute -top-5 right-0 uppercase select-none pointer-events-none whitespace-nowrap"
                     style={{ WebkitTextStroke: '1.5px #fecaca', color: 'transparent' }}
                   >
-                    Campus
+                    {t('home.campus_watermark', 'Campus')}
                   </span>
                   <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-4">
                     {t('home.activities_badge')}
@@ -735,8 +821,8 @@ const activitiesRow2 = [
                         <input
                           type="text"
                           value={formData.student_name}
-                          onKeyDown={(e) => { if (/[0-9]/.test(e.key)) e.preventDefault(); }}
-                          onChange={(e) => {
+                          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => { if (/[0-9]/.test(e.key)) e.preventDefault(); }}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             const val = e.target.value.replace(/[0-9]/g, '');
                             setFormData({ ...formData, student_name: val });
                             if (errors.student_name) setErrors({ ...errors, student_name: null });
@@ -754,7 +840,7 @@ const activitiesRow2 = [
                         <input
                           type="email"
                           value={formData.email}
-                          onChange={(e) => {
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             setFormData({ ...formData, email: e.target.value });
                             if (errors.email) setErrors({ ...errors, email: null });
                           }}
@@ -771,7 +857,7 @@ const activitiesRow2 = [
                       <input
                         type="tel"
                         value={formData.phone}
-                        onChange={(e) => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           setFormData({ ...formData, phone: e.target.value });
                           if (errors.phone) setErrors({ ...errors, phone: null });
                         }}
@@ -787,7 +873,7 @@ const activitiesRow2 = [
                       <textarea
                         rows={4}
                         value={formData.message}
-                        onChange={(e) => {
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                           setFormData({ ...formData, message: e.target.value });
                           if (errors.message) setErrors({ ...errors, message: null });
                         }}

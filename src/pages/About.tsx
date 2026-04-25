@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { BookOpen, Users, Target, Eye, Library, FlaskConical, Monitor, Dumbbell, Quote } from 'lucide-react';
+import { BookOpen, Users, Target, Eye, FlaskConical, Monitor, Dumbbell, Quote } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 /* ─── scroll-reveal hook ─── */
-function useReveal(options = {}) {
-  const ref = useRef(null);
+function useReveal(options: IntersectionObserverInit = {}) {
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -166,7 +166,7 @@ const About = () => {
                     />
                   </div>
                   <div className="num-pop absolute -bottom-6 -left-6 bg-red-600 text-white px-8 py-6 rounded-2xl shadow-xl hidden md:block border-4 border-[#FDFCF6]">
-                    <p className="text-4xl font-black leading-none tracking-tighter">35+</p>
+                    <p className="text-4xl font-black leading-none tracking-tighter">32+</p>
                     <p className="text-[11px] uppercase tracking-widest font-bold mt-1">{t('about_page.years_of_legacy', 'Years of Legacy')}</p>
                   </div>
                 </div>

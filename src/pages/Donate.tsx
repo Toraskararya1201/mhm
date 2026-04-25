@@ -156,10 +156,6 @@ const Donate = () => {
       <style>{`
         .scroll-animate { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
         .scroll-animate.animate-in-view { opacity: 1; transform: translateY(0); }
-        .scroll-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-        .scroll-left.animate-in-view { opacity: 1; transform: translateX(0); }
-        .scroll-right { opacity: 0; transform: translateX(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-        .scroll-right.animate-in-view { opacity: 1; transform: translateX(0); }
         .delay-100 { transition-delay: 0.1s; }
         .delay-200 { transition-delay: 0.2s; }
         .delay-300 { transition-delay: 0.3s; }
@@ -202,12 +198,7 @@ const Donate = () => {
           opacity: 0;
           transition: opacity 0.25s ease;
         }
-        .hero-cta-btn:hover {
-          transform: translateY(-3px) scale(1.03);
-          box-shadow: 0 14px 32px rgba(0,0,0,0.3), 0 0 0 3px rgba(255,255,255,0.4);
-          color: #ffffff;
-          border-color: #dc2626;
-        }
+        .hero-cta-btn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 14px 32px rgba(0,0,0,0.3), 0 0 0 3px rgba(255,255,255,0.4); color: #ffffff; border-color: #dc2626; }
         .hero-cta-btn:hover::before { opacity: 1; }
         .hero-cta-btn span { position: relative; z-index: 1; }
         .hero-cta-btn:active { transform: translateY(-1px) scale(1.01); }
@@ -220,12 +211,7 @@ const Donate = () => {
           border: 2px solid #bfdbfe;
           transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
         }
-        .way-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 20px 40px rgba(59,130,246,0.15);
-          border-color: #2563eb;
-          background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
-        }
+        .way-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(59,130,246,0.15); border-color: #2563eb; background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%); }
         .way-card .way-icon-wrap { transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
         .way-card:hover .way-icon-wrap { transform: scale(1.12); box-shadow: 0 4px 12px rgba(59,130,246,0.2); border-color: #93c5fd; }
         .way-card .way-title { transition: color 0.3s ease; }
@@ -240,6 +226,40 @@ const Donate = () => {
         .slide1 { animation: kenBurns1 12s ease-in-out infinite; }
         .slide2 { animation: kenBurns2 12s ease-in-out infinite; }
         .slide3 { animation: kenBurns3 12s ease-in-out infinite; }
+
+        /* ── Creative section headings ── */
+        .section-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: #fef2f2;
+          color: #dc2626;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.13em;
+          text-transform: uppercase;
+          padding: 5px 14px;
+          border-radius: 50px;
+          border: 1px solid #fecaca;
+          margin-bottom: 12px;
+        }
+        .section-pill::before { content: ''; width: 6px; height: 6px; background: #dc2626; border-radius: 50%; display: inline-block; }
+
+        .heading-accent {
+          position: relative;
+          display: inline;
+          white-space: nowrap;
+        }
+        .heading-accent::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: -4px;
+          width: 100%;
+          height: 5px;
+          background: linear-gradient(90deg, #dc2626, #f87171 60%, transparent);
+          border-radius: 3px;
+        }
       `}</style>
 
       <div className="min-h-screen pt-20 bg-slate-50">
@@ -248,13 +268,13 @@ const Donate = () => {
         <section className="relative py-24 bg-gradient-to-br from-red-700 to-red-900 text-white overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div className="slide1 absolute inset-0">
-              <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1600" alt="Students learning" className="w-full h-full object-cover object-top" />
+              <img src="/d1.jpeg" alt="Students learning" className="w-full h-full object-cover object-top" />
             </div>
             <div className="slide2 absolute inset-0">
-              <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&q=80&w=1600" alt="Classroom" className="w-full h-full object-cover object-top" />
+              <img src="/d2.jpeg" alt="Classroom" className="w-full h-full object-cover object-top" />
             </div>
             <div className="slide3 absolute inset-0">
-              <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=1600" alt="School building" className="w-full h-full object-cover object-top" />
+              <img src="/d3.jpeg" alt="School building" className="w-full h-full object-cover object-top" />
             </div>
             <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-red-900/50" />
           </div>
@@ -283,9 +303,13 @@ const Donate = () => {
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div ref={whyRef as any} className="scroll-animate">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center border-b-4 border-red-600 pb-4 inline-block">
-                {t('donate_page.why_title')}
-              </h2>
+              <div className="text-center mb-8">
+                <div className="section-pill">Our Story</div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                  Every Rupee Plants a{' '}
+                  <span className="heading-accent text-red-600">Seed of Change</span>
+                </h2>
+              </div>
               <div className="space-y-4 text-lg text-gray-600 leading-relaxed">
                 <p>{t('donate_page.why_p1')}</p>
                 <p>{t('donate_page.why_p2')}</p>
@@ -299,8 +323,12 @@ const Donate = () => {
         <section className="py-16 bg-red-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div ref={waysTitle as any} className="scroll-animate text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('donate_page.ways_title')}</h2>
-              <p className="text-gray-500">{t('donate_page.ways_subtitle')}</p>
+              <div className="section-pill">Make an Impact</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                Choose How You{' '}
+                <span className="heading-accent text-red-600">Spark a Future</span>
+              </h2>
+              <p className="text-gray-500 mt-5">{t('donate_page.ways_subtitle')}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {contributionTypes.map((type, index) => (
@@ -327,8 +355,12 @@ const Donate = () => {
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div ref={howTitle as any} className="scroll-animate text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('donate_page.how_title')}</h2>
-              <p className="text-gray-500">{t('donate_page.how_subtitle')}</p>
+              <div className="section-pill">Simple & Secure</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                Your Kindness,{' '}
+                <span className="heading-accent text-red-600">Your Way</span>
+              </h2>
+              <p className="text-gray-500 mt-5">{t('donate_page.how_subtitle')}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {donationMethods.map((method, index) => (
@@ -356,8 +388,12 @@ const Donate = () => {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div ref={formRef as any} className="scroll-animate">
               <div className="text-center mb-10">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('donate_page.form_title')}</h2>
-                <p className="text-gray-600">{t('donate_page.form_subtitle')}</p>
+                <div className="section-pill">Take Action</div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                  Be the{' '}
+                  <span className="heading-accent text-red-600">Reason They Smile</span>
+                </h2>
+                <p className="text-gray-600 mt-5">{t('donate_page.form_subtitle')}</p>
               </div>
               <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
 
@@ -367,9 +403,7 @@ const Donate = () => {
                       <CheckCircle className="w-12 h-12 text-green-500" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('donate_page.success_title')}</h3>
-                    <p className="text-gray-500 text-base">
-                      {t('donate_page.success_msg')}
-                    </p>
+                    <p className="text-gray-500 text-base">{t('donate_page.success_msg')}</p>
                     <p className="text-gray-400 text-sm mt-2">
                       {t('donate_page.success_urgent')}{' '}
                       <a href="tel:+919657630464" className="text-red-600 font-semibold hover:underline">+91 9657630464 | +91 9527794050</a>{' '}
@@ -380,7 +414,6 @@ const Donate = () => {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-
                     <div>
                       <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
                         <Users className="w-4 h-4 mr-2 text-red-600" /> {t('donate_page.form_name_label')}
@@ -496,7 +529,11 @@ const Donate = () => {
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div ref={faqTitle as any} className="scroll-animate text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('donate_page.faq_title')}</h2>
+              <div className="section-pill">Got Questions?</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                Everything You{' '}
+                <span className="heading-accent text-red-600">Need to Know</span>
+              </h2>
             </div>
             <div className="space-y-4">
               {faqs.map((faq, index) => (
