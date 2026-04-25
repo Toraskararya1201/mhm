@@ -18,6 +18,19 @@ function useReveal(options: IntersectionObserverInit = {}) {
   return ref;
 }
 
+const FacultyCard = ({ teacher }) => (
+  <div className="group relative border border-gray-200 rounded-lg p-5 text-center bg-white transition duration-300 hover:shadow-md hover:border-red-300 h-[220px] w-full flex flex-col justify-between">
+    <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-red-500 rounded-tl-lg"></div>
+    <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-red-500 rounded-br-lg"></div>
+    <div className="w-14 h-14 mx-auto rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-700 group-hover:bg-red-50 group-hover:text-red-600 transition">
+      {teacher.name.charAt(0)}
+    </div>
+    <h3 className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition">{teacher.name}</h3>
+    <p className="text-[10px] text-gray-500 uppercase tracking-wide">{teacher.subject}</p>
+    <p className="text-xs text-gray-600 leading-tight">{teacher.qualification}</p>
+  </div>
+);
+
 const About = () => {
   const { t } = useTranslation();
 
@@ -33,11 +46,11 @@ const About = () => {
   ];
 
   const faculty = [
-    { name: 'Shri Patil A.A.',   subject: 'Principal',    qualification: 'B.A., B.Ed. in Education' },
-    { name: 'Shrimati Patil D.S.', subject: 'Teacher',    qualification: 'M.Sc., B.Ed. in Education' },
-    { name: 'Sau. Gujar S.G.',    subject: 'Teacher',     qualification: 'M.A., B.Ed. in Education' },
-    { name: 'Shrimati Kamble P.R.',  subject: 'Teacher',     qualification: 'B.A., B.Ed. in Education' },
-    { name: 'Sau. Khot S.K.',     subject: 'Teacher', qualification: 'M.A., B.Ed. in Education' },
+    { name: t('about_page.faculty1_name'), subject: t('about_page.faculty1_subject'), qualification: t('about_page.faculty1_qual') },
+    { name: t('about_page.faculty2_name'), subject: t('about_page.faculty2_subject'), qualification: t('about_page.faculty2_qual') },
+    { name: t('about_page.faculty3_name'), subject: t('about_page.faculty3_subject'), qualification: t('about_page.faculty3_qual') },
+    { name: t('about_page.faculty4_name'), subject: t('about_page.faculty4_subject'), qualification: t('about_page.faculty4_qual') },
+    { name: t('about_page.faculty5_name'), subject: t('about_page.faculty5_subject'), qualification: t('about_page.faculty5_qual') },
   ];
 
   const heroRef       = useReveal();
@@ -264,53 +277,35 @@ const About = () => {
                 className="principal-photo-panel principal-left lg:col-span-4 relative bg-[#e3ae58] flex flex-col justify-end min-h-[480px] lg:min-h-[450px]"
                 ref={el => { if (el) { const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting){el.classList.add('revealed');obs.unobserve(el);} },{threshold:0.1}); obs.observe(el); } }}
               >
-                {/* Background Image (Absolute & Full Cover on all screens) */}
                 <img
                   src="/Principal.png"
                   alt="Principal"
                   className="absolute inset-0 w-full h-full object-cover object-top opacity-100 lg:opacity-90 z-0"
                 />
-
-                {/* Mobile-only bottom gradient overlay — matched to the soft coral/pink hue from the screenshot */}
                 <div
                   className="absolute inset-x-0 bottom-0 h-[260px] bg-gradient-to-t from-[#cf7b72]/95 via-[#cf7b72]/70 to-transparent lg:hidden pointer-events-none z-0"
                 ></div>
-
-                {/* Desktop gradient overlay */}
                 <div
                   className="absolute inset-0 bg-gradient-to-t from-red-900/55 via-red-900/20 to-transparent hidden lg:block pointer-events-none z-0"
                 ></div>
-
-                {/* Shared info overlay (Forced to sit above absolute background image via z-10) */}
                 <div className="relative z-10 p-6 lg:p-8 w-full mt-auto">
-                  {/* Mobile Quote Marks (Matches the orange-ish quote in the screenshot) */}
                   <div className="absolute bottom-6 right-4 text-[#ff9b9b] text-[80px] font-serif leading-none select-none pointer-events-none lg:hidden opacity-80" style={{ transform: 'translateY(15px)' }}>
-                    ”
+                    "
                   </div>
-                  
-                  {/* Desktop Quote Marks */}
                   <div className="text-red-400/30 text-[120px] font-serif leading-none absolute top-4 right-6 select-none pointer-events-none hidden lg:block">
                     "
                   </div>
-
-                  {/* Glassmorphism Badge */}
                   <div className="inline-block bg-white/10 backdrop-blur-md border border-white/40 rounded-2xl px-4 py-1.5 mb-2 shadow-sm">
                     <span className="text-white text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-md">
                       {t('about_page.principal_desk', "PRINCIPAL'S DESK")}
                     </span>
                   </div>
-
-                  {/* Name */}
                   <h3 className="text-[28px] sm:text-3xl lg:text-2xl font-black text-white tracking-tight leading-none mb-1.5 drop-shadow-md">
                     {t('about_page.principal_name', 'Mr. Arunsingh Patil')}
                   </h3>
-
-                  {/* Role / Subtitle */}
                   <p className="text-[#fca5a5] text-[10px] font-bold uppercase tracking-widest drop-shadow-sm mb-2 lg:mb-0">
                     {t('about_page.principal_title_role', 'PRINCIPAL · PH.D. IN EDUCATION')}
                   </p>
-
-                  {/* Red line (desktop only) */}
                   <div className="h-[2px] w-8 lg:w-10 bg-red-400 mt-3 lg:mt-4 hidden lg:block"></div>
                 </div>
               </div>
@@ -320,22 +315,18 @@ const About = () => {
                 className="principal-message-panel principal-right lg:col-span-8 bg-white px-10 py-12 flex flex-col justify-center relative overflow-hidden"
                 ref={el => { if (el) { const obs = new IntersectionObserver(([e]) => { if(e.isIntersecting){el.classList.add('revealed');obs.unobserve(el);} },{threshold:0.1}); obs.observe(el); } }}
               >
-                {/* Desktop version (absolute, hidden on mobile) */}
                 <span
                   className="message-bg-text-desktop absolute -top-4 right-4 text-8xl font-black uppercase select-none pointer-events-none"
                   style={{ WebkitTextStroke:'1px #fee2e2', color:'transparent' }}
                 >
                   MESSAGE
                 </span>
-
-                {/* Mobile version (inline, hidden on desktop) */}
                 <span
                   className="message-bg-text-mobile text-[3rem] font-black uppercase select-none pointer-events-none tracking-tighter mb-1"
                   style={{ WebkitTextStroke:'1px #fee2e2', color:'transparent', lineHeight: 1 }}
                 >
                   MESSAGE
                 </span>
-
                 <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter mb-8 relative z-10">
                   {t('about_page.principal_section_heading', "A Message from our")} <span className="text-red-600">{t('about_page.principal_section_accent', 'Principal')}</span>
                 </h2>
@@ -381,35 +372,26 @@ const About = () => {
               </div>
             </div>
 
-            <div ref={facultyGrdRef} className="stagger-grid max-w-4xl mx-auto">
-              <div className="flex justify-center gap-6 flex-wrap mb-8">
-                {faculty.slice(0, 3).map((teacher, idx) => (
-                  <div key={idx} className="group relative border border-gray-200 rounded-lg p-5 text-center bg-white transition duration-300 hover:shadow-md hover:border-red-300 h-[220px] w-full max-w-[250px] flex flex-col justify-between">
-                    <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-red-500 rounded-tl-lg"></div>
-                    <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-red-500 rounded-br-lg"></div>
-                    <div className="w-14 h-14 mx-auto rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-700 group-hover:bg-red-50 group-hover:text-red-600 transition">
-                      {teacher.name.split(' ')[1][0]}
-                    </div>
-                    <h3 className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition">{teacher.name}</h3>
-                    <p className="text-[10px] text-gray-500 uppercase tracking-wide">{teacher.subject}</p>
-                    <p className="text-xs text-gray-600 leading-tight">{teacher.qualification}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="flex justify-center gap-6">
-                {faculty.slice(3, 5).map((teacher, idx) => (
-                  <div key={idx} className="group relative border border-gray-200 rounded-lg p-5 text-center bg-white transition duration-300 hover:shadow-md hover:border-red-300 h-[220px] w-full max-w-[250px] flex flex-col justify-between">
-                    <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-red-500 rounded-tl-lg"></div>
-                    <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-red-500 rounded-br-lg"></div>
-                    <div className="w-14 h-14 mx-auto rounded-full bg-gray-100 flex items-center justify-center text-lg font-bold text-gray-700 group-hover:bg-red-50 group-hover:text-red-600 transition">
-                      {teacher.name.split(' ')[1][0]}
-                    </div>
-                    <h3 className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition">{teacher.name}</h3>
-                    <p className="text-[10px] text-gray-500 uppercase tracking-wide">{teacher.subject}</p>
-                    <p className="text-xs text-gray-600 leading-tight">{teacher.qualification}</p>
-                  </div>
-                ))}
-              </div>
+            {/* Faculty cards — 1 col mobile | 3-col grid on desktop, last 2 centered via col-start */}
+            <div
+              ref={facultyGrdRef}
+              className="stagger-grid max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-6 gap-6"
+            >
+              {/* Row 1: 3 cards — each spans 2 of 6 cols */}
+              {faculty.slice(0, 3).map((teacher, idx) => (
+                <div key={idx} className="md:col-span-2">
+                  <FacultyCard teacher={teacher} />
+                </div>
+              ))}
+              {/* Row 2: 2 cards centered — start at col 2, each spans 2 of 6 cols */}
+              {faculty.slice(3, 5).map((teacher, idx) => (
+                <div
+                  key={idx + 3}
+                  className={`md:col-span-2 ${idx === 0 ? 'md:col-start-2' : ''}`}
+                >
+                  <FacultyCard teacher={teacher} />
+                </div>
+              ))}
             </div>
           </div>
         </section>

@@ -47,14 +47,192 @@ function AutoReset({ onReset }: { onReset: () => void }) {
   );
 }
 
-type FormData = {
-  student_name: string;
-  email: string;
-  phone: string;
-  message: string;
-};
 
-type FormErrors = Record<string, string | null>;
+/**
+ * useManualScroll
+ * ---------------
+ * Drives an infinite marquee entirely in JS (RAF loop) so we can:
+ *   1. Pause on hover
+ *   2. Let the user drag freely
+ *   3. Apply momentum after drag release
+ *   4. Resume auto-scroll from EXACTLY where the drag/momentum left off
+ *
+ * The element is expected to contain its children duplicated (×2) so the
+ * "half-width wrap" trick creates a seamless loop.
+ *
+ * Props:
+ *   direction  – 'left' | 'right'   (default: 'left')
+ *   speed      – px per frame @ 60 fps (default: 0.5)
+ */
+function useManualScroll({ direction = 'left', speed = 0.5 } = {}) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    /* ── state ── */
+    let offset = 0;          // current translateX (always negative for left)
+    let autoSpeed = direction === 'left' ? -speed : speed;
+    let isHovered = false;
+    let isDragging = false;
+    let velocity = 0;
+    let momentumActive = false;
+    let rafId = null;
+
+    /* drag tracking */
+    let dragStartX = 0;
+    let dragStartOffset = 0;
+    let lastX = 0;
+    let lastTime = 0;
+
+    /* ── helpers ── */
+
+    // Half-width of the duplicated strip = the loop boundary
+    const halfWidth = () => el.scrollWidth / 2;
+
+    // Wrap offset so it stays within [-halfWidth, 0)
+    const wrapOffset = (v) => {
+      const hw = halfWidth();
+      if (hw === 0) return v;
+      v = v % hw;                    // bring into (-hw, hw)
+      if (v > 0) v -= hw;            // keep negative (left-direction semantics)
+      return v;
+    };
+
+    const applyTransform = () => {
+      el.style.transform = `translateX(${offset}px)`;
+    };
+
+    /* ── main RAF loop ── */
+    const tick = () => {
+      rafId = requestAnimationFrame(tick);
+
+      if (isDragging) {
+        // transform is set live in pointer handlers; nothing to do here
+        return;
+      }
+
+      if (momentumActive) {
+        velocity *= 0.92;
+        offset += velocity;
+        offset = wrapOffset(offset);
+        applyTransform();
+
+        if (Math.abs(velocity) < 0.3) {
+          momentumActive = false;
+          velocity = 0;
+          // auto-scroll resumes seamlessly from current offset on next frame
+        }
+        return;
+      }
+
+      // auto-scroll (skip if hovered without dragging)
+      if (!isHovered) {
+        offset += autoSpeed;
+        offset = wrapOffset(offset);
+        applyTransform();
+      }
+    };
+
+    rafId = requestAnimationFrame(tick);
+
+    /* ── hover ── */
+    const onMouseEnter = () => { isHovered = true; };
+    const onMouseLeave = () => {
+      isHovered = false;
+      if (isDragging) {
+        isDragging = false;
+        el.style.cursor = '';
+        momentumActive = true;
+      }
+    };
+
+    /* ── mouse drag ── */
+    const onMouseDown = (e) => {
+      isDragging = true;
+      momentumActive = false;
+      velocity = 0;
+      dragStartX = e.pageX;
+      dragStartOffset = offset;
+      lastX = e.pageX;
+      lastTime = Date.now();
+      el.style.cursor = 'grabbing';
+      e.preventDefault();
+    };
+
+    const onMouseMove = (e) => {
+      if (!isDragging) return;
+      const now = Date.now();
+      const dt = Math.max(now - lastTime, 1);
+      velocity = (e.pageX - lastX) / dt * 16; // scale to ~60fps frame
+      lastX = e.pageX;
+      lastTime = now;
+      offset = wrapOffset(dragStartOffset + (e.pageX - dragStartX));
+      applyTransform();
+    };
+
+    const onMouseUp = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      el.style.cursor = '';
+      momentumActive = true;
+    };
+
+    /* ── touch drag ── */
+    const onTouchStart = (e) => {
+      isDragging = true;
+      momentumActive = false;
+      velocity = 0;
+      dragStartX = e.touches[0].pageX;
+      dragStartOffset = offset;
+      lastX = e.touches[0].pageX;
+      lastTime = Date.now();
+    };
+
+    const onTouchMove = (e) => {
+      if (!isDragging) return;
+      const now = Date.now();
+      const dt = Math.max(now - lastTime, 1);
+      velocity = (e.touches[0].pageX - lastX) / dt * 16;
+      lastX = e.touches[0].pageX;
+      lastTime = now;
+      offset = wrapOffset(dragStartOffset + (e.touches[0].pageX - dragStartX));
+      applyTransform();
+    };
+
+    const onTouchEnd = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      momentumActive = true;
+    };
+
+    /* ── listeners ── */
+    el.addEventListener('mouseenter', onMouseEnter);
+    el.addEventListener('mouseleave', onMouseLeave);
+    el.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);   // window so fast drags don't escape
+    window.addEventListener('mouseup', onMouseUp);
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: true });
+    el.addEventListener('touchend', onTouchEnd);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      el.removeEventListener('mouseenter', onMouseEnter);
+      el.removeEventListener('mouseleave', onMouseLeave);
+      el.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [direction, speed]);
+
+  return ref;
+}
+
 
 const Home = () => {
   const { t } = useTranslation();
@@ -70,46 +248,51 @@ const Home = () => {
     { image: '/achieve.jpeg',     title: t('home.achievements_card6_title'),  description: t('home.achievements_card6_desc') },
   ];
 
-  const activitiesRow1 = [
-    { image: '/activity.jpeg',  title: t('home.activity_sports_title'),   description: t('home.activity_sports_desc') },
-    { image: '/activity2.jpeg', title: t('home.activity_labs_title'),     description: t('home.activity_labs_desc') },
-    { image: '/activity3.jpeg', title: t('home.activity_culture_title'),  description: t('home.activity_culture_desc') },
-    { image: '/activity4.jpeg', title: t('home.activity_community_title'),description: t('home.activity_community_desc') },
-    { image: '/act1.jpeg',      title: t('home.activity_art_title'),       description: t('home.activity_art_desc') },
-    { image: '/act2.jpeg',      title: t('home.activity_music_title'),     description: t('home.activity_music_desc') },
-    { image: '/act20.jpeg',     title: t('home.activity_computer_title'),  description: t('home.activity_computer_desc') },
-    { image: '/act21.jpeg',     title: t('home.activity_computer_title'),  description: t('home.activity_computer_desc') },
-    { image: '/act22.jpeg',     title: t('home.activity_computer_title'),  description: t('home.activity_computer_desc') },
-    { image: '/act23.jpeg',     title: t('home.activity_computer_title'),  description: t('home.activity_computer_desc') },
-    { image: '/act24.jpeg',     title: t('home.activity_computer_title'),  description: t('home.activity_computer_desc') },
-    { image: '/act25.jpeg',     title: t('home.activity_computer_title'),  description: t('home.activity_computer_desc') },
-  ];
+ const activitiesRow1 = [
+  { image: '/activity.jpeg',  title: t('home.activity_c1_title'),  description: t('home.activity_c1_desc') },
+  { image: '/activity2.jpeg', title: t('home.activity_c2_title'),  description: t('home.activity_c2_desc') },
+  { image: '/activity3.jpeg', title: t('home.activity_c3_title'),  description: t('home.activity_c3_desc') },
+  { image: '/activity4.jpeg', title: t('home.activity_c4_title'),  description: t('home.activity_c4_desc') },
+  { image: '/act1.jpeg',      title: t('home.activity_c5_title'),  description: t('home.activity_c5_desc') },
+  { image: '/act2.jpeg',      title: t('home.activity_c6_title'),  description: t('home.activity_c6_desc') },
+  { image: '/act20.jpeg',     title: t('home.activity_c7_title'),  description: t('home.activity_c7_desc') },
+  { image: '/act21.jpeg',     title: t('home.activity_c8_title'),  description: t('home.activity_c8_desc') },
+  { image: '/act22.jpeg',     title: t('home.activity_c9_title'),  description: t('home.activity_c9_desc') },
+  { image: '/act23.jpeg',     title: t('home.activity_c10_title'), description: t('home.activity_10_desc') },
+  { image: '/act24.jpeg',     title: t('home.activity_c11_title'), description: t('home.activity_11_desc') },
+  { image: '/act25.jpeg',     title: t('home.activity_c12_title'), description: t('home.activity_12_desc') },
+];
 
-  const activitiesRow2 = [
-    { image: '/act3.jpeg',  title: t('home.activity_library_title'),  description: t('home.activity_library_desc') },
-    { image: '/act4.jpeg',  title: t('home.activity_tech_title'),     description: t('home.activity_tech_desc') },
-    { image: '/act5.jpeg',  title: t('home.activity_dance_title'),    description: t('home.activity_dance_desc') },
-    { image: '/act6.jpeg',  title: t('home.activity_yoga_title'),     description: t('home.activity_yoga_desc') },
-    { image: '/act7.jpeg',  title: t('home.activity_reading_title'),  description: t('home.activity_reading_desc') },
-    { image: '/act8.jpeg',  title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act9.jpeg',  title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act10.jpeg', title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act11.jpeg', title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act12.jpeg', title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act13.jpeg', title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act14.jpeg', title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act15.jpeg', title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act16.jpeg', title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act17.jpeg', title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act18.jpeg', title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-    { image: '/act19.jpeg', title: t('home.activity_computer_title'), description: t('home.activity_computer_desc') },
-  ];
+const activitiesRow2 = [
+  { image: '/act3.jpeg',  title: t('home.activity_c13_title'),  description: t('home.activity_c13_desc') },
+  { image: '/act4.jpeg',  title: t('home.activity_c14_title'),  description: t('home.activity_c14_desc') },
+  { image: '/act5.jpeg',  title: t('home.activity_c15_title'),  description: t('home.activity_c15_desc') },
+  { image: '/act6.jpeg',  title: t('home.activity_c16_title'),  description: t('home.activity_c16_desc') },
+  { image: '/act7.jpeg',  title: t('home.activity_c17_title'),  description: t('home.activity_c17_desc') },
+  { image: '/act8.jpeg',  title: t('home.activity_c18_title'),  description: t('home.activity_c18_desc') },
+  { image: '/act9.jpeg',  title: t('home.activity_c19_title'),  description: t('home.activity_c19_desc') },
+  { image: '/act10.jpeg', title: t('home.activity_c20_title'),  description: t('home.activity_c20_desc') },
+  { image: '/act11.jpeg', title: t('home.activity_c21_title'),  description: t('home.activity_c21_desc') },
+  { image: '/act12.jpeg', title: t('home.activity_c22_title'),  description: t('home.activity_c22_desc') },
+  { image: '/act13.jpeg', title: t('home.activity_c23_title'),  description: t('home.activity_c23_desc') },
+  { image: '/act14.jpeg', title: t('home.activity_c24_title'),  description: t('home.activity_c24_desc') },
+  { image: '/act15.jpeg', title: t('home.activity_c25_title'),  description: t('home.activity_c25_desc') },
+  { image: '/act16.jpeg', title: t('home.activity_c26_title'),  description: t('home.activity_c26_desc') },
+  { image: '/act17.jpeg', title: t('home.activity_c27_title'),  description: t('home.activity_c27_desc') },
+  { image: '/act18.jpeg', title: t('home.activity_c28_title'),  description: t('home.activity_c28_desc') },
+  { image: '/act19.jpeg', title: t('home.activity_c29_title'),  description: t('home.activity_c29_desc') },
+];
 
   const admissionSteps = [
     { number: '01', title: t('home.admission_step1_title'), description: t('home.admission_step1_desc'), icon: BookOpen },
     { number: '02', title: t('home.admission_step2_title'), description: t('home.admission_step2_desc'), icon: CheckCircle },
     { number: '03', title: t('home.admission_step3_title'), description: t('home.admission_step3_desc'), icon: Award },
   ];
+
+  // Each strip gets its own hook instance with correct direction + speed
+  const achievementsRef    = useManualScroll({ direction: 'left',  speed: 1.2 });
+  const activitiesRow1Ref  = useManualScroll({ direction: 'right', speed: 1.2 });
+  const activitiesRow2Ref  = useManualScroll({ direction: 'left',  speed: 1.2 });
 
   const aboutRef      = useReveal();
   const admissionRef  = useReveal();
@@ -184,11 +367,15 @@ const Home = () => {
         .hero-sub    { animation: heroSlide .9s cubic-bezier(.4,0,.2,1) .5s both }
         .hero-btns   { animation: heroBtns  .9s cubic-bezier(.4,0,.2,1) .75s both }
 
-        @keyframes scrollLeft  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-        @keyframes scrollRight { from{transform:translateX(-50%)} to{transform:translateX(0)} }
-        .scroll-left  { display:flex; width:max-content; animation:scrollLeft  28s linear infinite; }
-        .scroll-right { display:flex; width:max-content; animation:scrollRight 28s linear infinite; }
-        .scroll-left:hover, .scroll-right:hover { animation-play-state:paused; }
+        /* Marquee strips: NO CSS scroll animation — driven 100% by JS RAF */
+        .marquee-strip {
+          display: flex;
+          width: max-content;
+          will-change: transform;
+          cursor: grab;
+          user-select: none;
+        }
+        .marquee-strip:active { cursor: grabbing; }
 
         @keyframes popIn { 0%{opacity:0;transform:scale(.7)} 80%{transform:scale(1.07)} 100%{opacity:1;transform:scale(1)} }
         .pop-in { animation: popIn .5s cubic-bezier(.4,0,.2,1) both; }
@@ -305,6 +492,72 @@ const Home = () => {
           {/* ── ABOUT ── */}
           <section className="py-12">
             <div ref={aboutRef} className="reveal max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+
+                  {/* ── Left: Text + Stats ── */}
+                  <div>
+                    <div className="relative mb-2">
+                      <span
+                        className="text-7xl md:text-8xl font-black absolute -top-6 left-0 uppercase select-none pointer-events-none whitespace-nowrap"
+                        style={{ WebkitTextStroke: '1.5px #fddcb5', color: 'transparent' }}
+                      >
+                        About Us
+                      </span>
+                      <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-5">
+                        {t('home.about_badge')}
+                      </span>
+                    </div>
+
+                    <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                      {t('home.about_title')} <span className="text-red-600">{t('home.about_title_accent')}</span>
+                    </h2>
+                    <p className="text-base text-gray-600 mb-6 leading-relaxed">
+                      <Trans
+                        i18nKey="home.about_description"
+                        components={{ b: <span className="font-semibold text-gray-900" /> }}
+                      />
+                    </p>
+
+                    {/* ── Stats Grid ── */}
+                    <div className="grid grid-cols-2 gap-3 mb-6">
+                      {[
+                        { label: t('home.about_stat1') },
+                        { label: t('home.about_stat2') },
+                        { label: t('home.about_stat3') },
+                        { label: t('home.about_stat4') },
+                      ].map((s, i) => (
+                        <div key={i} className="bg-red-50 rounded-xl px-4 py-3 flex items-center gap-3 border border-red-100">
+                          <div className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></div>
+                          <div className="text-sm font-semibold text-red-700">{s.label}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grow-line h-0.5 bg-red-200 mb-6 rounded-full"></div>
+
+                    <Button onClick={() => navigate('/about')} variant="outline">
+                      {t('home.about_btn')}
+                      <ArrowRight className="inline-block ml-2 w-5 h-5" />
+                    </Button>
+                  </div>
+
+                  {/* ── Right: School Photo ── */}
+                  <div className="relative">
+                    <div className="rounded-2xl overflow-hidden border-2 border-red-100 shadow-xl shadow-red-50">
+                      <img
+                        src="/act34.jpeg"
+                        alt="Manpadale High School"
+                        className="w-full h-[380px] object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-red-900/30 to-transparent rounded-2xl"></div>
+                    </div>
+                    {/* decorative ring */}
+                    <div className="absolute -bottom-4 -right-4 w-28 h-28 rounded-full border-[12px] border-red-100/40 pointer-events-none"></div>
+                    <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full border-[8px] border-orange-100/50 pointer-events-none"></div>
+                  </div>
+
+                </div>
               <div className="max-w-3xl mx-auto text-center">
                 <div className="relative mb-2">
                   <span
@@ -419,7 +672,8 @@ const Home = () => {
                 <div className="grow-line h-1 bg-red-600 rounded-full mt-2"></div>
               </div>
               <div className="overflow-hidden">
-                <div className="scroll-left py-4" style={{ gap: '1.5rem' }}>
+                {/* ref goes on the inner strip, NOT the overflow wrapper */}
+                <div ref={achievementsRef} className="marquee-strip py-4" style={{ gap: '0.5rem' }}>
                   {[...achievements, ...achievements].map((achievement, index) => (
                     <div
                       key={index}
@@ -441,7 +695,6 @@ const Home = () => {
                       </div>
                       <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm"></div>
                     </div>
-                    
                   ))}
                 </div>
               </div>
@@ -468,9 +721,11 @@ const Home = () => {
                 </h2>
                 <div className="grow-line h-1 bg-red-600 rounded-full mt-2"></div>
               </div>
+
+              {/* Row 1 — scrolls RIGHT */}
               <div className="overflow-hidden">
-                <div className="scroll-right py-4" style={{ gap: '1.5rem', animationDuration: '56s' }}>
-                 {[...activitiesRow1, ...activitiesRow1].map((activity, index) => (
+                <div ref={activitiesRow1Ref} className="marquee-strip py-4" style={{ gap: '0.5rem' }}>
+                  {[...activitiesRow1, ...activitiesRow1].map((activity, index) => (
                     <div
                       key={index}
                       className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 border-red-100 hover:border-red-300 hover:shadow-lg hover:shadow-red-50"
@@ -494,8 +749,10 @@ const Home = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Row 2 — scrolls LEFT */}
               <div className="overflow-hidden mt-3">
-                <div className="scroll-left py-4" style={{ gap: '1.5rem', animationDuration: '84s' }}>
+                <div ref={activitiesRow2Ref} className="marquee-strip py-4" style={{ gap: '0.5rem' }}>
                   {[...activitiesRow2, ...activitiesRow2].map((activity, index) => (
                     <div
                       key={index}
