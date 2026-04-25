@@ -47,6 +47,138 @@ function AutoReset({ onReset }) {
   );
 }
 
+function useManualScroll() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let isDown = false;
+    let startX = 0;
+    let currentOffset = 0;
+    let velocity = 0;
+    let lastX = 0;
+    let lastTime = 0;
+    let momentumFrame = null;
+
+    const getCurrentTranslateX = () => {
+      const matrix = new DOMMatrix(window.getComputedStyle(el).transform);
+      return matrix.m41;
+    };
+
+    const detachAnimation = () => {
+      currentOffset = getCurrentTranslateX();
+      el.style.animationName = 'none';
+      el.style.transform = `translateX(${currentOffset}px)`;
+    };
+
+    const reattachAnimation = () => {
+      el.style.animationName = '';
+      el.style.animationPlayState = 'running';
+      el.style.transform = '';
+    };
+
+    const cancelMomentum = () => {
+      if (momentumFrame) { cancelAnimationFrame(momentumFrame); momentumFrame = null; }
+    };
+
+    const runMomentum = () => {
+      velocity *= 0.92; // friction — higher = slides longer
+      currentOffset += velocity;
+      el.style.transform = `translateX(${currentOffset}px)`;
+      if (Math.abs(velocity) > 0.3) {
+        momentumFrame = requestAnimationFrame(runMomentum);
+      } else {
+        reattachAnimation();
+      }
+    };
+
+    // ── Mouse ──
+    const onMouseDown = (e) => {
+      cancelMomentum();
+      isDown = true;
+      startX = e.pageX;
+      lastX = e.pageX;
+      lastTime = Date.now();
+      velocity = 0;
+      detachAnimation();
+      el.style.cursor = 'grabbing';
+    };
+
+    const onMouseMove = (e) => {
+  if (!isDown) return;
+  const now = Date.now();
+  const dt = now - lastTime || 1;
+  velocity = (e.pageX - lastX) / dt * 16;
+  lastX = e.pageX;
+  lastTime = now;
+  el.style.transform = `translateX(${currentOffset + (e.pageX - startX)}px)`;
+};
+
+    const onMouseUp = () => {
+      if (!isDown) return;
+      isDown = false;
+      el.style.cursor = '';
+      momentumFrame = requestAnimationFrame(runMomentum);
+    };
+
+    const onMouseLeave = () => {
+      if (!isDown) return;
+      isDown = false;
+      el.style.cursor = '';
+      momentumFrame = requestAnimationFrame(runMomentum);
+    };
+
+    // ── Touch ──
+    let touchOffset = 0;
+
+    const onTouchStart = (e) => {
+      cancelMomentum();
+      startX = e.touches[0].pageX;
+      lastX = startX;
+      lastTime = Date.now();
+      velocity = 0;
+      detachAnimation();
+      touchOffset = currentOffset;
+    };
+
+    const onTouchMove = (e) => {
+      const now = Date.now();
+      const dt = now - lastTime || 1;
+      velocity = (e.touches[0].pageX - lastX) / dt * 16;
+      lastX = e.touches[0].pageX;
+      lastTime = now;
+      el.style.transform = `translateX(${touchOffset + (e.touches[0].pageX - startX)}px)`;
+    };
+
+    const onTouchEnd = () => {
+      momentumFrame = requestAnimationFrame(runMomentum);
+    };
+
+    el.addEventListener('mousedown', onMouseDown);
+    el.addEventListener('mousemove', onMouseMove);
+    el.addEventListener('mouseup', onMouseUp);
+    el.addEventListener('mouseleave', onMouseLeave);
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: true });
+    el.addEventListener('touchend', onTouchEnd);
+
+    return () => {
+      cancelMomentum();
+      el.removeEventListener('mousedown', onMouseDown);
+      el.removeEventListener('mousemove', onMouseMove);
+      el.removeEventListener('mouseup', onMouseUp);
+      el.removeEventListener('mouseleave', onMouseLeave);
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+    };
+  }, []);
+
+  return ref;
+}
+
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -102,6 +234,9 @@ const Home = () => {
     { number: '03', title: t('home.admission_step3_title'), description: t('home.admission_step3_desc'), icon: Award },
   ];
 
+  const achievementsRef = useManualScroll();
+  const activitiesRow1Ref = useManualScroll();
+  const activitiesRow2Ref = useManualScroll();
   const aboutRef      = useReveal();
   const admissionRef  = useReveal();
   const achieveRef    = useReveal();
@@ -237,38 +372,77 @@ const Home = () => {
           </section>
 
           {/* ── ABOUT ── */}
-          <section className="py-12">
-            <div ref={aboutRef} className="reveal max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-3xl mx-auto text-center">
-                <div className="relative mb-2">
-                  <span
-                    className="text-7xl md:text-8xl font-black absolute -top-6 left-1/2 -translate-x-1/2 uppercase select-none pointer-events-none whitespace-nowrap"
-                    style={{ WebkitTextStroke: '1.5px #fddcb5', color: 'transparent' }}
-                  >
-                    About Us
-                  </span>
-                <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-5">
-                    {t('home.about_badge')}
-                  </span>
-                </div>
-                <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  {t('home.about_title')}
-                </h2>
-                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-  <Trans
-    i18nKey="home.about_description"
-    components={{ b: <span className="font-semibold text-gray-900" /> }}
-  />
-</p>
+<section className="py-12">
+  <div ref={aboutRef} className="reveal max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-5xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
-                <div className="grow-line h-0.5 bg-red-200 mx-auto mb-8 rounded-full"></div>
-                <Button onClick={() => navigate('/about')} variant="outline">
-                  {t('home.about_btn')}
-                  <ArrowRight className="inline-block ml-2 w-5 h-5" />
-                </Button>
-              </div>
-            </div>
-          </section>
+        {/* ── Left: Text + Stats ── */}
+        <div>
+          <div className="relative mb-2">
+            <span
+              className="text-7xl md:text-8xl font-black absolute -top-6 left-0 uppercase select-none pointer-events-none whitespace-nowrap"
+              style={{ WebkitTextStroke: '1.5px #fddcb5', color: 'transparent' }}
+            >
+              About Us
+            </span>
+            <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-5">
+              {t('home.about_badge')}
+            </span>
+          </div>
+
+          <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+  {t('home.about_title')} <span className="text-red-600">{t('home.about_title_accent')}</span>
+</h2>
+          <p className="text-base text-gray-600 mb-6 leading-relaxed">
+            <Trans
+              i18nKey="home.about_description"
+              components={{ b: <span className="font-semibold text-gray-900" /> }}
+            />
+          </p>
+
+          {/* ── Stats Grid ── */}
+<div className="grid grid-cols-2 gap-3 mb-6">
+  {[
+  { label: t('home.about_stat1') },
+  { label: t('home.about_stat2') },
+  { label: t('home.about_stat3') },
+  { label: t('home.about_stat4') },
+].map((s, i) => (
+  <div key={i} className="bg-red-50 rounded-xl px-4 py-3 flex items-center gap-3 border border-red-100">
+    <div className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></div>
+    <div className="text-sm font-semibold text-red-700">{s.label}</div>
+  </div>
+))}
+</div>
+
+          <div className="grow-line h-0.5 bg-red-200 mb-6 rounded-full"></div>
+
+          <Button onClick={() => navigate('/about')} variant="outline">
+            {t('home.about_btn')}
+            <ArrowRight className="inline-block ml-2 w-5 h-5" />
+          </Button>
+        </div>
+
+        {/* ── Right: School Photo ── */}
+        <div className="relative">
+          <div className="rounded-2xl overflow-hidden border-2 border-red-100 shadow-xl shadow-red-50">
+            <img
+              src="/act34.jpeg"
+              alt="Manpadale High School"
+              className="w-full h-[380px] object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-red-900/30 to-transparent rounded-2xl"></div>
+          </div>
+          {/* decorative ring */}
+          <div className="absolute -bottom-4 -right-4 w-28 h-28 rounded-full border-[12px] border-red-100/40 pointer-events-none"></div>
+          <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full border-[8px] border-orange-100/50 pointer-events-none"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
 
           {/* ── ADMISSION PROCESS ── */}
           <section id="admission" className="py-12 relative overflow-hidden">
@@ -353,7 +527,7 @@ const Home = () => {
                 <div className="grow-line h-1 bg-red-600 rounded-full mt-2"></div>
               </div>
               <div className="overflow-hidden">
-                <div className="scroll-left py-4" style={{ gap: '1.5rem' }}>
+                <div ref={achievementsRef} className="scroll-left py-4" style={{ gap: '1.5rem' }}>
                   {[...achievements, ...achievements].map((achievement, index) => (
                     <div
                       key={index}
@@ -403,7 +577,7 @@ const Home = () => {
                 <div className="grow-line h-1 bg-red-600 rounded-full mt-2"></div>
               </div>
               <div className="overflow-hidden">
-                <div className="scroll-right py-4" style={{ gap: '1.5rem', animationDuration: '56s' }}>
+                <div ref={activitiesRow1Ref} className="scroll-right py-4" style={{ gap: '1.5rem', animationDuration: '56s' }}>
                  {[...activitiesRow1, ...activitiesRow1].map((activity, index) => (
                     <div
                       key={index}
@@ -429,7 +603,7 @@ const Home = () => {
                 </div>
               </div>
               <div className="overflow-hidden mt-3">
-                <div className="scroll-left py-4" style={{ gap: '1.5rem', animationDuration: '84s' }}>
+                <div ref={activitiesRow2Ref} className="scroll-left py-4" style={{ gap: '1.5rem', animationDuration: '84s' }}>
                   {[...activitiesRow2, ...activitiesRow2].map((activity, index) => (
                     <div
                       key={index}

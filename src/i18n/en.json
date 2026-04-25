@@ -19,9 +19,13 @@
     "hero_support_btn": "Support Our Mission",
 
     "about_badge": "Who We Are",
-    "about_title": "About Manpadle Highschool",
+    "about_title": "About",
+"about_title_accent": "Manpadale Highschool",
     "about_description": "Welcome to <b>Manpadle Highschool</b> — a place where every child is known, cared for, and encouraged to do their best. <b>Manpadale Highschool</b> was started to give good education to children in our village and nearby areas. Our school runs from <b>Class 5 to 10</b> and is managed by <b>Late Buvasaheb Patil Shikshan Prasarak Mandal, Manpadale</b> and awarded with the <b>Dalit Mitra Puraskar</b>. We believe <b>every child deserves a chance to study</b>. That is why we provide <b>free admission, free uniform, and free books</b> to all students. Our teachers work hard every day to help each child grow and succeed.",
-
+    "about_stat1": "Free Admission",
+"about_stat2": "Free Books",
+"about_stat3": "Free Uniform",
+"about_stat4": "Free Transport",
     "about_btn": "Know More About Us",
 
     "admission_badge": "How to Join",
@@ -53,8 +57,8 @@
     "achievements_card6_desc": "Social responsibility initiatives",
 
     "activities_badge": "Campus Life",
-    "activities_title": "Activities &",
-    "activities_title_accent": "Facilities",
+    "activities_title": "Our",
+    "activities_title_accent": "Gallary",
     "activity_sports_title": "Sports & Athletics",
     "activity_sports_desc": "State-of-the-art facilities for various sports",
     "activity_labs_title": "Science Labs",
