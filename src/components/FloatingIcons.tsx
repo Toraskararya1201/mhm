@@ -27,15 +27,18 @@ const FloatingIcons = () => {
     {
       icon: Instagram,
       title: t('floating_icons.instagram'),
-      href: 'https://www.instagram.com/edu_mhm/',
+      href: 'https://www.instagram.com/edu_mhm?igsh=MTE3N2poeTBqbGZrNg==',
       bg: 'bg-pink-600 hover:bg-pink-700',
     },
   ];
 
   return (
-    <div className="fixed right-4 bottom-6 flex flex-col gap-3 z-[9999]" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div
+      className="fixed right-4 bottom-6 flex flex-col gap-3 z-[9999]"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+    >
       {icons.map((item, index) => (
-        
+        <a
           key={index}
           href={item.href}
           title={item.title}
