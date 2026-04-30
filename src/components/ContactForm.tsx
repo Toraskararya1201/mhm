@@ -2,6 +2,7 @@ import { useState, FormEvent } from 'react';
 import Button from './Button';
 import { Mail, User, MessageSquare, CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { supabase } from '../lib/supabase';
 
 const ContactForm = () => {
   const { t } = useTranslation();
@@ -33,7 +34,12 @@ const ContactForm = () => {
 
     try {
       // Backend integration reserved: This section will handle form submission to store user queries in Supabase database
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const { error } = await supabase.from('enquiry').insert([{
+  student_name: formData.name,
+  email: formData.email,
+  message: formData.message,
+}]);
+if (error) throw error;
 
       setSubmitStatus('success');
       setFormData({ name: '', email: '', message: '' });

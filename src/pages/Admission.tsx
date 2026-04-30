@@ -499,9 +499,9 @@ const Admission = () => {
                     <p className="text-gray-500 text-base">{t('admission_page.success_msg')}</p>
                     <p className="text-gray-400 text-sm mt-2">
                       {t('admission_page.success_urgent')}{' '}
-                      <a href="tel:+919657630464" className="text-red-600 font-semibold hover:underline">+91 9657630464 | +91 9527794050</a>
+                      <a href="tel:+91 7588869700" className="text-red-600 font-semibold hover:underline">+91 7588869700</a>
                       {' '}{t('admission_page.success_or_email')}{' '}
-                      <a href="mailto:admissions@manpadale.edu.in" className="text-red-600 font-semibold hover:underline">admissions@manpadale.edu.in</a>
+                      <a href="mailto:headmaster.mhm@gmail.com" className="text-red-600 font-semibold hover:underline">headmaster.mhm@gmail.com</a>
                     </p>
                     <AutoReset key={resetKey} onReset={handleReset} />
                   </div>

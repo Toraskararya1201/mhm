@@ -801,9 +801,9 @@ const Home = () => {
                     <p className="text-gray-500 text-base">{t('home.success_msg')}</p>
                     <p className="text-gray-400 text-sm mt-2">
                       {t('home.success_urgent')}{' '}
-                      <a href="tel:+911234567890" className="text-red-600 font-semibold hover:underline">+91 12345 67890</a>{' '}
+                      <a href="tel:+91 7588869700" className="text-red-600 font-semibold hover:underline">+91 7588869700</a>{' '}
                       {t('home.success_or_email')}{' '}
-                      <a href="mailto:admissions@greenfieldhigh.com" className="text-red-600 font-semibold hover:underline">admissions@greenfieldhigh.com</a>
+                      <a href="mailto:headmaster.mhm@gmail.com" className="text-red-600 font-semibold hover:underline">headmaster.mhm@gmail.com</a>
                     </p>
                     <AutoReset key={resetKey} onReset={handleReset} />
                   </div>
