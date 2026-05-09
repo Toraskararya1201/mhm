@@ -2,9 +2,18 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpen, Award, CheckCircle, User, Mail, Phone, MessageSquare } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import Button from '../components/Button';
-import { supabase } from '../lib/supabase';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useTranslation, Trans } from 'react-i18next';
+
+const GOOGLE_FORM_ACTION =
+  'https://docs.google.com/forms/d/e/1FAIpQLSc9ou8hM-Yp3kdbapaR2Ie5QOV6Bjp4DL73YcEb5BMAcAE4Ug/formResponse';
+
+const ENTRY = {
+  student_name: 'entry.2005620554',
+  email:        'entry.1045781291',
+  phone:        'entry.1166974658',
+  message:      'entry.839337160',
+};
 
 /* ── TypeScript interfaces ── */
 interface FormData {
@@ -310,8 +319,20 @@ const Home = () => {
     setErrors({});
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('enquiry').insert([formData]);
-      if (error) throw error;
+      const body = new URLSearchParams({
+        [ENTRY.student_name]: formData.student_name,
+        [ENTRY.email]:        formData.email,
+        [ENTRY.phone]:        formData.phone,
+        [ENTRY.message]:      formData.message,
+      });
+
+      await fetch(GOOGLE_FORM_ACTION, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      });
+
       setResetKey(k => k + 1);
       setSubmitStatus('success');
     } catch {
@@ -410,26 +431,26 @@ const Home = () => {
 
             <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
               <h1 className="hero-title mb-6 leading-tight">
-  <span
-    className="block text-xl md:text-2xl lg:text-3xl mb-3 tracking-[0.3em] uppercase font-light"
-    style={{
-      color: 'rgba(255,255,255,0.85)',
-      fontFamily: "'Georgia', serif",
-    }}
-  >
-    Welcome to
-  </span>
-  <span
-    className="block text-3xl md:text-5xl lg:text-6xl font-bold"
-    style={{
-      fontFamily: "'Georgia', serif",
-      color: '#ffffff',
-      textShadow: '0 0 20px rgba(220,30,30,0.8)',
-    }}
-  >
-    {t('home.hero_title').replace('Welcome to ', '')}
-  </span>
-</h1>
+                <span
+                  className="block text-xl md:text-2xl lg:text-3xl mb-3 tracking-[0.3em] uppercase font-light"
+                  style={{
+                    color: 'rgba(255,255,255,0.85)',
+                    fontFamily: "'Georgia', serif",
+                  }}
+                >
+                  Welcome to
+                </span>
+                <span
+                  className="block text-3xl md:text-5xl lg:text-6xl font-bold"
+                  style={{
+                    fontFamily: "'Georgia', serif",
+                    color: '#ffffff',
+                    textShadow: '0 0 20px rgba(220,30,30,0.8)',
+                  }}
+                >
+                  {t('home.hero_title').replace('Welcome to ', '')}
+                </span>
+              </h1>
 
               <div className="flex items-center justify-center gap-3 mb-6">
                 <span className="h-px w-14 bg-gradient-to-r from-transparent to-red-400/70 rounded-full" />
@@ -441,9 +462,9 @@ const Home = () => {
 
               <p className="hero-sub mb-8" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}>
                 <span
-  className="block font-bold text-xl md:text-2xl mb-2 text-white"
-  style={{ letterSpacing: '0.06em',  color: "#e16767" }}
->
+                  className="block font-bold text-xl md:text-2xl mb-2 text-white"
+                  style={{ letterSpacing: '0.06em', color: "#e16767" }}
+                >
                   {t('home.hero_slogan_sanskrit')}
                 </span>
                 <span className="block text-white italic text-sm md:text-base font-medium tracking-wide">
@@ -468,123 +489,91 @@ const Home = () => {
           </section>
 
           {/* ── ABOUT ── */}
-          {/* ── ABOUT ── */}
-<section className="py-12">
-  <div ref={aboutRef} className="reveal max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <section className="py-12">
+            <div ref={aboutRef} className="reveal max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
-      {/* Left: Text + Stats */}
-      <div>
-        <div className="relative mb-2">
-          <span
-            className="text-7xl md:text-8xl font-black absolute -top-6 left-0 uppercase select-none pointer-events-none whitespace-nowrap"
-            style={{ WebkitTextStroke: '1.5px #fddcb5', color: 'transparent' }}
-          >
-            About Us
-          </span>
-          <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-5">
-            {t('home.about_badge')}
-          </span>
-        </div>
-        <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          {t('home.about_title')} <span className="text-red-600">{t('home.about_title_accent')}</span>
-        </h2>
-        <p className="text-base text-gray-600 mb-6 leading-relaxed">
-          <Trans
-            i18nKey="home.about_description"
-            components={{ b: <span className="font-semibold text-gray-900" /> }}
-          />
-        </p>
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          {[
-            { label: t('home.about_stat1') },
-            { label: t('home.about_stat2') },
-            { label: t('home.about_stat3') },
-            { label: t('home.about_stat4') },
-          ].map((s, i) => (
-            <div key={i} className="bg-red-50 rounded-xl px-4 py-3 flex items-center gap-3 border border-red-100">
-              <div className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></div>
-              <div className="text-sm font-semibold text-red-700">{s.label}</div>
+                {/* Left: Text + Stats */}
+                <div>
+                  <div className="relative mb-2">
+                    <span
+                      className="text-7xl md:text-8xl font-black absolute -top-6 left-0 uppercase select-none pointer-events-none whitespace-nowrap"
+                      style={{ WebkitTextStroke: '1.5px #fddcb5', color: 'transparent' }}
+                    >
+                      About Us
+                    </span>
+                    <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-5">
+                      {t('home.about_badge')}
+                    </span>
+                  </div>
+                  <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    {t('home.about_title')} <span className="text-red-600">{t('home.about_title_accent')}</span>
+                  </h2>
+                  <p className="text-base text-gray-600 mb-6 leading-relaxed">
+                    <Trans
+                      i18nKey="home.about_description"
+                      components={{ b: <span className="font-semibold text-gray-900" /> }}
+                    />
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    {[
+                      { label: t('home.about_stat1') },
+                      { label: t('home.about_stat2') },
+                      { label: t('home.about_stat3') },
+                      { label: t('home.about_stat4') },
+                    ].map((s, i) => (
+                      <div key={i} className="bg-red-50 rounded-xl px-4 py-3 flex items-center gap-3 border border-red-100">
+                        <div className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></div>
+                        <div className="text-sm font-semibold text-red-700">{s.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="grow-line h-0.5 bg-red-200 mb-6 rounded-full"></div>
+                  <Button onClick={() => navigate('/about')} variant="outline">
+                    {t('home.about_btn')}
+                    <ArrowRight className="inline-block ml-2 w-5 h-5" />
+                  </Button>
+                </div>
+
+                {/* Right: School Photo with frame */}
+                <div className="relative">
+                  <div
+                    className="absolute inset-0 rounded-2xl"
+                    style={{
+                      background: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)',
+                      transform: 'translate(10px, 10px)',
+                      zIndex: 0,
+                    }}
+                  />
+                  <div
+                    className="relative rounded-2xl z-10"
+                    style={{
+                      padding: '10px',
+                      background: '#ffffff',
+                      boxShadow: '0 20px 60px -10px rgba(220, 38, 38, 0.18), 0 8px 24px -4px rgba(0,0,0,0.10)',
+                      border: '1px solid #fecaca',
+                    }}
+                  >
+                    <span style={{ position: 'absolute', top: 8, left: 8, width: 28, height: 28, zIndex: 20, borderTop: '2px solid #dc2626', borderLeft: '2px solid #dc2626', borderRadius: '6px 0 0 0' }} />
+                    <span style={{ position: 'absolute', top: 8, right: 8, width: 28, height: 28, zIndex: 20, borderTop: '2px solid #dc2626', borderRight: '2px solid #dc2626', borderRadius: '0 6px 0 0' }} />
+                    <span style={{ position: 'absolute', bottom: 8, left: 8, width: 28, height: 28, zIndex: 20, borderBottom: '2px solid #dc2626', borderLeft: '2px solid #dc2626', borderRadius: '0 0 0 6px' }} />
+                    <span style={{ position: 'absolute', bottom: 8, right: 8, width: 28, height: 28, zIndex: 20, borderBottom: '2px solid #dc2626', borderRight: '2px solid #dc2626', borderRadius: '0 0 6px 0' }} />
+                    <div className="rounded-xl overflow-hidden">
+                      <img
+                        src="/act34.jpeg"
+                        alt="Manpadale High School"
+                        className="w-full h-[380px] object-cover block"
+                      />
+                    </div>
+                  </div>
+                  <div className="absolute -bottom-4 -right-4 w-28 h-28 rounded-full border-[12px] border-red-100/40 pointer-events-none z-20"></div>
+                  <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full border-[8px] border-orange-100/50 pointer-events-none z-20"></div>
+                </div>
+
+              </div>
             </div>
-          ))}
-        </div>
-        <div className="grow-line h-0.5 bg-red-200 mb-6 rounded-full"></div>
-        <Button onClick={() => navigate('/about')} variant="outline">
-          {t('home.about_btn')}
-          <ArrowRight className="inline-block ml-2 w-5 h-5" />
-        </Button>
-      </div>
+          </section>
 
-      {/* Right: School Photo with frame */}
-      <div className="relative">
-        {/* Offset shadow card behind */}
-        <div
-          className="absolute inset-0 rounded-2xl"
-          style={{
-            background: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)',
-            transform: 'translate(10px, 10px)',
-            zIndex: 0,
-          }}
-        />
-
-        {/* Main white frame */}
-        <div
-          className="relative rounded-2xl z-10"
-          style={{
-            padding: '10px',
-            background: '#ffffff',
-            boxShadow: '0 20px 60px -10px rgba(220, 38, 38, 0.18), 0 8px 24px -4px rgba(0,0,0,0.10)',
-            border: '1px solid #fecaca',
-          }}
-        >
-          {/* Red corner accent marks */}
-          <span style={{
-            position: 'absolute', top: 8, left: 8,
-            width: 28, height: 28, zIndex: 20,
-            borderTop: '2px solid #dc2626',
-            borderLeft: '2px solid #dc2626',
-            borderRadius: '6px 0 0 0',
-          }} />
-          <span style={{
-            position: 'absolute', top: 8, right: 8,
-            width: 28, height: 28, zIndex: 20,
-            borderTop: '2px solid #dc2626',
-            borderRight: '2px solid #dc2626',
-            borderRadius: '0 6px 0 0',
-          }} />
-          <span style={{
-            position: 'absolute', bottom: 8, left: 8,
-            width: 28, height: 28, zIndex: 20,
-            borderBottom: '2px solid #dc2626',
-            borderLeft: '2px solid #dc2626',
-            borderRadius: '0 0 0 6px',
-          }} />
-          <span style={{
-            position: 'absolute', bottom: 8, right: 8,
-            width: 28, height: 28, zIndex: 20,
-            borderBottom: '2px solid #dc2626',
-            borderRight: '2px solid #dc2626',
-            borderRadius: '0 0 6px 0',
-          }} />
-
-          {/* Image */}
-          <div className="rounded-xl overflow-hidden">
-            <img
-              src="/act34.jpeg"
-              alt="Manpadale High School"
-              className="w-full h-[380px] object-cover block"
-            />
-          </div>
-        </div>
-
-        {/* Floating circle accents */}
-        <div className="absolute -bottom-4 -right-4 w-28 h-28 rounded-full border-[12px] border-red-100/40 pointer-events-none z-20"></div>
-        <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full border-[8px] border-orange-100/50 pointer-events-none z-20"></div>
-      </div>
-
-    </div>
-  </div>
-</section>
           {/* ── ADMISSION PROCESS ── */}
           <section id="admission" className="py-12 relative overflow-hidden">
             <div className="float-a absolute -top-16 -right-16 w-72 h-72 rounded-full border-[50px] border-red-100/25 pointer-events-none"></div>

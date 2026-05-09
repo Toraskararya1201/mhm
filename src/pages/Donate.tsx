@@ -1,6 +1,5 @@
 import { useState, FormEvent, useEffect, useRef } from 'react';
 import { Heart, BookOpen, Monitor, Users, Building, Smartphone, Mail, Phone, CheckCircle, CreditCard, ChevronDown } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 import Button from '../components/Button';
 import { useTranslation } from 'react-i18next';
 
@@ -100,6 +99,43 @@ function FaqItem({ question, answer, isOpen, onClick }: {
   );
 }
 
+// ── Google Forms submission ───────────────────────────────────────
+const GOOGLE_FORM_ACTION =
+  'https://docs.google.com/forms/d/e/1FAIpQLSdUhk2gvvUCKR-b8EPVPPkZ-wQ42LXZ-zXvwJOXZXuWTHKBBg/formResponse';
+
+const ENTRY_IDS = {
+  full_name:     'entry.468176863',
+  email:         'entry.2082340584',
+  phone:         'entry.1585586376',
+  donation_type: 'entry.309465188',
+  message:       'entry.1744908057',
+};
+
+async function submitToGoogleForm(data: {
+  full_name: string;
+  email: string;
+  phone: string;
+  donation_type: string;
+  message: string;
+}) {
+  const body = new URLSearchParams({
+    [ENTRY_IDS.full_name]:     data.full_name,
+    [ENTRY_IDS.email]:         data.email,
+    [ENTRY_IDS.phone]:         data.phone,
+    [ENTRY_IDS.donation_type]: data.donation_type,
+    [ENTRY_IDS.message]:       data.message,
+  });
+
+  // Google Forms doesn't support CORS, so we use no-cors.
+  // The response will be opaque but the submission still goes through.
+  await fetch(GOOGLE_FORM_ACTION, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  });
+}
+
 const Donate = () => {
   const { t } = useTranslation();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
@@ -172,11 +208,10 @@ const Donate = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from('donation_interests').insert([formData]);
-      if (error) throw error;
+      await submitToGoogleForm(formData);
       setResetKey(k => k + 1);
       setSubmitStatus('success');
-    } catch (err) {
+    } catch {
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -571,19 +606,19 @@ const Donate = () => {
             </div>
 
             <div ref={contactRef as any} className="scroll-animate mt-12 bg-gradient-to-br from-red-50 to-slate-50 rounded-2xl p-8 text-center border border-red-100">
-  <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('home.contact_title')}</h3>
-  <p className="text-gray-600 mb-6">{t('home.contact_subtitle')}</p>
-  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-    <a href="mailto:headmaster.mhm@gmail.com" className="flex items-center justify-center px-8 py-4 bg-white rounded-xl shadow hover:shadow-lg transition-all border border-red-100 min-w-[280px]">
-      <Mail className="w-5 h-5 mr-2 text-red-600 flex-shrink-0" />
-      <span className="font-medium text-gray-900 whitespace-nowrap">{t('footer.email')}</span>
-    </a>
-    <a href="tel:+917588869700" className="flex items-center justify-center px-8 py-4 bg-white rounded-xl shadow hover:shadow-lg transition-all border border-red-100 min-w-[320px]">
-      <Phone className="w-5 h-5 mr-2 text-red-600 flex-shrink-0" />
-      <span className="font-medium text-gray-900 whitespace-nowrap">+91 7588869700 | +91 9657630464</span>
-    </a>
-  </div>
-</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('home.contact_title')}</h3>
+              <p className="text-gray-600 mb-6">{t('home.contact_subtitle')}</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="mailto:headmaster.mhm@gmail.com" className="flex items-center justify-center px-8 py-4 bg-white rounded-xl shadow hover:shadow-lg transition-all border border-red-100 min-w-[280px]">
+                  <Mail className="w-5 h-5 mr-2 text-red-600 flex-shrink-0" />
+                  <span className="font-medium text-gray-900 whitespace-nowrap">{t('footer.email')}</span>
+                </a>
+                <a href="tel:+917588869700" className="flex items-center justify-center px-8 py-4 bg-white rounded-xl shadow hover:shadow-lg transition-all border border-red-100 min-w-[320px]">
+                  <Phone className="w-5 h-5 mr-2 text-red-600 flex-shrink-0" />
+                  <span className="font-medium text-gray-900 whitespace-nowrap">+91 7588869700 | +91 9657630464</span>
+                </a>
+              </div>
+            </div>
 
           </div>
         </section>

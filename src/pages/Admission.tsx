@@ -1,8 +1,17 @@
 import { useState, FormEvent, useEffect, useRef } from 'react';
 import { Calendar, FileText, CheckCircle, User, Mail, Phone, MessageSquare, BookOpen, Award } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 import Button from '../components/Button';
 import { useTranslation } from 'react-i18next';
+
+const GOOGLE_FORM_ACTION =
+  'https://docs.google.com/forms/d/e/1FAIpQLSc9ou8hM-Yp3kdbapaR2Ie5QOV6Bjp4DL73YcEb5BMAcAE4Ug/formResponse';
+
+const ENTRY = {
+  student_name: 'entry.2005620554',
+  email:        'entry.1045781291',
+  phone:        'entry.1166974658',
+  message:      'entry.839337160',
+};
 
 /* ─── scroll-reveal hook (same as About) ─── */
 function useReveal(options = {}) {
@@ -67,6 +76,8 @@ const Admission = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // ── Validation (unchanged) ──
     const newErrors: Record<string, string> = {};
     if (!formData.student_name.trim() || formData.student_name.trim().length < 2)
       newErrors.student_name = t('admission_page.err_name_short');
@@ -81,13 +92,34 @@ const Admission = () => {
     if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return; }
     setErrors({});
     setIsSubmitting(true);
+
+    // ── Submit to Google Forms via no-cors fetch ──
+    // Google Forms doesn't support CORS so we use no-cors (response is opaque).
+    // We treat any network success as a form success since we can't read the response.
     try {
-      const { error } = await supabase.from('enquiry').insert([formData]);
-      if (error) throw error;
+      const body = new URLSearchParams({
+        [ENTRY.student_name]: formData.student_name,
+        [ENTRY.email]:        formData.email,
+        [ENTRY.phone]:        formData.phone,
+        [ENTRY.message]:      formData.message,
+      });
+
+      await fetch(GOOGLE_FORM_ACTION, {
+        method: 'POST',
+        mode: 'no-cors',          // required — Google Forms blocks CORS
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      });
+
+      // With no-cors we can't detect HTTP errors, but if fetch didn't throw
+      // the request was sent successfully.
       setResetKey(k => k + 1);
       setSubmitStatus('success');
-    } catch { setSubmitStatus('error'); }
-    finally { setIsSubmitting(false); }
+    } catch {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const steps = [
@@ -188,13 +220,7 @@ const Admission = () => {
 
       <div className="min-h-screen bg-slate-50">
 
-        {/* ════════════ 1. HERO ════════════
-            Admission's own character:
-            — White background (not About's #FDFCF6)
-            — Diagonal clip bottom edge
-            — Stat strip below headline
-            — Same blobs, noise, badge/h1/sub animations
-        ═══════════════════════════════════ */}
+        {/* ════════════ 1. HERO ════════════ */}
         <section className="hero-clip relative pt-32 pb-24 overflow-hidden" style={{ background: 'linear-gradient(135deg, #fff1f1 0%, #fef2f2 40%, #fff7ed 100%)' }}>
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
                style={{ backgroundImage:`url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }} />
@@ -220,12 +246,7 @@ const Admission = () => {
           </div>
         </section>
 
-        {/* ════════════ 2. OVERVIEW ════════════
-            Original: text-left + image-right grid
-            Design: About's grow-line label + ghost
-            watermark heading + image hover ring
-            Image on RIGHT (About has text right) — flipped
-        ════════════════════════════════════════ */}
+        {/* ════════════ 2. OVERVIEW ════════════ */}
         <section className="py-14 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
@@ -250,91 +271,76 @@ const Admission = () => {
               </div>
 
               <div
-  className="reveal-right relative"
-  ref={el => {
-    if (el) {
-      const o = new IntersectionObserver(
-        ([e]) => { if (e.isIntersecting) { el.classList.add('revealed'); o.unobserve(el); } },
-        { threshold: 0.1 }
-      );
-      o.observe(el);
-    }
-  }}
->
-  {/* Dotted pattern layer — sits behind and bottom-right offset */}
-  <div
-    className="absolute -bottom-5 -right-5 w-full h-full rounded-2xl pointer-events-none"
-    style={{
-      backgroundImage: 'radial-gradient(circle, #fca5a5 1.5px, transparent 1.5px)',
-      backgroundSize: '12px 12px',
-      zIndex: 0,
-      opacity: 0.7,
-    }}
-  />
-
-  {/* Offset thin red border — top-left */}
-  <div
-    className="absolute pointer-events-none"
-    style={{
-      inset: 0,
-      transform: 'translate(-10px, -10px)',
-      border: '2px solid #fca5a5',
-      borderRadius: '1rem',
-      zIndex: 0,
-    }}
-  />
-
-  {/* White padding frame */}
-  <div
-    className="relative z-10 rounded-2xl p-3 bg-white"
-    style={{
-      boxShadow: '0 25px 60px -10px rgba(220,38,38,0.15), 0 10px 25px -5px rgba(0,0,0,0.08)',
-      border: '1px solid #fee2e2',
-    }}
-  >
-    {/* Image */}
-    <div className="rounded-xl overflow-hidden">
-      <img
-        src="/act3.jpeg"
-        alt="Students at Manpadale"
-        className="w-full h-[400px] object-cover block"
-      />
-    </div>
-
-    {/* Bottom red gradient overlay on image */}
-    <div
-      className="absolute bottom-3 left-3 right-3 h-24 rounded-b-xl pointer-events-none"
-      style={{
-        background: 'linear-gradient(to top, rgba(220,38,38,0.10), transparent)',
-        zIndex: 11,
-      }}
-    />
-  </div>
-
-  {/* Floating badge — bottom left of frame */}
-  <div
-    className="absolute -bottom-4 left-6 z-20 bg-white rounded-xl px-4 py-2 flex items-center gap-2"
-    style={{
-      border: '1px solid #fee2e2',
-      boxShadow: '0 4px 16px rgba(220,38,38,0.10)',
-    }}
-  >
-    <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
-    <span className="text-xs font-black text-gray-700 uppercase tracking-widest">
-      {t('admission_page.overview_label', 'Admissions')}
-    </span>
-  </div>
-</div>
+                className="reveal-right relative"
+                ref={el => {
+                  if (el) {
+                    const o = new IntersectionObserver(
+                      ([e]) => { if (e.isIntersecting) { el.classList.add('revealed'); o.unobserve(el); } },
+                      { threshold: 0.1 }
+                    );
+                    o.observe(el);
+                  }
+                }}
+              >
+                <div
+                  className="absolute -bottom-5 -right-5 w-full h-full rounded-2xl pointer-events-none"
+                  style={{
+                    backgroundImage: 'radial-gradient(circle, #fca5a5 1.5px, transparent 1.5px)',
+                    backgroundSize: '12px 12px',
+                    zIndex: 0,
+                    opacity: 0.7,
+                  }}
+                />
+                <div
+                  className="absolute pointer-events-none"
+                  style={{
+                    inset: 0,
+                    transform: 'translate(-10px, -10px)',
+                    border: '2px solid #fca5a5',
+                    borderRadius: '1rem',
+                    zIndex: 0,
+                  }}
+                />
+                <div
+                  className="relative z-10 rounded-2xl p-3 bg-white"
+                  style={{
+                    boxShadow: '0 25px 60px -10px rgba(220,38,38,0.15), 0 10px 25px -5px rgba(0,0,0,0.08)',
+                    border: '1px solid #fee2e2',
+                  }}
+                >
+                  <div className="rounded-xl overflow-hidden">
+                    <img
+                      src="/act3.jpeg"
+                      alt="Students at Manpadale"
+                      className="w-full h-[400px] object-cover block"
+                    />
+                  </div>
+                  <div
+                    className="absolute bottom-3 left-3 right-3 h-24 rounded-b-xl pointer-events-none"
+                    style={{
+                      background: 'linear-gradient(to top, rgba(220,38,38,0.10), transparent)',
+                      zIndex: 11,
+                    }}
+                  />
+                </div>
+                <div
+                  className="absolute -bottom-4 left-6 z-20 bg-white rounded-xl px-4 py-2 flex items-center gap-2"
+                  style={{
+                    border: '1px solid #fee2e2',
+                    boxShadow: '0 4px 16px rgba(220,38,38,0.10)',
+                  }}
+                >
+                  <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
+                  <span className="text-xs font-black text-gray-700 uppercase tracking-widest">
+                    {t('admission_page.overview_label', 'Admissions')}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* ════════════ 3. DOCS + DATES ════════════
-            Original: two cards side by side
-            Design: About's card treatment (left red
-            stripe, icon box hover, card-lift)
-            Ghost watermark above section header
-        ══════════════════════════════════════════ */}
+        {/* ════════════ 3. DOCS + DATES ════════════ */}
         <section className="py-10 bg-slate-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -400,14 +406,7 @@ const Admission = () => {
           </div>
         </section>
 
-        {/* ════════════ 4. APPLICATION PROCESS ════════════
-            Original: 3 step cards
-            Design: About's facilities header (ghost
-            watermark + grow-line label + right-aligned desc)
-            + same process-card hover system
-            Distinguishing: dashed timeline connector
-            between cards on desktop
-        ════════════════════════════════════════════════ */}
+        {/* ════════════ 4. APPLICATION PROCESS ════════════ */}
         <section className="py-14 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -453,14 +452,7 @@ const Admission = () => {
           </div>
         </section>
 
-        {/* ════════════ 5. ENQUIRY FORM ════════════
-            Original: centered single-column form card
-            Design: About's #FDFCF6 bg + blobs + ghost
-            watermark heading + grow-line label
-            Distinguishing: CENTERED card (not split-panel
-            like About's principal) keeps it unique;
-            contact strip footer below submit button
-        ══════════════════════════════════════════ */}
+        {/* ════════════ 5. ENQUIRY FORM ════════════ */}
         <section className="py-14 bg-[#FDFCF6] relative overflow-hidden">
           <div className="float-a absolute top-0 left-0 w-72 h-72 bg-red-50 rounded-full blur-[100px] opacity-60 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
           <div className="float-b absolute bottom-0 right-0 w-96 h-96 bg-red-50 rounded-full blur-[120px] opacity-50 translate-x-1/3 translate-y-1/3 pointer-events-none"></div>
@@ -468,27 +460,24 @@ const Admission = () => {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div ref={formRef as any} className="reveal">
 
-              {/* Section label row — same About "LEADERSHIP" pattern */}
               <div className="flex items-center gap-4 mb-8">
-  <div className="grow-line h-[2px] bg-red-600"></div>
-  <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">
-    {t('admission_page.form_section_label', 'ENQUIRY')}
-  </span>
-</div>
+                <div className="grow-line h-[2px] bg-red-600"></div>
+                <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">
+                  {t('admission_page.form_section_label', 'ENQUIRY')}
+                </span>
+              </div>
 
-              {/* Ghost watermark + heading — same About treatment */}
               <div className="relative mb-8">
-  <span className="absolute -top-6 right-0 text-7xl font-black uppercase select-none pointer-events-none hidden md:block"
-        style={{ WebkitTextStroke:'1px #fee2e2', color:'transparent' }}>
-    {t('admission_page.enquire_watermark', 'ENQUIRE')}
-  </span>
-  <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter relative z-10">
-    {t('admission_page.form_title')} <span className="text-red-600">{t('admission_page.form_title_accent', 'Enquiry')}</span>
-  </h2>
-  <p className="text-gray-500 text-sm font-medium mt-2 tracking-wide">{t('admission_page.form_subtitle')}</p>
-</div>
+                <span className="absolute -top-6 right-0 text-7xl font-black uppercase select-none pointer-events-none hidden md:block"
+                      style={{ WebkitTextStroke:'1px #fee2e2', color:'transparent' }}>
+                  {t('admission_page.enquire_watermark', 'ENQUIRE')}
+                </span>
+                <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter relative z-10">
+                  {t('admission_page.form_title')} <span className="text-red-600">{t('admission_page.form_title_accent', 'Enquiry')}</span>
+                </h2>
+                <p className="text-gray-500 text-sm font-medium mt-2 tracking-wide">{t('admission_page.form_subtitle')}</p>
+              </div>
 
-              {/* Card — About's rounded-3xl shadow-2xl style */}
               <div className="bg-white rounded-3xl shadow-2xl shadow-gray-200/60 p-8 border border-gray-100">
                 {submitStatus === 'success' ? (
                   <div className="text-center py-12">
@@ -589,7 +578,6 @@ const Admission = () => {
                       {isSubmitting ? t('admission_page.form_submitting') : t('admission_page.form_submit_btn')}
                     </Button>
 
-                    {/* Contact footer — unique to Admission, not on About */}
                     <div className="pt-5 border-t border-gray-100 flex flex-wrap items-center justify-center gap-5 text-xs text-gray-400 font-medium">
                       <a href="tel:+917588869700" className="flex items-center gap-1.5 hover:text-red-600 transition-colors">
                         <Phone className="w-3.5 h-3.5" /> +91 7588869700
