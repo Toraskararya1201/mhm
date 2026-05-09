@@ -319,19 +319,48 @@ const Home = () => {
     setErrors({});
     setIsSubmitting(true);
     try {
-      const body = new URLSearchParams({
+      const iframeName = `gform-iframe-${Date.now()}`;
+
+      const iframe = document.createElement('iframe');
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      await new Promise(resolve => {
+        iframe.onload = resolve;
+        setTimeout(resolve, 500);
+      });
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = GOOGLE_FORM_ACTION;
+      form.target = iframeName;
+
+      const fields: Record<string, string> = {
         [ENTRY.student_name]: formData.student_name,
         [ENTRY.email]:        formData.email,
         [ENTRY.phone]:        formData.phone,
         [ENTRY.message]:      formData.message,
+      };
+
+      Object.entries(fields).forEach(([name, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
       });
 
-      await fetch(GOOGLE_FORM_ACTION, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString(),
+      document.body.appendChild(form);
+
+      await new Promise<void>((resolve) => {
+        iframe.onload = () => resolve();
+        form.submit();
+        setTimeout(resolve, 6000);
       });
+
+      try { document.body.removeChild(form); } catch {}
+      try { document.body.removeChild(iframe); } catch {}
 
       setResetKey(k => k + 1);
       setSubmitStatus('success');
@@ -390,24 +419,6 @@ const Home = () => {
         .card-hover { transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
         .card-hover:hover { transform: translateY(-4px) scale(1.01); }
 
-        @keyframes shimmer {
-          0% { background-position: -200% center; }
-          100% { background-position: 200% center; }
-        }
-        .hero-name-gradient {
-          background: linear-gradient(90deg, #ffffff 0%, #ffcccc 35%, #ff8888 55%, #ffcccc 75%, #ffffff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-        .hero-sanskrit-gradient {
-          background: linear-gradient(90deg, #ffd6d6, #ffaaaa, #ffd6d6);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          animation: shimmer 5s linear infinite;
-        }
         .hero-divider-dot {
           box-shadow: 0 0 10px 3px rgba(255, 100, 100, 0.7);
         }
@@ -422,7 +433,8 @@ const Home = () => {
               <img
                 src="/school.jpeg"
                 alt="School Building"
-                className="w-full h-full object-cover opacity-80"
+                className="w-full h-full object-cover opacity-75"
+                style={{ objectPosition: 'center 30%' }}
               />
               <div className="absolute inset-0 bg-black/20"></div>
             </div>
@@ -431,43 +443,69 @@ const Home = () => {
 
             <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
               <h1 className="hero-title mb-6 leading-tight">
+                {/* "Welcome to" — maroon bordered pill */}
                 <span
-                  className="block text-xl md:text-2xl lg:text-3xl mb-3 tracking-[0.3em] uppercase font-light"
+                  className="inline-block text-xl md:text-2xl lg:text-3xl mb-4 tracking-[0.3em] uppercase font-light px-6 py-1.5"
                   style={{
-                    color: 'rgba(255,255,255,0.85)',
-                    fontFamily: "'Georgia', serif",
-                  }}
-                >
-                  Welcome to
-                </span>
-                <span
-                  className="block text-3xl md:text-5xl lg:text-6xl font-bold"
-                  style={{
-                    fontFamily: "'Georgia', serif",
                     color: '#ffffff',
-                    textShadow: '0 0 20px rgba(220,30,30,0.8)',
+                    fontFamily: "'Georgia', serif",
+                    // border: '1.5px solid #800020',
+                    // borderRadius: '4px',
+                    // boxShadow: '0 0 12px rgba(128,0,32,0.5), inset 0 0 8px rgba(128,0,32,0.15)',
+                    letterSpacing: '0.25em',
                   }}
                 >
-                  {t('home.hero_title').replace('Welcome to ', '')}
+                  {t('home.hero_welcome')}
+                </span>
+                {/* School name — white with maroon text-border glow */}
+                <span
+                  className="block text-3xl md:text-5xl lg:text-6xl font-bold mt-2"
+                  style={{
+                    fontFamily: "'Georgia', serif",
+                    lineHeight: '1.25',
+                    color: '#ffffff',
+                    textShadow: '0 0 0 #800020, 1px 1px 0 #800020, -1px -1px 0 #800020, 1px -1px 0 #800020, -1px 1px 0 #800020, 0 0 20px rgba(128,0,32,0.6)',
+                  }}
+                >
+                  {t('home.hero_title')}
                 </span>
               </h1>
 
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <span className="h-px w-14 bg-gradient-to-r from-transparent to-red-400/70 rounded-full" />
-                <span className="w-2 h-2 rounded-full bg-red-400 hero-divider-dot" />
-                <span className="w-1.5 h-1.5 rounded-full bg-red-300/60" />
-                <span className="w-1 h-1 rounded-full bg-red-200/40" />
-                <span className="h-px w-14 bg-gradient-to-l from-transparent to-red-400/70 rounded-full" />
+              {/* Decorative divider — ornamental rule */}
+              <div className="flex items-center justify-center gap-2 mb-7 hero-sub">
+                <span className="h-px flex-1 max-w-[60px]" style={{ background: 'linear-gradient(to right, transparent, #ddccd0)' }} />
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#ddccd0', boxShadow: '0 0 6px 2px rgba(240, 231, 233, 0.7)' }} />
+                <span className="h-px w-6" style={{ background: '#ddccd0', opacity: 0.6 }} />
+                <span
+                  className="text-xs tracking-[0.35em] uppercase font-semibold px-3"
+                  style={{ color: '#ffcccc', fontFamily: "'Georgia', serif", letterSpacing: '0.3em' }}
+                >
+                  ✦
+                </span>
+                <span className="h-px w-6" style={{ background: '#ddccd0', opacity: 0.6 }} />
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#ddccd0', boxShadow: '0 0 6px 2px rgba(240, 231, 233, 0.7)' }} />
+                <span className="h-px flex-1 max-w-[60px]" style={{ background: 'linear-gradient(to left, transparent, #ddccd0)' }} />
               </div>
 
-              <p className="hero-sub mb-8" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}>
+              <p className="hero-sub mb-8">
                 <span
-                  className="block font-bold text-xl md:text-2xl mb-2 text-white"
-                  style={{ letterSpacing: '0.06em', color: "#e16767" }}
+                  className="block font-bold text-xl md:text-2xl mb-2"
+                  style={{
+                    color: '#ffffff',
+                    letterSpacing: '0.06em',
+                    textShadow: '0 0 16px rgba(128,0,32,0.8), 0 2px 8px rgba(0,0,0,0.5)',
+                  }}
                 >
                   {t('home.hero_slogan_sanskrit')}
                 </span>
-                <span className="block text-white italic text-sm md:text-base font-medium tracking-wide">
+                <span
+                  className="block italic text-sm md:text-base font-medium tracking-wide"
+                  style={{
+                    color: '#ffffff',
+                    letterSpacing: '0.06em',
+                    textShadow: '0 0 16px rgba(128,0,32,0.8), 0 2px 8px rgba(0,0,0,0.5)',
+                  }}
+                >
                   {t('home.hero_slogan_english')}
                 </span>
               </p>
