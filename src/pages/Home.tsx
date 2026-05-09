@@ -433,7 +433,7 @@ const Home = () => {
               <img
                 src="/school.jpeg"
                 alt="School Building"
-                className="w-full h-full object-cover opacity-75"
+                className="w-full h-full object-cover opacity-80"
                 style={{ objectPosition: 'center 30%' }}
               />
               <div className="absolute inset-0 bg-black/20"></div>
@@ -462,9 +462,9 @@ const Home = () => {
                   className="block text-3xl md:text-5xl lg:text-6xl font-bold mt-2"
                   style={{
                     fontFamily: "'Georgia', serif",
-                    lineHeight: '1.25',
                     color: '#ffffff',
-                    textShadow: '0 0 0 #800020, 1px 1px 0 #800020, -1px -1px 0 #800020, 1px -1px 0 #800020, -1px 1px 0 #800020, 0 0 20px rgba(128,0,32,0.6)',
+                    textShadow: '1px 1px 0 #800020, -1px -1px 0 #800020, 1px -1px 0 #800020, -1px 1px 0 #800020',
+                    lineHeight: '1.4',
                   }}
                 >
                   {t('home.hero_title')}
@@ -473,18 +473,18 @@ const Home = () => {
 
               {/* Decorative divider — ornamental rule */}
               <div className="flex items-center justify-center gap-2 mb-7 hero-sub">
-                <span className="h-px flex-1 max-w-[60px]" style={{ background: 'linear-gradient(to right, transparent, #ddccd0)' }} />
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#ddccd0', boxShadow: '0 0 6px 2px rgba(240, 231, 233, 0.7)' }} />
-                <span className="h-px w-6" style={{ background: '#ddccd0', opacity: 0.6 }} />
+                <span className="h-px flex-1 max-w-[60px]" style={{ background: 'linear-gradient(to right, transparent, #ffffff)' }} />
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#ffffff', boxShadow: '0 0 6px 2px rgba(240, 231, 233, 0.7)' }} />
+                <span className="h-px w-6" style={{ background: '#ffffff', opacity: 0.6 }} />
                 <span
                   className="text-xs tracking-[0.35em] uppercase font-semibold px-3"
                   style={{ color: '#ffcccc', fontFamily: "'Georgia', serif", letterSpacing: '0.3em' }}
                 >
                   ✦
                 </span>
-                <span className="h-px w-6" style={{ background: '#ddccd0', opacity: 0.6 }} />
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#ddccd0', boxShadow: '0 0 6px 2px rgba(240, 231, 233, 0.7)' }} />
-                <span className="h-px flex-1 max-w-[60px]" style={{ background: 'linear-gradient(to left, transparent, #ddccd0)' }} />
+                <span className="h-px w-6" style={{ background: '#ffffff', opacity: 0.6 }} />
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#ffffff', boxShadow: '0 0 6px 2px rgba(240, 231, 233, 0.7)' }} />
+                <span className="h-px flex-1 max-w-[60px]" style={{ background: 'linear-gradient(to left, transparent, #ffffff)' }} />
               </div>
 
               <p className="hero-sub mb-8">
