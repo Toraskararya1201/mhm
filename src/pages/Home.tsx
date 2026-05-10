@@ -62,8 +62,8 @@ function AutoReset({ onReset }: { onReset: () => void }) {
   return (
     <p className="text-gray-400 text-xs mt-6">
       {t('home.reset_text')}{' '}
-      <span className="text-red-500 font-bold">{seconds}</span>{t('home.reset_seconds_unit')} —{' '}
-      <button onClick={() => onResetRef.current()} className="text-red-600 underline hover:text-red-800 font-medium">
+      <span className="text-[#7F2020] font-bold">{seconds}</span>{t('home.reset_seconds_unit')} —{' '}
+      <button onClick={() => onResetRef.current()} className="text-[#7F2020] underline hover:text-[#6b1a1a] font-medium">
         {t('home.reset_now')}
       </button>
     </p>
@@ -420,7 +420,7 @@ const Home = () => {
           <section className="relative h-screen flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0">
               <img
-                src="/school.jpeg"
+                src="/school.png"
                 alt="School Building"
                 className="w-full h-full object-cover opacity-80"
               />
@@ -502,12 +502,12 @@ const Home = () => {
                     >
                       About Us
                     </span>
-                    <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-5">
+                    <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-[#7F2020] px-4 py-1.5 rounded-full mb-5">
                       {t('home.about_badge')}
                     </span>
                   </div>
                   <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    {t('home.about_title')} <span className="text-red-600">{t('home.about_title_accent')}</span>
+                    {t('home.about_title')} <span className="text-[#7F2020]">{t('home.about_title_accent')}</span>
                   </h2>
                   <p className="text-base text-gray-600 mb-6 leading-relaxed">
                     <Trans
@@ -523,8 +523,8 @@ const Home = () => {
                       { label: t('home.about_stat4') },
                     ].map((s, i) => (
                       <div key={i} className="bg-red-50 rounded-xl px-4 py-3 flex items-center gap-3 border border-red-100">
-                        <div className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></div>
-                        <div className="text-sm font-semibold text-red-700">{s.label}</div>
+                        <div className="w-2 h-2 rounded-full bg-[#7F2020] flex-shrink-0"></div>
+                        <div className="text-sm font-semibold text-[#7F2020]">{s.label}</div>
                       </div>
                     ))}
                   </div>
@@ -554,10 +554,10 @@ const Home = () => {
                       border: '1px solid #fecaca',
                     }}
                   >
-                    <span style={{ position: 'absolute', top: 8, left: 8, width: 28, height: 28, zIndex: 20, borderTop: '2px solid #dc2626', borderLeft: '2px solid #dc2626', borderRadius: '6px 0 0 0' }} />
-                    <span style={{ position: 'absolute', top: 8, right: 8, width: 28, height: 28, zIndex: 20, borderTop: '2px solid #dc2626', borderRight: '2px solid #dc2626', borderRadius: '0 6px 0 0' }} />
-                    <span style={{ position: 'absolute', bottom: 8, left: 8, width: 28, height: 28, zIndex: 20, borderBottom: '2px solid #dc2626', borderLeft: '2px solid #dc2626', borderRadius: '0 0 0 6px' }} />
-                    <span style={{ position: 'absolute', bottom: 8, right: 8, width: 28, height: 28, zIndex: 20, borderBottom: '2px solid #dc2626', borderRight: '2px solid #dc2626', borderRadius: '0 0 6px 0' }} />
+                    <span style={{ position: 'absolute', top: 8, left: 8, width: 28, height: 28, zIndex: 20, borderTop: '2px solid #7F2020', borderLeft: '2px solid #7F2020', borderRadius: '6px 0 0 0' }} />
+                    <span style={{ position: 'absolute', top: 8, right: 8, width: 28, height: 28, zIndex: 20, borderTop: '2px solid #7F2020', borderRight: '2px solid #7F2020', borderRadius: '0 6px 0 0' }} />
+                    <span style={{ position: 'absolute', bottom: 8, left: 8, width: 28, height: 28, zIndex: 20, borderBottom: '2px solid #7F2020', borderLeft: '2px solid #7F2020', borderRadius: '0 0 0 6px' }} />
+                    <span style={{ position: 'absolute', bottom: 8, right: 8, width: 28, height: 28, zIndex: 20, borderBottom: '2px solid #7F2020', borderRight: '2px solid #7F2020', borderRadius: '0 0 6px 0' }} />
                     <div className="rounded-xl overflow-hidden">
                       <img
                         src="/act34.jpeg"
@@ -587,34 +587,34 @@ const Home = () => {
                   >
                     {t('home.admission_watermark', 'Admission')}
                   </span>
-                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-4">
+                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-[#7F2020] px-4 py-1.5 rounded-full mb-4">
                     {t('home.admission_badge')}
                   </span>
                 </div>
                 <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-                  {t('home.admission_title')} <span className="text-red-600">{t('home.admission_title_accent')}</span>
+                  {t('home.admission_title')} <span className="text-[#7F2020]">{t('home.admission_title_accent')}</span>
                 </h2>
                 <p className="text-gray-500 text-base max-w-xl mx-auto mb-4">
                   {t('home.admission_subtitle')}
                 </p>
-                <div className="grow-line h-1 bg-red-600 mx-auto rounded-full"></div>
+                <div className="grow-line h-1 bg-[#7F2020] mx-auto rounded-full"></div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative items-stretch">
                 {admissionSteps.map((step, index) => (
                   <div key={index} className="group relative flex">
-                    <div className="card-hover relative rounded-2xl p-5 border-2 border-orange-100 bg-white/70 backdrop-blur-sm hover:bg-white hover:border-red-300 hover:shadow-xl hover:shadow-orange-100/60 transition-all duration-300 text-center flex flex-col items-center w-full">
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-red-600 text-white font-black text-xs flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <div className="card-hover relative rounded-2xl p-5 border-2 border-orange-100 bg-white/70 backdrop-blur-sm hover:bg-white hover:border-[#7F2020] hover:shadow-xl hover:shadow-orange-100/60 transition-all duration-300 text-center flex flex-col items-center w-full">
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#7F2020] text-white font-black text-xs flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
                         {step.number}
                       </div>
-                      <div className="mt-4 mb-4 inline-flex items-center justify-center w-11 h-11 rounded-xl bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white transition-all duration-300 flex-shrink-0">
+                      <div className="mt-4 mb-4 inline-flex items-center justify-center w-11 h-11 rounded-xl bg-red-50 text-[#7F2020] group-hover:bg-[#7F2020] group-hover:text-white transition-all duration-300 flex-shrink-0">
                         <step.icon className="w-5 h-5" />
                       </div>
                       <h3 className="text-base font-bold text-gray-900 mb-2">{step.title}</h3>
                       <p className="text-sm text-gray-500 leading-relaxed flex-1">{step.description}</p>
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-12 h-1 bg-red-600 rounded-full transition-all duration-500"></div>
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-12 h-1 bg-[#7F2020] rounded-full transition-all duration-500"></div>
                     </div>
                     {index < admissionSteps.length - 1 && (
-                      <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 -right-5 z-10 items-center justify-center w-9 h-9 rounded-full bg-red-600 text-white shadow-md">
+                      <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 -right-5 z-10 items-center justify-center w-9 h-9 rounded-full bg-[#7F2020] text-white shadow-md">
                         <ArrowRight className="w-4 h-4" />
                       </div>
                     )}
@@ -624,7 +624,7 @@ const Home = () => {
               <div className="text-center mt-10">
                 <button
                   onClick={() => navigate('/admission')}
-                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors duration-300 shadow-md hover:shadow-lg"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white bg-[#7F2020] hover:bg-[#6b1a1a] transition-colors duration-300 shadow-md hover:shadow-lg"
                 >
                   {t('home.admission_cta_btn')}
                   <ArrowRight className="w-5 h-5" />
@@ -648,21 +648,21 @@ const Home = () => {
                   >
                     {t('home.success_watermark', 'Success')}
                   </span>
-                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-4">
+                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-[#7F2020] px-4 py-1.5 rounded-full mb-4">
                     {t('home.achievements_badge')}
                   </span>
                 </div>
                 <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                  {t('home.achievements_title')} <span className="text-red-600">{t('home.achievements_title_accent')}</span>
+                  {t('home.achievements_title')} <span className="text-[#7F2020]">{t('home.achievements_title_accent')}</span>
                 </h2>
-                <div className="grow-line h-1 bg-red-600 rounded-full mt-2"></div>
+                <div className="grow-line h-1 bg-[#7F2020] rounded-full mt-2"></div>
               </div>
               <div className="overflow-hidden">
                 <div ref={achievementsRef} className="marquee-strip py-4" style={{ gap: '0.5rem' }}>
                   {[...achievements, ...achievements].map((achievement, index) => (
                     <div
                       key={index}
-                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 border-red-100 hover:border-red-300 hover:shadow-lg hover:shadow-red-50"
+                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 border-red-100 hover:border-[#7F2020] hover:shadow-lg hover:shadow-red-50"
                       style={{ marginRight: '1.5rem' }}
                     >
                       <div className="h-[180px] overflow-hidden">
@@ -678,7 +678,7 @@ const Home = () => {
                           <p className="text-xs text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 line-clamp-2">{achievement.description}</p>
                         </div>
                       </div>
-                      <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm"></div>
+                      <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-[#7F2020] opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm"></div>
                     </div>
                   ))}
                 </div>
@@ -697,14 +697,14 @@ const Home = () => {
                   >
                     {t('home.campus_watermark', 'Campus')}
                   </span>
-                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-4">
+                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-[#7F2020] px-4 py-1.5 rounded-full mb-4">
                     {t('home.activities_badge')}
                   </span>
                 </div>
                 <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                  {t('home.activities_title')} <span className="text-red-600">{t('home.activities_title_accent')}</span>
+                  {t('home.activities_title')} <span className="text-[#7F2020]">{t('home.activities_title_accent')}</span>
                 </h2>
-                <div className="grow-line h-1 bg-red-600 rounded-full mt-2"></div>
+                <div className="grow-line h-1 bg-[#7F2020] rounded-full mt-2"></div>
               </div>
 
               {/* Row 1 — scrolls RIGHT */}
@@ -713,7 +713,7 @@ const Home = () => {
                   {[...activitiesRow1, ...activitiesRow1].map((activity, index) => (
                     <div
                       key={index}
-                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 border-red-100 hover:border-red-300 hover:shadow-lg hover:shadow-red-50"
+                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 border-red-100 hover:border-[#7F2020] hover:shadow-lg hover:shadow-red-50"
                       style={{ marginRight: '1.5rem' }}
                     >
                       <div className="h-[180px] overflow-hidden">
@@ -729,7 +729,7 @@ const Home = () => {
                           <p className="text-xs text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 line-clamp-2">{activity.description}</p>
                         </div>
                       </div>
-                      <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm"></div>
+                      <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-[#7F2020] opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm"></div>
                     </div>
                   ))}
                 </div>
@@ -741,7 +741,7 @@ const Home = () => {
                   {[...activitiesRow2, ...activitiesRow2].map((activity, index) => (
                     <div
                       key={index}
-                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 border-orange-100 hover:border-red-300 hover:shadow-lg hover:shadow-orange-50"
+                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 border-orange-100 hover:border-[#7F2020] hover:shadow-lg hover:shadow-orange-50"
                       style={{ marginRight: '1.5rem' }}
                     >
                       <div className="h-[180px] overflow-hidden">
@@ -769,7 +769,7 @@ const Home = () => {
           <section id="contact" className="py-12">
             <div ref={ctaRef} className="reveal max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-10">
-                <span className="inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-red-600 px-4 py-1.5 rounded-full mb-4">
+                <span className="inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-[#7F2020] px-4 py-1.5 rounded-full mb-4">
                   {t('home.contact_badge')}
                 </span>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -778,7 +778,7 @@ const Home = () => {
                 <p className="text-lg text-gray-500">
                   {t('home.contact_subtitle')}
                 </p>
-                <div className="grow-line h-1 bg-red-600 mx-auto rounded-full mt-4"></div>
+                <div className="grow-line h-1 bg-[#7F2020] mx-auto rounded-full mt-4"></div>
               </div>
               <div className="bg-red-50 rounded-3xl shadow-2xl p-8 border border-gray-100">
                 {submitStatus === 'success' ? (
@@ -790,9 +790,9 @@ const Home = () => {
                     <p className="text-gray-500 text-base">{t('home.success_msg')}</p>
                     <p className="text-gray-400 text-sm mt-2">
                       {t('home.success_urgent')}{' '}
-                      <a href="tel:+91 7588869700" className="text-red-600 font-semibold hover:underline">+91 7588869700</a>{' '}
+                      <a href="tel:+91 7588869700" className="text-[#7F2020] font-semibold hover:underline">+91 7588869700</a>{' '}
                       {t('home.success_or_email')}{' '}
-                      <a href="mailto:headmaster.mhm@gmail.com" className="text-red-600 font-semibold hover:underline">headmaster.mhm@gmail.com</a>
+                      <a href="mailto:headmaster.mhm@gmail.com" className="text-[#7F2020] font-semibold hover:underline">headmaster.mhm@gmail.com</a>
                     </p>
                     <AutoReset key={resetKey} onReset={handleReset} />
                   </div>
@@ -801,7 +801,7 @@ const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                          <User className="w-4 h-4 mr-2 text-red-600" /> {t('home.form_name_label')}
+                          <User className="w-4 h-4 mr-2 text-[#7F2020]" /> {t('home.form_name_label')}
                         </label>
                         <input
                           type="text"
@@ -812,14 +812,14 @@ const Home = () => {
                             setFormData({ ...formData, student_name: val });
                             if (errors.student_name) setErrors({ ...errors, student_name: null });
                           }}
-                          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none transition-all bg-white ${errors.student_name ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
+                          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#7F2020] outline-none transition-all bg-white ${errors.student_name ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
                           placeholder={t('home.form_name_placeholder')}
                         />
-                        {errors.student_name && <p className="text-red-500 text-xs mt-1">{errors.student_name}</p>}
+                        {errors.student_name && <p className="text-[#7F2020] text-xs mt-1">{errors.student_name}</p>}
                       </div>
                       <div>
                         <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                          <Mail className="w-4 h-4 mr-2 text-red-600" /> {t('home.form_email_label')}
+                          <Mail className="w-4 h-4 mr-2 text-[#7F2020]" /> {t('home.form_email_label')}
                           <span className="ml-2 text-xs font-normal text-gray-400">{t('home.form_email_optional')}</span>
                         </label>
                         <input
@@ -829,15 +829,15 @@ const Home = () => {
                             setFormData({ ...formData, email: e.target.value });
                             if (errors.email) setErrors({ ...errors, email: null });
                           }}
-                          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none transition-all bg-white ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
+                          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#7F2020] outline-none transition-all bg-white ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
                           placeholder={t('home.form_email_placeholder')}
                         />
-                        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                        {errors.email && <p className="text-[#7F2020] text-xs mt-1">{errors.email}</p>}
                       </div>
                     </div>
                     <div>
                       <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                        <Phone className="w-4 h-4 mr-2 text-red-600" /> {t('home.form_phone_label')}
+                        <Phone className="w-4 h-4 mr-2 text-[#7F2020]" /> {t('home.form_phone_label')}
                       </label>
                       <input
                         type="tel"
@@ -846,14 +846,14 @@ const Home = () => {
                           setFormData({ ...formData, phone: e.target.value });
                           if (errors.phone) setErrors({ ...errors, phone: null });
                         }}
-                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none transition-all bg-white ${errors.phone ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
+                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#7F2020] outline-none transition-all bg-white ${errors.phone ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
                         placeholder={t('home.form_phone_placeholder')}
                       />
-                      {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                      {errors.phone && <p className="text-[#7F2020] text-xs mt-1">{errors.phone}</p>}
                     </div>
                     <div>
                       <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                        <MessageSquare className="w-4 h-4 mr-2 text-red-600" /> {t('home.form_message_label')}
+                        <MessageSquare className="w-4 h-4 mr-2 text-[#7F2020]" /> {t('home.form_message_label')}
                       </label>
                       <textarea
                         rows={4}
@@ -862,20 +862,20 @@ const Home = () => {
                           setFormData({ ...formData, message: e.target.value });
                           if (errors.message) setErrors({ ...errors, message: null });
                         }}
-                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none transition-all bg-white resize-none ${errors.message ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
+                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#7F2020] outline-none transition-all bg-white resize-none ${errors.message ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
                         placeholder={t('home.form_message_placeholder')}
                       />
-                      {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+                      {errors.message && <p className="text-[#7F2020] text-xs mt-1">{errors.message}</p>}
                     </div>
                     {submitStatus === 'error' && (
-                      <div className="bg-red-100 border border-red-300 text-red-700 text-sm px-4 py-3 rounded-xl">
+                      <div className="bg-red-100 border border-red-300 text-[#7F2020] text-sm px-4 py-3 rounded-xl">
                         {t('home.form_error_msg')}
                       </div>
                     )}
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-red-600 hover:bg-red-700 py-4 text-lg font-bold rounded-xl shadow-lg shadow-red-200"
+                      className="w-full bg-[#7F2020] hover:bg-[#6b1a1a] py-4 text-lg font-bold rounded-xl shadow-lg shadow-red-200"
                     >
                       {isSubmitting ? t('home.form_submitting') : t('home.form_submit_btn')}
                     </Button>
