@@ -12,7 +12,8 @@
   },
 
   "home": {
-    "hero_title": "Welcome to Manpadale Highschool, Manpadale",
+    "hero_welcome" : "Welcome to",
+    "hero_title": "Manpadale Highschool, Manpadale",
     "hero_slogan_sanskrit": "न हि ज्ञानेन सदृशं पवित्रमिह विद्यते।",
     "hero_slogan_english": "Our goal is to nurture students into cultured, value-driven, and exemplary personalities.",
     "hero_apply_btn": "Apply for Admission",
