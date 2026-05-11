@@ -62,6 +62,7 @@ const About = () => {
   const principalRef  = useReveal();
   const facultyHdRef  = useReveal();
   const facultyGrdRef = useReveal();
+  const hostelRef = useReveal();
 
   return (
     <>
@@ -258,6 +259,122 @@ const About = () => {
             </div>
           </div>
         </section>
+        {/* ── HOSTEL SECTION ── */}
+{/* ── HOSTEL SECTION ── */}
+{/* ── HOSTEL SECTION ── */}
+<section className="py-14 bg-gray-50/50">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div ref={hostelRef} className="reveal relative mb-12">
+      <span className="absolute -top-12 left-0 text-7xl md:text-9xl font-black text-gray-100 uppercase tracking-tighter select-none -z-0">
+        {t('about_page.hostel_title')}
+      </span>
+      <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="grow-line h-1.5 bg-red-600 rounded-full"></div>
+            <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">
+              {t('about_page.hostel_label')}
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
+            {t('about_page.hostel_title')} <span className="text-red-600">{t('about_page.hostel_title_accent')}</span>
+          </h2>
+        </div>
+        <p className="text-gray-400 text-sm max-w-xs md:text-right font-medium tracking-wide leading-relaxed border-l-2 md:border-l-0 md:border-r-2 border-red-100 pl-4 md:pl-0 md:pr-4">
+          {t('about_page.hostel_subtitle')}
+        </p>
+      </div>
+    </div>
+
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+
+      {/* Hostel Facilities */}
+      <div className="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-9 h-9 bg-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Users className="w-5 h-5 text-white" />
+          </div>
+          <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest">
+            {t('about_page.hostel_facilities_heading')}
+          </h3>
+        </div>
+        <ul className="space-y-2.5">
+          {(['hostel_f1','hostel_f2','hostel_f3','hostel_f4','hostel_f5','hostel_f6','hostel_f7'] as const).map((key, i) => (
+            <li key={i} className="flex items-start gap-2.5 text-sm text-gray-600 font-medium">
+              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
+              {t(`about_page.${key}`)}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Food System */}
+      <div className="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-9 h-9 bg-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
+            <FlaskConical className="w-5 h-5 text-white" />
+          </div>
+          <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest">
+            {t('about_page.hostel_food_heading')}
+          </h3>
+        </div>
+        <ul className="space-y-2.5 mb-6">
+          {(['hostel_food1','hostel_food2','hostel_food3','hostel_food4'] as const).map((key, i) => (
+            <li key={i} className="flex items-start gap-2.5 text-sm text-gray-600 font-medium">
+              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
+              {t(`about_page.${key}`)}
+            </li>
+          ))}
+        </ul>
+        <div className="border-t border-gray-200 pt-5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-red-600 mb-3">
+            {t('about_page.hostel_safety_heading')}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {(['hostel_s1','hostel_s2','hostel_s3','hostel_s4'] as const).map((key, i) => (
+              <span key={i} className="text-[11px] font-semibold bg-red-50 text-red-700 border border-red-100 px-3 py-1 rounded-full">
+                {t(`about_page.${key}`)}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Daily Routine */}
+    <div className="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-9 h-9 bg-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
+          <Target className="w-5 h-5 text-white" />
+        </div>
+        <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest">
+          {t('about_page.hostel_routine_heading')}
+        </h3>
+        <span className="ml-auto text-[10px] font-bold uppercase tracking-widest text-gray-400">
+          {t('about_page.hostel_routine_days')}
+        </span>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] as const).map((n, i) => (
+          <div key={i} className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5 border border-gray-100 hover:border-red-200 transition-colors">
+            <span className="text-sm font-black text-red-600 tabular-nums whitespace-nowrap tracking-tight min-w-[80px]">
+              {t(`about_page.hostel_t${n}_time`)}
+            </span>
+            <div className="w-px h-7 bg-gray-200 flex-shrink-0"></div>
+            <p className="text-sm font-semibold text-gray-800 leading-tight">
+              {t(`about_page.hostel_t${n}_act`)}
+            </p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-5 text-[11px] text-gray-400 font-medium tracking-wide border-t border-gray-100 pt-4">
+        {t('about_page.hostel_routine_note')}
+      </p>
+    </div>
+
+  </div>
+</section>
 
         {/* ── PRINCIPAL'S MESSAGE ── */}
         <section className="py-14 bg-[#FDFCF6] relative overflow-hidden">

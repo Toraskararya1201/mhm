@@ -235,6 +235,7 @@ const Home = () => {
     { image: '/achieve3.jpeg', title: t('home.achievements_card4_title'), description: t('home.achievements_card4_desc') },
     { image: '/ach1.jpeg',     title: t('home.achievements_card5_title'), description: t('home.achievements_card5_desc') },
     { image: '/achieve.jpeg',  title: t('home.achievements_card6_title'), description: t('home.achievements_card6_desc') },
+    { image: '/achp.jpeg',     title: t('home.achievements_card7_title'), description: t('home.achievements_card7_desc') },
   ];
 
   const activitiesRow1 = [
