@@ -248,6 +248,12 @@ const Donate = () => {
   return (
     <>
       <style>{`
+
+        /* Fix horizontal overflow on entire page */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
         .scroll-animate { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
         .scroll-animate.animate-in-view { opacity: 1; transform: translateY(0); }
         .delay-100 { transition-delay: 0.1s; }
