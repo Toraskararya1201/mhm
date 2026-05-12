@@ -13,7 +13,7 @@ const ENTRY = {
   message:      'entry.839337160',
 };
 
-/* ─── scroll-reveal hook (same as About) ─── */
+/* ─── scroll-reveal hook ─── */
 function useReveal(options = {}) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -45,8 +45,8 @@ function AutoReset({ onReset }: { onReset: () => void }) {
   return (
     <p className="text-gray-400 text-xs mt-6">
       {t('admission_page.reset_text')}{' '}
-      <span className="text-red-500 font-bold">{seconds}</span>{t('admission_page.reset_seconds_unit')} —{' '}
-      <button onClick={() => onResetRef.current()} className="text-red-600 underline hover:text-red-800 font-medium">
+      <span className="font-bold" style={{ color: '#e05a8a' }}>{seconds}</span>{t('admission_page.reset_seconds_unit')} —{' '}
+      <button onClick={() => onResetRef.current()} className="underline font-medium" style={{ color: '#c94070' }}>
         {t('admission_page.reset_now')}
       </button>
     </p>
@@ -77,7 +77,6 @@ const Admission = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // ── Validation (unchanged) ──
     const newErrors: Record<string, string> = {};
     if (!formData.student_name.trim() || formData.student_name.trim().length < 2)
       newErrors.student_name = t('admission_page.err_name_short');
@@ -93,9 +92,6 @@ const Admission = () => {
     setErrors({});
     setIsSubmitting(true);
 
-    // ── Submit to Google Forms via no-cors fetch ──
-    // Google Forms doesn't support CORS so we use no-cors (response is opaque).
-    // We treat any network success as a form success since we can't read the response.
     try {
       const body = new URLSearchParams({
         [ENTRY.student_name]: formData.student_name,
@@ -106,13 +102,11 @@ const Admission = () => {
 
       await fetch(GOOGLE_FORM_ACTION, {
         method: 'POST',
-        mode: 'no-cors',          // required — Google Forms blocks CORS
+        mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: body.toString(),
       });
 
-      // With no-cors we can't detect HTTP errors, but if fetch didn't throw
-      // the request was sent successfully.
       setResetKey(k => k + 1);
       setSubmitStatus('success');
     } catch {
@@ -122,10 +116,38 @@ const Admission = () => {
     }
   };
 
+  /* ─── Step colors: rose / amber / teal ─── */
   const steps = [
-    { icon: BookOpen,    title: t('admission_page.step1_title'), description: t('admission_page.step1_desc') },
-    { icon: CheckCircle, title: t('admission_page.step2_title'), description: t('admission_page.step2_desc') },
-    { icon: Award,       title: t('admission_page.step3_title'), description: t('admission_page.step3_desc') },
+    {
+      icon: BookOpen,
+      title: t('admission_page.step1_title'),
+      description: t('admission_page.step1_desc'),
+      accent: '#e05a8a',
+      accentBg: '#fdf2f6',
+      accentSoft: '#fce7f0',
+      num: '#fce7f0',
+      numText: '#e05a8a',
+    },
+    {
+      icon: CheckCircle,
+      title: t('admission_page.step2_title'),
+      description: t('admission_page.step2_desc'),
+      accent: '#f59e0b',
+      accentBg: '#fffbeb',
+      accentSoft: '#fef3c7',
+      num: '#fef3c7',
+      numText: '#d97706',
+    },
+    {
+      icon: Award,
+      title: t('admission_page.step3_title'),
+      description: t('admission_page.step3_desc'),
+      accent: '#0d9488',
+      accentBg: '#f0fdfa',
+      accentSoft: '#ccfbf1',
+      num: '#ccfbf1',
+      numText: '#0d9488',
+    },
   ];
 
   const requirements = [
@@ -139,10 +161,13 @@ const Admission = () => {
     { event: t('admission_page.date3_event'), date: t('admission_page.date3_date') },
   ];
 
+  /* teal accents for dates */
+  const dateColors = ['#0d9488', '#0891b2', '#0891b2'];
+
   return (
     <>
       <style>{`
-        /* ── Reveal system — identical to About ── */
+        /* ── Reveal system ── */
         .reveal           { opacity:0; transform:translateY(36px); transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1) }
         .reveal.revealed  { opacity:1; transform:none }
         .reveal-left           { opacity:0; transform:translateX(-52px); transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1) }
@@ -164,33 +189,29 @@ const Admission = () => {
         .hero-h1    { animation:heroFade  .8s cubic-bezier(.4,0,.2,1) .3s both }
         .hero-sub   { animation:heroSub   .8s cubic-bezier(.4,0,.2,1) .55s both }
 
-        /* ── Float blobs — same as About ── */
+        /* ── Float blobs ── */
         @keyframes floatA { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
         @keyframes floatB { 0%,100%{transform:translateY(0)} 50%{transform:translateY(14px)}  }
         .float-a { animation:floatA 6s ease-in-out infinite }
         .float-b { animation:floatB 8s ease-in-out infinite }
 
-        /* ── Grow line — same as About ── */
+        /* ── Grow line ── */
         @keyframes growLine { from{width:0} to{width:3rem} }
         .grow-line { animation:growLine .6s cubic-bezier(.4,0,.2,1) .5s both }
 
-        /* ── Card lift — same as About ── */
+        /* ── Card lift ── */
         .card-lift { transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease }
         .card-lift:hover { transform:translateY(-5px) scale(1.01) }
 
-        /* ── Process cards — same hover system as About ── */
+        /* ── Process cards ── */
         .process-card { position:relative; overflow:hidden; transition:transform .35s ease,box-shadow .35s ease,background-color .35s ease }
-        .process-card::before { content:''; position:absolute; inset:0; border-radius:.75rem; background:linear-gradient(135deg,rgba(220,38,38,.06) 0%,rgba(220,38,38,.02) 100%); opacity:0; transition:opacity .35s ease }
-        .process-card:hover { transform:translateY(-8px); box-shadow:0 20px 40px -8px rgba(220,38,38,.15),0 6px 12px -4px rgba(0,0,0,.06); background-color:#fff7f7 }
-        .process-card:hover::before { opacity:1 }
-        .process-card .card-icon-wrap { transition:transform .35s cubic-bezier(.34,1.56,.64,1),background-color .3s,box-shadow .3s }
-        .process-card:hover .card-icon-wrap { transform:scale(1.18) rotate(-6deg); background-color:#b91c1c; box-shadow:0 8px 20px rgba(185,28,28,.35) }
-        .process-card .card-title { transition:color .3s }
-        .process-card:hover .card-title { color:#dc2626 }
-        .process-card .card-bottom-bar { position:absolute; bottom:0; left:0; width:0%; height:4px; background:linear-gradient(90deg,#dc2626,#f87171); border-radius:0 0 .75rem .75rem; transition:width .4s }
+        .process-card:hover { transform:translateY(-8px) }
+        .process-card .card-bottom-bar { position:absolute; bottom:0; left:0; width:0%; height:4px; border-radius:0 0 .75rem .75rem; transition:width .4s }
         .process-card:hover .card-bottom-bar { width:100% }
+        .process-card .card-icon-wrap { transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .3s }
+        .process-card:hover .card-icon-wrap { transform:scale(1.18) rotate(-6deg) }
 
-        /* ── List stagger — docs ── */
+        /* ── List stagger ── */
         .list-item { opacity:0; transform:translateX(-16px); transition:opacity .4s ease,transform .4s ease }
         .revealed .list-item { opacity:1; transform:none }
         .revealed .list-item:nth-child(1){transition-delay:.05s}
@@ -199,7 +220,7 @@ const Admission = () => {
         .revealed .list-item:nth-child(4){transition-delay:.29s}
         .revealed .list-item:nth-child(5){transition-delay:.37s}
 
-        /* ── List stagger — dates (slide from right) ── */
+        /* ── Date stagger ── */
         .date-item { opacity:0; transform:translateX(16px); transition:opacity .4s ease,transform .4s ease }
         .revealed .date-item { opacity:1; transform:none }
         .revealed .date-item:nth-child(1){transition-delay:.08s}
@@ -210,36 +231,41 @@ const Admission = () => {
         @keyframes popIn { 0%{opacity:0;transform:scale(.5)} 70%{transform:scale(1.1)} 100%{opacity:1;transform:scale(1)} }
         .success-icon { animation:popIn .5s cubic-bezier(.175,.885,.32,1.275) both }
 
-        /* ── Input focus — admission's own red ring ── */
+        /* ── Input focus ── */
         .adm-input { transition:border-color .2s,box-shadow .2s }
-        .adm-input:focus { border-color:#dc2626; box-shadow:0 0 0 3px rgba(220,38,38,.1); outline:none }
+        .adm-input:focus { border-color:#e05a8a; box-shadow:0 0 0 3px rgba(224,90,138,.12); outline:none }
 
-        /* ── Admission distinguishing: diagonal clip on hero bottom ── */
+        /* ── Hero bottom clip ── */
         .hero-clip { clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%) }
       `}</style>
 
       <div className="min-h-screen bg-slate-50">
 
         {/* ════════════ 1. HERO ════════════ */}
-        <section className="hero-clip relative pt-32 pb-24 overflow-hidden" style={{ background: 'linear-gradient(135deg, #fff1f1 0%, #fef2f2 40%, #fff7ed 100%)' }}>
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
-               style={{ backgroundImage:`url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }} />
-          <div className="float-a absolute top-0 right-[-8%] w-[35%] h-[400px] bg-red-200/30 rounded-full blur-[100px] pointer-events-none"></div>
-          <div className="float-b absolute bottom-0 left-[-5%] w-[28%] h-[300px] bg-orange-100/40 rounded-full blur-[80px] pointer-events-none"></div>
+        {/* Warm rose-to-amber gradient — soft and cheerful */}
+        <section
+          className="hero-clip relative pt-32 pb-24 overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #fff0f5 0%, #fff7ed 50%, #fffbeb 100%)' }}
+        >
+          <div className="float-a absolute top-0 right-[-8%] w-[35%] h-[400px] rounded-full blur-[100px] pointer-events-none" style={{ background: 'rgba(224,90,138,0.18)' }}></div>
+          <div className="float-b absolute bottom-0 left-[-5%] w-[28%] h-[300px] rounded-full blur-[80px] pointer-events-none" style={{ background: 'rgba(251,191,36,0.18)' }}></div>
+          {/* Violet blob top-left */}
+          <div className="float-a absolute top-10 left-[10%] w-[18%] h-[200px] rounded-full blur-[80px] pointer-events-none" style={{ background: 'rgba(139,92,246,0.12)' }}></div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div className="hero-badge inline-flex items-center gap-3 bg-white/70 backdrop-blur-sm border border-red-100 px-5 py-2 rounded-full shadow-sm mb-5">
-              <span className="w-2 h-2 rounded-full bg-red-600"></span>
-              <span className="text-red-700 font-bold uppercase tracking-[0.18em] text-xs">
-                  {t('admission_page.hero_badge', 'Admissions Open • 2025–26')}
+            <div className="hero-badge inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border px-5 py-2 rounded-full shadow-sm mb-5" style={{ borderColor: '#fce7f0' }}>
+              <span className="w-2 h-2 rounded-full" style={{ background: '#e05a8a' }}></span>
+              <span className="font-bold uppercase tracking-[0.18em] text-xs" style={{ color: '#c94070' }}>
+                {t('admission_page.hero_badge', 'Admissions Open • 2025–26')}
               </span>
             </div>
             <h1 className="hero-h1 text-4xl md:text-6xl font-black text-gray-900 mb-5 tracking-tighter leading-tight">
-              {t('admission_page.hero_title', 'Begin Your')} <span className="text-red-600">{t('admission_page.hero_title_accent', 'Journey Here.')}</span>
+              {t('admission_page.hero_title', 'Begin Your')}{' '}
+              <span style={{ color: '#e05a8a' }}>{t('admission_page.hero_title_accent', 'Journey Here.')}</span>
             </h1>
             <p className="hero-sub text-base md:text-lg text-gray-500 max-w-xl mx-auto font-medium leading-relaxed tracking-wide">
               {t('admission_page.hero_subtitle')}{' '}
-              <span className="text-gray-900 font-bold underline decoration-red-200 decoration-4">
+              <span className="text-gray-900 font-bold underline decoration-4" style={{ textDecorationColor: '#fde68a' }}>
                 {t('admission_page.hero_subtitle_accent', 'excellence & character')}
               </span>.
             </p>
@@ -253,14 +279,15 @@ const Admission = () => {
 
               <div ref={overviewRef as any} className="reveal-left">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="grow-line h-[2px] bg-red-600"></div>
-                  <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[11px]">
+                  <div className="grow-line h-[2px]" style={{ background: '#e05a8a' }}></div>
+                  <span className="font-bold uppercase tracking-[0.4em] text-[11px]" style={{ color: '#e05a8a' }}>
                     {t('admission_page.overview_label', 'ADMISSIONS')}
                   </span>
                 </div>
                 <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8 tracking-tighter leading-[1.1]">
                   {t('admission_page.overview_title')}<br />
-                  <span className="bg-red-600 text-white px-4 py-1 inline-block mt-2">
+                  {/* Amber accent block */}
+                  <span className="px-4 py-1 inline-block mt-2 text-white" style={{ background: '#f59e0b' }}>
                     {t('admission_page.overview_title_accent', 'Overview')}
                   </span>
                 </h2>
@@ -282,21 +309,23 @@ const Admission = () => {
                   }
                 }}
               >
+                {/* Teal dot pattern */}
                 <div
                   className="absolute -bottom-5 -right-5 w-full h-full rounded-2xl pointer-events-none"
                   style={{
-                    backgroundImage: 'radial-gradient(circle, #fca5a5 1.5px, transparent 1.5px)',
+                    backgroundImage: 'radial-gradient(circle, #5eead4 1.5px, transparent 1.5px)',
                     backgroundSize: '12px 12px',
                     zIndex: 0,
-                    opacity: 0.7,
+                    opacity: 0.6,
                   }}
                 />
+                {/* Violet offset border */}
                 <div
                   className="absolute pointer-events-none"
                   style={{
                     inset: 0,
                     transform: 'translate(-10px, -10px)',
-                    border: '2px solid #fca5a5',
+                    border: '2px solid #c4b5fd',
                     borderRadius: '1rem',
                     zIndex: 0,
                   }}
@@ -304,8 +333,8 @@ const Admission = () => {
                 <div
                   className="relative z-10 rounded-2xl p-3 bg-white"
                   style={{
-                    boxShadow: '0 25px 60px -10px rgba(220,38,38,0.15), 0 10px 25px -5px rgba(0,0,0,0.08)',
-                    border: '1px solid #fee2e2',
+                    boxShadow: '0 25px 60px -10px rgba(224,90,138,0.12), 0 10px 25px -5px rgba(0,0,0,0.07)',
+                    border: '1px solid #fce7f0',
                   }}
                 >
                   <div className="rounded-xl overflow-hidden">
@@ -315,22 +344,16 @@ const Admission = () => {
                       className="w-full h-[400px] object-cover block"
                     />
                   </div>
-                  <div
-                    className="absolute bottom-3 left-3 right-3 h-24 rounded-b-xl pointer-events-none"
-                    style={{
-                      background: 'linear-gradient(to top, rgba(220,38,38,0.10), transparent)',
-                      zIndex: 11,
-                    }}
-                  />
                 </div>
+                {/* Rose badge */}
                 <div
                   className="absolute -bottom-4 left-6 z-20 bg-white rounded-xl px-4 py-2 flex items-center gap-2"
                   style={{
-                    border: '1px solid #fee2e2',
-                    boxShadow: '0 4px 16px rgba(220,38,38,0.10)',
+                    border: '1px solid #fce7f0',
+                    boxShadow: '0 4px 16px rgba(224,90,138,0.10)',
                   }}
                 >
-                  <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
+                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#e05a8a' }} />
                   <span className="text-xs font-black text-gray-700 uppercase tracking-widest">
                     {t('admission_page.overview_label', 'Admissions')}
                   </span>
@@ -341,7 +364,8 @@ const Admission = () => {
         </section>
 
         {/* ════════════ 3. DOCS + DATES ════════════ */}
-        <section className="py-10 bg-slate-50">
+        {/* Light warm cream background */}
+        <section className="py-10" style={{ background: '#fafaf7' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div className="reveal relative mb-10"
@@ -350,8 +374,8 @@ const Admission = () => {
                 {t('admission_page.details_watermark', 'Details')}
               </span>
               <div className="relative z-10 flex items-center gap-3">
-                <div className="grow-line h-1.5 bg-red-600 rounded-full"></div>
-                <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">
+                <div className="grow-line h-1.5 rounded-full" style={{ background: '#0d9488' }}></div>
+                <span className="font-bold uppercase tracking-[0.4em] text-[20px]" style={{ color: '#0d9488' }}>
                   {t('admission_page.details_label', 'WHAT YOU NEED')}
                 </span>
               </div>
@@ -359,21 +383,27 @@ const Admission = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
+              {/* Documents card — amber accent */}
               <div ref={docsRef as any} className="card-lift reveal-left group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden">
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
+                <div className="absolute top-0 left-0 w-1.5 h-full" style={{ background: '#f59e0b' }}></div>
                 <div className="p-8">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="flex-shrink-0 w-12 h-12 bg-red-50 text-red-600 rounded-lg flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all duration-500">
+                    <div
+                      className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-500"
+                      style={{ background: '#fffbeb', color: '#d97706' }}
+                      onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = '#f59e0b'; (e.currentTarget as HTMLElement).style.color = '#fff'; }}
+                      onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = '#fffbeb'; (e.currentTarget as HTMLElement).style.color = '#d97706'; }}
+                    >
                       <FileText className="w-6 h-6" />
                     </div>
-                    <h3 className="text-base font-black text-gray-900 uppercase tracking-widest group-hover:text-red-600 transition-colors">
+                    <h3 className="text-base font-black text-gray-900 uppercase tracking-widest transition-colors group-hover:text-amber-500">
                       {t('admission_page.docs_title')}
                     </h3>
                   </div>
                   <ul className="space-y-3">
                     {requirements.map((req, i) => (
                       <li key={i} className="list-item flex items-start text-gray-600 text-sm font-medium">
-                        <CheckCircle className="w-4 h-4 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 mr-3 mt-0.5 flex-shrink-0" style={{ color: '#f59e0b' }} />
                         {req}
                       </li>
                     ))}
@@ -381,20 +411,30 @@ const Admission = () => {
                 </div>
               </div>
 
+              {/* Dates card — teal accent */}
               <div ref={datesRef as any} className="card-lift reveal-right group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden">
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
+                <div className="absolute top-0 left-0 w-1.5 h-full" style={{ background: '#0d9488' }}></div>
                 <div className="p-8">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="flex-shrink-0 w-12 h-12 bg-red-50 text-red-600 rounded-lg flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all duration-500">
+                    <div
+                      className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-500"
+                      style={{ background: '#f0fdfa', color: '#0d9488' }}
+                      onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = '#0d9488'; (e.currentTarget as HTMLElement).style.color = '#fff'; }}
+                      onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = '#f0fdfa'; (e.currentTarget as HTMLElement).style.color = '#0d9488'; }}
+                    >
                       <Calendar className="w-6 h-6" />
                     </div>
-                    <h3 className="text-base font-black text-gray-900 uppercase tracking-widest group-hover:text-red-600 transition-colors">
+                    <h3 className="text-base font-black text-gray-900 uppercase tracking-widest transition-colors group-hover:text-teal-600">
                       {t('admission_page.dates_title')}
                     </h3>
                   </div>
                   <ul className="space-y-5">
                     {importantDates.map((item, i) => (
-                      <li key={i} className="date-item border-l-4 border-red-600 pl-4 transition-transform hover:translate-x-1">
+                      <li
+                        key={i}
+                        className="date-item pl-4 transition-transform hover:translate-x-1"
+                        style={{ borderLeft: `4px solid ${dateColors[i]}` }}
+                      >
                         <p className="font-black text-gray-900 text-sm tracking-tight">{item.event}</p>
                         <p className="text-xs text-gray-400 font-medium mt-0.5">{item.date}</p>
                       </li>
@@ -412,21 +452,22 @@ const Admission = () => {
 
             <div ref={processTitleRef as any} className="reveal relative mb-12">
               <span className="absolute -top-10 left-0 text-7xl md:text-9xl font-black text-gray-50 uppercase tracking-tighter select-none -z-0 pointer-events-none">
-                  {t('admission_page.apply_watermark', 'Apply')}
+                {t('admission_page.apply_watermark', 'Apply')}
               </span>
               <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="grow-line h-1.5 bg-red-600 rounded-full"></div>
-                    <span className="text-red-600 font-bold uppercase tracking-[0.4em] text-[10px]">
+                    <div className="grow-line h-1.5 rounded-full" style={{ background: '#8b5cf6' }}></div>
+                    <span className="font-bold uppercase tracking-[0.4em] text-[10px]" style={{ color: '#8b5cf6' }}>
                       {t('admission_page.process_label', 'HOW TO APPLY')}
                     </span>
                   </div>
                   <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
-                    {t('admission_page.process_title')} <span className="text-red-600">{t('admission_page.process_title_accent', 'Process')}</span>
+                    {t('admission_page.process_title')}{' '}
+                    <span style={{ color: '#8b5cf6' }}>{t('admission_page.process_title_accent', 'Process')}</span>
                   </h2>
                 </div>
-                <p className="text-gray-400 text-sm max-w-xs md:text-right font-medium tracking-wide leading-relaxed border-l-2 md:border-l-0 md:border-r-2 border-red-100 pl-4 md:pl-0 md:pr-4">
+                <p className="text-gray-400 text-sm max-w-xs md:text-right font-medium tracking-wide leading-relaxed border-l-2 md:border-l-0 md:border-r-2 border-purple-100 pl-4 md:pl-0 md:pr-4">
                   {t('admission_page.process_subtitle')}
                 </p>
               </div>
@@ -434,17 +475,29 @@ const Admission = () => {
 
             <div ref={processGridRef as any} className="stagger-grid grid grid-cols-1 md:grid-cols-3 gap-8">
               {steps.map((step, index) => (
-                <div key={index} className="process-card bg-white rounded-xl p-8 shadow-md border border-gray-100 flex flex-col">
-                  <div className="card-bottom-bar"></div>
+                <div
+                  key={index}
+                  className="process-card rounded-xl p-8 shadow-md border border-gray-100 flex flex-col"
+                  style={{ background: '#fff' }}
+                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = step.accentBg; (e.currentTarget as HTMLElement).style.boxShadow = `0 20px 40px -8px ${step.accent}22, 0 6px 12px -4px rgba(0,0,0,0.05)`; }}
+                  onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = '#fff'; (e.currentTarget as HTMLElement).style.boxShadow = ''; }}
+                >
+                  {/* Coloured bottom bar */}
+                  <div className="card-bottom-bar" style={{ background: `linear-gradient(90deg, ${step.accent}, ${step.accent}99)` }}></div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-5xl font-black text-red-50 select-none leading-none">
+                    <span className="text-5xl font-black select-none leading-none" style={{ color: step.num, WebkitTextStroke: `1px ${step.accent}44` }}>
                       {String(index + 1).padStart(2, '0')}
                     </span>
-                    <div className="card-icon-wrap bg-red-600 p-3 rounded-full flex-shrink-0">
+                    <div
+                      className="card-icon-wrap p-3 rounded-full flex-shrink-0"
+                      style={{ background: step.accent }}
+                    >
                       <step.icon className="w-6 h-6 text-white" />
                     </div>
                   </div>
-                  <h3 className="card-title text-xl font-black text-gray-900 mb-2 tracking-tight">{step.title}</h3>
+                  <h3 className="text-xl font-black text-gray-900 mb-2 tracking-tight transition-colors" style={{}}>
+                    {step.title}
+                  </h3>
                   <p className="text-gray-500 leading-relaxed text-sm font-medium">{step.description}</p>
                 </div>
               ))}
@@ -452,7 +505,7 @@ const Admission = () => {
           </div>
         </section>
 
-        {/* ════════════ 5. ENQUIRY FORM ════════════ */}
+{/* ════════════ 5. ENQUIRY FORM ════════════ */}
         <section className="py-14 bg-[#FDFCF6] relative overflow-hidden">
           <div className="float-a absolute top-0 left-0 w-72 h-72 bg-red-50 rounded-full blur-[100px] opacity-60 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
           <div className="float-b absolute bottom-0 right-0 w-96 h-96 bg-red-50 rounded-full blur-[120px] opacity-50 translate-x-1/3 translate-y-1/3 pointer-events-none"></div>

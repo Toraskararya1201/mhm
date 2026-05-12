@@ -62,8 +62,8 @@ function AutoReset({ onReset }: { onReset: () => void }) {
   return (
     <p className="text-gray-400 text-xs mt-6">
       {t('home.reset_text')}{' '}
-      <span className="text-[#7F2020] font-bold">{seconds}</span>{t('home.reset_seconds_unit')} —{' '}
-      <button onClick={() => onResetRef.current()} className="text-[#7F2020] underline hover:text-[#6b1a1a] font-medium">
+      <span className="font-bold" style={{ color: '#e05a8a' }}>{seconds}</span>{t('home.reset_seconds_unit')} —{' '}
+      <button onClick={() => onResetRef.current()} className="underline hover:opacity-80 font-medium" style={{ color: '#c94070' }}>
         {t('home.reset_now')}
       </button>
     </p>
@@ -279,6 +279,13 @@ const Home = () => {
     { number: '03', title: t('home.admission_step3_title'), description: t('home.admission_step3_desc'), icon: Award },
   ];
 
+  /* Step accent colors matching admission.tsx: rose / amber / teal */
+  const stepAccents = [
+    { accent: '#e05a8a', accentBg: '#fdf2f6', numBg: '#fce7f0' },
+    { accent: '#f59e0b', accentBg: '#fffbeb', numBg: '#fef3c7' },
+    { accent: '#0d9488', accentBg: '#f0fdfa', numBg: '#ccfbf1' },
+  ];
+
   const achievementsRef   = useManualScroll({ direction: 'left',  speed: 1.2 });
   const activitiesRow1Ref = useManualScroll({ direction: 'right', speed: 1.2 });
   const activitiesRow2Ref = useManualScroll({ direction: 'left',  speed: 1.2 });
@@ -419,14 +426,11 @@ const Home = () => {
 
         .card-hover { transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
         .card-hover:hover { transform: translateY(-4px) scale(1.01); }
-
-        .hero-divider-dot {
-          box-shadow: 0 0 10px 3px rgba(255, 100, 100, 0.7);
-        }
       `}</style>
 
       <div className="min-h-screen">
-        <div style={{ background: 'linear-gradient(to bottom, #fffaf5 0%, #fff7f0 40%, #fff4eb 70%, #fff1e6 100%)' }}>
+        {/* Warm soft background matching admission.tsx hero */}
+        <div style={{ background: 'linear-gradient(to bottom, #fff0f5 0%, #fff7ed 40%, #fffbeb 70%, #fafaf7 100%)' }}>
 
           {/* ── HERO ── */}
           <section className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -439,32 +443,31 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-black/20"></div>
             </div>
-            <div className="float-a absolute top-24 left-12 w-32 h-32 rounded-full bg-white/5 blur-xl pointer-events-none"></div>
-            <div className="float-b absolute bottom-32 right-16 w-48 h-48 rounded-full bg-red-300/10 blur-2xl pointer-events-none"></div>
+            {/* Floating blobs matching admission.tsx */}
+            <div className="float-a absolute top-24 left-12 w-32 h-32 rounded-full pointer-events-none" style={{ background: 'rgba(224,90,138,0.15)', filter: 'blur(40px)' }}></div>
+            <div className="float-b absolute bottom-32 right-16 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'rgba(251,191,36,0.15)', filter: 'blur(60px)' }}></div>
+            <div className="float-a absolute top-16 right-24 w-36 h-36 rounded-full pointer-events-none" style={{ background: 'rgba(139,92,246,0.12)', filter: 'blur(50px)' }}></div>
 
             <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
               <h1 className="hero-title mb-6 leading-tight">
-                {/* "Welcome to" — maroon bordered pill */}
+                {/* "Welcome to" pill — now with teal/amber border glow instead of maroon */}
                 <span
                   className="inline-block text-xl md:text-2xl lg:text-3xl mb-4 tracking-[0.3em] uppercase font-light px-6 py-1.5"
                   style={{
                     color: '#ffffff',
                     fontFamily: "'Georgia', serif",
-                    // border: '1.5px solid #800020',
-                    // borderRadius: '4px',
-                    // boxShadow: '0 0 12px rgba(128,0,32,0.5), inset 0 0 8px rgba(128,0,32,0.15)',
                     letterSpacing: '0.25em',
                   }}
                 >
                   {t('home.hero_welcome')}
                 </span>
-                {/* School name — white with maroon text-border glow */}
+                {/* School name — white with amber/teal glow instead of maroon */}
                 <span
                   className="block text-3xl md:text-5xl lg:text-6xl font-bold mt-2"
                   style={{
                     fontFamily: "'Georgia', serif",
                     color: '#ffffff',
-                    textShadow: '1px 1px 0 #800020, -1px -1px 0 #800020, 1px -1px 0 #800020, -1px 1px 0 #800020',
+                    textShadow: '1px 1px 0 #ac1e0b, -1px -1px 0 #ac1e0b, 1px -1px 0 #ac1e0b, -1px 1px 0 #ac1e0b',
                     lineHeight: '1.4',
                   }}
                 >
@@ -472,14 +475,14 @@ const Home = () => {
                 </span>
               </h1>
 
-              {/* Decorative divider — ornamental rule */}
+              {/* Decorative divider */}
               <div className="flex items-center justify-center gap-2 mb-7 hero-sub">
                 <span className="h-px flex-1 max-w-[60px]" style={{ background: 'linear-gradient(to right, transparent, #ffffff)' }} />
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#ffffff', boxShadow: '0 0 6px 2px rgba(240, 231, 233, 0.7)' }} />
                 <span className="h-px w-6" style={{ background: '#ffffff', opacity: 0.6 }} />
                 <span
                   className="text-xs tracking-[0.35em] uppercase font-semibold px-3"
-                  style={{ color: '#ffcccc', fontFamily: "'Georgia', serif", letterSpacing: '0.3em' }}
+                  style={{ color: '#fde68a', fontFamily: "'Georgia', serif", letterSpacing: '0.3em' }}
                 >
                   ✦
                 </span>
@@ -494,7 +497,7 @@ const Home = () => {
                   style={{
                     color: '#ffffff',
                     letterSpacing: '0.06em',
-                    textShadow: '0 0 16px rgba(128,0,32,0.8), 0 2px 8px rgba(0,0,0,0.5)',
+                    textShadow: '0 0 16px rgba(199, 32, 32, 0.8), 0 2px 8px rgba(0,0,0,0.5)',
                   }}
                 >
                   {t('home.hero_slogan_sanskrit')}
@@ -504,7 +507,7 @@ const Home = () => {
                   style={{
                     color: '#ffffff',
                     letterSpacing: '0.06em',
-                    textShadow: '0 0 16px rgba(128,0,32,0.8), 0 2px 8px rgba(0,0,0,0.5)',
+                    textShadow: '0 0 16px rgba(199, 32, 32, 0.8), 0 2px 8px rgba(0,0,0,0.5)',
                   }}
                 >
                   {t('home.hero_slogan_english')}
@@ -537,16 +540,16 @@ const Home = () => {
                   <div className="relative mb-2">
                     <span
                       className="text-7xl md:text-8xl font-black absolute -top-6 left-0 uppercase select-none pointer-events-none whitespace-nowrap"
-                      style={{ WebkitTextStroke: '1.5px #fddcb5', color: 'transparent' }}
+                      style={{ WebkitTextStroke: '1.5px #fde68a', color: 'transparent' }}
                     >
                       About Us
                     </span>
-                    <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-[#7F2020] px-4 py-1.5 rounded-full mb-5">
+                    <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5" style={{ background: '#fce7f0', color: '#c94070' }}>
                       {t('home.about_badge')}
                     </span>
                   </div>
                   <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    {t('home.about_title')} <span className="text-[#7F2020]">{t('home.about_title_accent')}</span>
+                    {t('home.about_title')} <span style={{ color: '#aa1e36' }}>{t('home.about_title_accent')}</span>
                   </h2>
                   <p className="text-base text-gray-600 mb-6 leading-relaxed">
                     <Trans
@@ -560,14 +563,24 @@ const Home = () => {
                       { label: t('home.about_stat2') },
                       { label: t('home.about_stat3') },
                       { label: t('home.about_stat4') },
-                    ].map((s, i) => (
-                      <div key={i} className="bg-red-50 rounded-xl px-4 py-3 flex items-center gap-3 border border-red-100">
-                        <div className="w-2 h-2 rounded-full bg-[#7F2020] flex-shrink-0"></div>
-                        <div className="text-sm font-semibold text-[#7F2020]">{s.label}</div>
-                      </div>
-                    ))}
+                    ].map((s, i) => {
+                      /* Cycle through rose / amber / teal / violet */
+                      const statColors = [
+                        {  border: '#eebbd1', dot: '#e05a8a', text: '#c94070' },
+                        {  border: '#f0e0a2', dot: '#f59e0b', text: '#d97706' },
+                        {  border: '#b2f1e4', dot: '#0d9488', text: '#0d9488' },
+                        {  border: '#ccc6eb', dot: '#8b5cf6', text: '#7c3aed' },
+                      ];
+                      const c = statColors[i % 4];
+                      return (
+                        <div key={i} className="rounded-xl px-4 py-3 flex items-center gap-3" style={{ background: c.bg, border: `1px solid ${c.border}` }}>
+                          <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: c.dot }}></div>
+                          <div className="text-sm font-semibold" style={{ color: c.text }}>{s.label}</div>
+                        </div>
+                      );
+                    })}
                   </div>
-                  <div className="grow-line h-0.5 bg-red-200 mb-6 rounded-full"></div>
+                  <div className="grow-line h-0.5 rounded-full mb-6" style={{ background: '#fde68a' }}></div>
                   <Button onClick={() => navigate('/about')} variant="outline">
                     {t('home.about_btn')}
                     <ArrowRight className="inline-block ml-2 w-5 h-5" />
@@ -576,11 +589,24 @@ const Home = () => {
 
                 {/* Right: School Photo with frame */}
                 <div className="relative">
+                  {/* Teal dot pattern background — same as admission.tsx overview image */}
                   <div
-                    className="absolute inset-0 rounded-2xl"
+                    className="absolute -bottom-5 -right-5 w-full h-full rounded-2xl pointer-events-none"
                     style={{
-                      background: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)',
-                      transform: 'translate(10px, 10px)',
+                      backgroundImage: 'radial-gradient(circle, #5eead4 1.5px, transparent 1.5px)',
+                      backgroundSize: '12px 12px',
+                      zIndex: 0,
+                      opacity: 0.6,
+                    }}
+                  />
+                  {/* Violet offset border — same as admission.tsx */}
+                  <div
+                    className="absolute pointer-events-none"
+                    style={{
+                      inset: 0,
+                      transform: 'translate(-10px, -10px)',
+                      border: '2px solid #c4b5fd',
+                      borderRadius: '1rem',
                       zIndex: 0,
                     }}
                   />
@@ -589,14 +615,15 @@ const Home = () => {
                     style={{
                       padding: '10px',
                       background: '#ffffff',
-                      boxShadow: '0 20px 60px -10px rgba(220, 38, 38, 0.18), 0 8px 24px -4px rgba(0,0,0,0.10)',
-                      border: '1px solid #fecaca',
+                      boxShadow: '0 20px 60px -10px rgba(224,90,138,0.12), 0 8px 24px -4px rgba(0,0,0,0.07)',
+                      border: '1px solid #fce7f0',
                     }}
                   >
-                    <span style={{ position: 'absolute', top: 8, left: 8, width: 28, height: 28, zIndex: 20, borderTop: '2px solid #7F2020', borderLeft: '2px solid #7F2020', borderRadius: '6px 0 0 0' }} />
-                    <span style={{ position: 'absolute', top: 8, right: 8, width: 28, height: 28, zIndex: 20, borderTop: '2px solid #7F2020', borderRight: '2px solid #7F2020', borderRadius: '0 6px 0 0' }} />
-                    <span style={{ position: 'absolute', bottom: 8, left: 8, width: 28, height: 28, zIndex: 20, borderBottom: '2px solid #7F2020', borderLeft: '2px solid #7F2020', borderRadius: '0 0 0 6px' }} />
-                    <span style={{ position: 'absolute', bottom: 8, right: 8, width: 28, height: 28, zIndex: 20, borderBottom: '2px solid #7F2020', borderRight: '2px solid #7F2020', borderRadius: '0 0 6px 0' }} />
+                    {/* Corner accents in teal */}
+                    <span style={{ position: 'absolute', top: 8, left: 8, width: 28, height: 28, zIndex: 20, borderTop: '2px solid #0d9488', borderLeft: '2px solid #0d9488', borderRadius: '6px 0 0 0' }} />
+                    <span style={{ position: 'absolute', top: 8, right: 8, width: 28, height: 28, zIndex: 20, borderTop: '2px solid #0d9488', borderRight: '2px solid #0d9488', borderRadius: '0 6px 0 0' }} />
+                    <span style={{ position: 'absolute', bottom: 8, left: 8, width: 28, height: 28, zIndex: 20, borderBottom: '2px solid #0d9488', borderLeft: '2px solid #0d9488', borderRadius: '0 0 0 6px' }} />
+                    <span style={{ position: 'absolute', bottom: 8, right: 8, width: 28, height: 28, zIndex: 20, borderBottom: '2px solid #0d9488', borderRight: '2px solid #0d9488', borderRadius: '0 0 6px 0' }} />
                     <div className="rounded-xl overflow-hidden">
                       <img
                         src="/act34.jpeg"
@@ -605,8 +632,8 @@ const Home = () => {
                       />
                     </div>
                   </div>
-                  <div className="absolute -bottom-4 -right-4 w-28 h-28 rounded-full border-[12px] border-red-100/40 pointer-events-none z-20"></div>
-                  <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full border-[8px] border-orange-100/50 pointer-events-none z-20"></div>
+                  <div className="absolute -bottom-4 -right-4 w-28 h-28 rounded-full border-[12px] pointer-events-none z-20" style={{ borderColor: '#fde68a40' }}></div>
+                  <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full border-[8px] pointer-events-none z-20" style={{ borderColor: '#ccfbf150' }}></div>
                 </div>
 
               </div>
@@ -615,55 +642,79 @@ const Home = () => {
 
           {/* ── ADMISSION PROCESS ── */}
           <section id="admission" className="py-12 relative overflow-hidden">
-            <div className="float-a absolute -top-16 -right-16 w-72 h-72 rounded-full border-[50px] border-red-100/25 pointer-events-none"></div>
-            <div className="float-b absolute -bottom-16 -left-16 w-64 h-64 rounded-full border-[40px] border-orange-100/25 pointer-events-none"></div>
+            {/* Floating blobs */}
+            <div className="float-a absolute -top-16 -right-16 w-72 h-72 rounded-full pointer-events-none" style={{ border: '50px solid rgba(224,90,138,0.10)' }}></div>
+            <div className="float-b absolute -bottom-16 -left-16 w-64 h-64 rounded-full pointer-events-none" style={{ border: '40px solid rgba(251,191,36,0.10)' }}></div>
             <div ref={admissionRef} className="stagger max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
               <div className="text-center mb-12">
                 <div className="relative mb-2">
                   <span
                     className="text-7xl md:text-8xl font-black absolute -top-6 left-1/2 -translate-x-1/2 uppercase select-none pointer-events-none whitespace-nowrap"
-                    style={{ WebkitTextStroke: '1.5px #fddcb5', color: 'transparent' }}
+                    style={{ WebkitTextStroke: '1.5px #fde68a', color: 'transparent' }}
                   >
                     {t('home.admission_watermark', 'Admission')}
                   </span>
-                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-[#7F2020] px-4 py-1.5 rounded-full mb-4">
+                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4" style={{ background: '#fef3c7', color: '#d97706' }}>
                     {t('home.admission_badge')}
                   </span>
                 </div>
                 <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-                  {t('home.admission_title')} <span className="text-[#7F2020]">{t('home.admission_title_accent')}</span>
+                  {t('home.admission_title')} <span style={{ color: '#97430c' }}>{t('home.admission_title_accent')}</span>
                 </h2>
                 <p className="text-gray-500 text-base max-w-xl mx-auto mb-4">
                   {t('home.admission_subtitle')}
                 </p>
-                <div className="grow-line h-1 bg-[#7F2020] mx-auto rounded-full"></div>
+                <div className="grow-line h-1 mx-auto rounded-full" style={{ background: '#f59e0b' }}></div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative items-stretch">
-                {admissionSteps.map((step, index) => (
-                  <div key={index} className="group relative flex">
-                    <div className="card-hover relative rounded-2xl p-5 border-2 border-orange-100 bg-white/70 backdrop-blur-sm hover:bg-white hover:border-[#7F2020] hover:shadow-xl hover:shadow-orange-100/60 transition-all duration-300 text-center flex flex-col items-center w-full">
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#7F2020] text-white font-black text-xs flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
-                        {step.number}
+                {admissionSteps.map((step, index) => {
+                  const c = stepAccents[index];
+                  return (
+                    <div key={index} className="group relative flex">
+                      <div
+                        className="card-hover relative rounded-2xl p-5 border-2 bg-white/70 backdrop-blur-sm hover:bg-white hover:shadow-xl transition-all duration-300 text-center flex flex-col items-center w-full"
+                        style={{
+                          borderColor: '#e5e7eb',
+                        }}
+                        onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = c.accent; }}
+                        onMouseOut={e => { (e.currentTarget as HTMLElement).style.borderColor = '#e5e7eb'; }}
+                      >
+                        <div
+                          className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full text-white font-black text-xs flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
+                          style={{ background: c.accent }}
+                        >
+                          {step.number}
+                        </div>
+                        <div
+                          className="mt-4 mb-4 inline-flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300 flex-shrink-0"
+                          style={{ background: c.numBg, color: c.accent }}
+                        >
+                          <step.icon className="w-5 h-5" />
+                        </div>
+                        <h3 className="text-base font-bold text-gray-900 mb-2">{step.title}</h3>
+                        <p className="text-sm text-gray-500 leading-relaxed flex-1">{step.description}</p>
+                        <div
+                          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-12 h-1 rounded-full transition-all duration-500"
+                          style={{ background: c.accent }}
+                        ></div>
                       </div>
-                      <div className="mt-4 mb-4 inline-flex items-center justify-center w-11 h-11 rounded-xl bg-red-50 text-[#7F2020] group-hover:bg-[#7F2020] group-hover:text-white transition-all duration-300 flex-shrink-0">
-                        <step.icon className="w-5 h-5" />
-                      </div>
-                      <h3 className="text-base font-bold text-gray-900 mb-2">{step.title}</h3>
-                      <p className="text-sm text-gray-500 leading-relaxed flex-1">{step.description}</p>
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-12 h-1 bg-[#7F2020] rounded-full transition-all duration-500"></div>
+                      {index < admissionSteps.length - 1 && (
+                        <div
+                          className="hidden md:flex absolute top-1/2 -translate-y-1/2 -right-5 z-10 items-center justify-center w-9 h-9 rounded-full text-white shadow-md"
+                          style={{ background: '#f59e0b' }}
+                        >
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
+                      )}
                     </div>
-                    {index < admissionSteps.length - 1 && (
-                      <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 -right-5 z-10 items-center justify-center w-9 h-9 rounded-full bg-[#7F2020] text-white shadow-md">
-                        <ArrowRight className="w-4 h-4" />
-                      </div>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <div className="text-center mt-10">
                 <button
                   onClick={() => navigate('/admission')}
-                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white bg-[#7F2020] hover:bg-[#6b1a1a] transition-colors duration-300 shadow-md hover:shadow-lg"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white transition-colors duration-300 shadow-md hover:shadow-lg"
+                  style={{ background: 'linear-gradient(135deg, #e05a8a 0%, #c94070 100%)' }}
                 >
                   {t('home.admission_cta_btn')}
                   <ArrowRight className="w-5 h-5" />
@@ -683,26 +734,28 @@ const Home = () => {
                 <div className="relative mb-1">
                   <span
                     className="text-7xl md:text-8xl font-black absolute -top-5 left-0 uppercase select-none pointer-events-none whitespace-nowrap"
-                    style={{ WebkitTextStroke: '1.5px #fecaca', color: 'transparent' }}
+                    style={{ WebkitTextStroke: '1.5px #ccfbf1', color: 'transparent' }}
                   >
                     {t('home.success_watermark', 'Success')}
                   </span>
-                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-[#7F2020] px-4 py-1.5 rounded-full mb-4">
+                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4" style={{ background: '#f0fdfa', color: '#0d9488' }}>
                     {t('home.achievements_badge')}
                   </span>
                 </div>
                 <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                  {t('home.achievements_title')} <span className="text-[#7F2020]">{t('home.achievements_title_accent')}</span>
+                  {t('home.achievements_title')} <span style={{ color: '#0d9488' }}>{t('home.achievements_title_accent')}</span>
                 </h2>
-                <div className="grow-line h-1 bg-[#7F2020] rounded-full mt-2"></div>
+                <div className="grow-line h-1 rounded-full mt-2" style={{ background: '#0d9488' }}></div>
               </div>
               <div className="overflow-hidden">
                 <div ref={achievementsRef} className="marquee-strip py-4" style={{ gap: '0.5rem' }}>
                   {[...achievements, ...achievements].map((achievement, index) => (
                     <div
                       key={index}
-                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 border-red-100 hover:border-[#7F2020] hover:shadow-lg hover:shadow-red-50"
-                      style={{ marginRight: '1.5rem' }}
+                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 hover:shadow-lg"
+                      style={{ marginRight: '1.5rem', borderColor: '#ccfbf1' }}
+                      onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = '#0d9488'; }}
+                      onMouseOut={e => { (e.currentTarget as HTMLElement).style.borderColor = '#ccfbf1'; }}
                     >
                       <div className="h-[180px] overflow-hidden">
                         <img
@@ -717,7 +770,7 @@ const Home = () => {
                           <p className="text-xs text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 line-clamp-2">{achievement.description}</p>
                         </div>
                       </div>
-                      <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-[#7F2020] opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm"></div>
+                      <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm" style={{ background: '#0d9488' }}></div>
                     </div>
                   ))}
                 </div>
@@ -732,28 +785,30 @@ const Home = () => {
                 <div className="relative mb-1 self-end">
                   <span
                     className="text-7xl md:text-8xl font-black absolute -top-5 right-0 uppercase select-none pointer-events-none whitespace-nowrap"
-                    style={{ WebkitTextStroke: '1.5px #fecaca', color: 'transparent' }}
+                    style={{ WebkitTextStroke: '1.5px #ede9fe', color: 'transparent' }}
                   >
                     {t('home.campus_watermark', 'Campus')}
                   </span>
-                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase bg-red-100 text-[#7F2020] px-4 py-1.5 rounded-full mb-4">
+                  <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4" style={{ background: '#f5f3ff', color: '#7c3aed' }}>
                     {t('home.activities_badge')}
                   </span>
                 </div>
                 <h2 className="relative text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                  {t('home.activities_title')} <span className="text-[#7F2020]">{t('home.activities_title_accent')}</span>
+                  {t('home.activities_title')} <span style={{ color: '#8b5cf6' }}>{t('home.activities_title_accent')}</span>
                 </h2>
-                <div className="grow-line h-1 bg-[#7F2020] rounded-full mt-2"></div>
+                <div className="grow-line h-1 rounded-full mt-2" style={{ background: '#8b5cf6' }}></div>
               </div>
 
-              {/* Row 1 — scrolls RIGHT */}
+              {/* Row 1 — scrolls RIGHT — amber accent */}
               <div className="overflow-hidden">
                 <div ref={activitiesRow1Ref} className="marquee-strip py-4" style={{ gap: '0.5rem' }}>
                   {[...activitiesRow1, ...activitiesRow1].map((activity, index) => (
                     <div
                       key={index}
-                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 border-red-100 hover:border-[#7F2020] hover:shadow-lg hover:shadow-red-50"
-                      style={{ marginRight: '1.5rem' }}
+                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 hover:shadow-lg"
+                      style={{ marginRight: '1.5rem', borderColor: '#fef3c7' }}
+                      onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = '#f59e0b'; }}
+                      onMouseOut={e => { (e.currentTarget as HTMLElement).style.borderColor = '#fef3c7'; }}
                     >
                       <div className="h-[180px] overflow-hidden">
                         <img
@@ -768,20 +823,22 @@ const Home = () => {
                           <p className="text-xs text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 line-clamp-2">{activity.description}</p>
                         </div>
                       </div>
-                      <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-[#7F2020] opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm"></div>
+                      <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm" style={{ background: '#f59e0b' }}></div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Row 2 — scrolls LEFT */}
+              {/* Row 2 — scrolls LEFT — violet accent */}
               <div className="overflow-hidden mt-3">
                 <div ref={activitiesRow2Ref} className="marquee-strip py-4" style={{ gap: '0.5rem' }}>
                   {[...activitiesRow2, ...activitiesRow2].map((activity, index) => (
                     <div
                       key={index}
-                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 border-orange-100 hover:border-[#7F2020] hover:shadow-lg hover:shadow-orange-50"
-                      style={{ marginRight: '1.5rem' }}
+                      className="card-hover w-[260px] flex-shrink-0 group relative overflow-hidden rounded-2xl border-2 hover:shadow-lg"
+                      style={{ marginRight: '1.5rem', borderColor: '#ede9fe' }}
+                      onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = '#8b5cf6'; }}
+                      onMouseOut={e => { (e.currentTarget as HTMLElement).style.borderColor = '#ede9fe'; }}
                     >
                       <div className="h-[180px] overflow-hidden">
                         <img
@@ -796,7 +853,7 @@ const Home = () => {
                           <p className="text-xs text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 line-clamp-2">{activity.description}</p>
                         </div>
                       </div>
-                      <div className="absolute top-3 left-3 w-2.5 h-2.5 rounded-full bg-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm"></div>
+                      <div className="absolute top-3 left-3 w-2.5 h-2.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm" style={{ background: '#8b5cf6' }}></div>
                     </div>
                   ))}
                 </div>
@@ -804,7 +861,7 @@ const Home = () => {
             </div>
           </section>
 
-          {/* ── CONTACT / ENQUIRY FORM ── */}
+           {/* ── CONTACT / ENQUIRY FORM ── */}
           <section id="contact" className="py-12">
             <div ref={ctaRef} className="reveal max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-10">
