@@ -194,7 +194,7 @@ const About = () => {
             </div>
             <h1 className="hero-h1 text-4xl md:text-6xl font-black text-gray-900 mb-5 tracking-tighter leading-tight">
               {t('about_page.title', 'About Our')}{' '}
-              <span style={{ color:'#e05a8a' }}>{t('about_page.title_accent', 'School.')}</span>
+              <span style={{ color:'#881313' }}>{t('about_page.title_accent', 'School.')}</span>
             </h1>
             <p className="hero-sub text-base md:text-lg text-gray-500 max-w-xl mx-auto font-medium leading-relaxed tracking-wide">
               {t('about_page.subtitle', 'A legacy of excellence spanning over')}{' '}

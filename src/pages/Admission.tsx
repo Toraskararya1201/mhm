@@ -261,7 +261,7 @@ const Admission = () => {
             </div>
             <h1 className="hero-h1 text-4xl md:text-6xl font-black text-gray-900 mb-5 tracking-tighter leading-tight">
               {t('admission_page.hero_title', 'Begin Your')}{' '}
-              <span style={{ color: '#e05a8a' }}>{t('admission_page.hero_title_accent', 'Journey Here.')}</span>
+              <span style={{ color: '#881313' }}>{t('admission_page.hero_title_accent', 'Journey Here.')}</span>
             </h1>
             <p className="hero-sub text-base md:text-lg text-gray-500 max-w-xl mx-auto font-medium leading-relaxed tracking-wide">
               {t('admission_page.hero_subtitle')}{' '}

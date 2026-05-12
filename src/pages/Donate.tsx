@@ -366,7 +366,7 @@ html, body {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <Heart className="w-16 h-16 mx-auto mb-6 heart-beat" style={{ color: '#fde68a' }} />
             <h1 className="text-4xl md:text-5xl font-bold mb-6 hero-title drop-shadow-lg">
-              {t('donate_page.hero_title')} <span style={{ color: '#99f6e4' }}>{t('donate_page.hero_title_accent')}</span>
+              {t('donate_page.hero_title')} <span style={{ color: '#d1b2a6' }}>{t('donate_page.hero_title_accent')}</span>
             </h1>
             <p className="text-xl text-gray-100 max-w-3xl mx-auto hero-sub mb-8 drop-shadow">
               {t('donate_page.hero_subtitle')}
