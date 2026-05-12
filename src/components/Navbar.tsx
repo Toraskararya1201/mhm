@@ -8,9 +8,8 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const location = useLocation();
-  const navigate = useNavigate(); // ADDED
+  const navigate = useNavigate();
 
-  // ── i18next language toggle ──
   const { t, i18n } = useTranslation();
   const isMarathi = i18n.language === 'mr';
   const toggle = () => i18n.changeLanguage(isMarathi ? 'en' : 'mr');
@@ -20,12 +19,13 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
-      if (location.pathname !== '/') {
+      const validPaths = ['/', '/about'];
+      if (!validPaths.includes(location.pathname)) {
         setActiveSection(null);
         return;
       }
 
-      const sections = ['achievements', 'activities', 'contact'];
+      const sections = ['achievements', 'activities', 'hostel', 'contact'];
       let current: string | null = null;
 
       for (const id of sections) {
@@ -52,7 +52,8 @@ const Navbar = () => {
     setActiveSection(null);
   }, [location]);
 
-  // ── After navigating to home, scroll to stored section ──
+  // ── After navigating to a new page, scroll to stored section ──
+  // Fires on pathname change (e.g. / → /about), giving page time to render
   useEffect(() => {
     const id = sessionStorage.getItem('scrollTo');
     if (id) {
@@ -64,15 +65,18 @@ const Navbar = () => {
           const top = element.getBoundingClientRect().top + window.scrollY - offset;
           window.scrollTo({ top, behavior: 'smooth' });
         }
-      }, 500);
+      }, 600);
     }
-  }, [location]);
+  }, [location.pathname]); // ← key fix: was [location], now [location.pathname]
 
-  const scrollToSection = (id: string) => {
-    if (location.pathname !== '/') {
+  // ── Unified scroll-to-section handler ──
+  const scrollToSection = (id: string, page = '/') => {
+    if (location.pathname !== page) {
+      // Different page: store target and navigate, scroll fires after render
       sessionStorage.setItem('scrollTo', id);
-      navigate('/'); // Fixed: Replaced window.location.href which was causing a full reload
+      navigate(page);
     } else {
+      // Already on the right page: scroll directly, no navigation needed
       const element = document.getElementById(id);
       if (element) {
         const offset = 80;
@@ -84,13 +88,14 @@ const Navbar = () => {
   };
 
   // ── Active link logic ──
-  const isLinkActive = (link: { path?: string; section?: string }) => {
+  const isLinkActive = (link: { path?: string; section?: string; page?: string }) => {
     if (link.path) {
-      if (link.path === '/' && activeSection !== null) return false;
-      return location.pathname === link.path;
-    }
+  if (link.path === '/' && activeSection !== null) return false;
+  if (link.path === '/about' && activeSection !== null) return false;
+  return location.pathname === link.path;
+}
     if (link.section) {
-      return activeSection === link.section;
+      return location.pathname === (link.page ?? '/') && activeSection === link.section;
     }
     return false;
   };
@@ -100,6 +105,7 @@ const Navbar = () => {
     { name: t('navbar.about'),        path: '/about' },
     { name: t('navbar.achievements'), section: 'achievements' },
     { name: t('navbar.activities'),   section: 'activities' },
+    { name: t('navbar.hostel'),       section: 'hostel', page: '/about' },
     { name: t('navbar.admission'),    path: '/admission' },
     { name: t('navbar.donate'),       path: '/donate' },
     { name: t('navbar.contact'),      section: 'contact' },
@@ -129,12 +135,12 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16 md:h-20">
 
           {/* Logo */}
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             onClick={() => {
-              window.scrollTo(0, 0); // Forced reset on click
+              window.scrollTo(0, 0);
               setIsOpen(false);
-            }} 
+            }}
             className="flex items-center space-x-3 group"
           >
             <img
@@ -157,19 +163,20 @@ const Navbar = () => {
             {navLinks.map((link) => (
               <div key={link.name}>
                 {link.path ? (
-                  <Link
-                    to={link.path}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isLinkActive(link)
-                        ? 'bg-red-600 text-white'
-                        : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
-                    }`}
-                  >
-                    {link.name}
-                  </Link>
+  <Link
+    to={link.path}
+    onClick={() => { if (link.path === '/') window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+      isLinkActive(link)
+        ? 'bg-red-600 text-white'
+        : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+    }`}
+  >
+    {link.name}
+  </Link>
                 ) : (
                   <button
-                    onClick={() => scrollToSection(link.section!)}
+                    onClick={() => scrollToSection(link.section!, link.page ?? '/')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                       isLinkActive(link)
                         ? 'bg-red-600 text-white'
@@ -215,19 +222,20 @@ const Navbar = () => {
           {navLinks.map((link) => (
             <div key={link.name}>
               {link.path ? (
-                <Link
-                  to={link.path}
-                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isLinkActive(link)
-                      ? 'bg-red-600 text-white'
-                      : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
-                  }`}
-                >
-                  {link.name}
-                </Link>
+  <Link
+    to={link.path}
+    onClick={() => { if (link.path === '/') window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+      isLinkActive(link)
+        ? 'bg-red-600 text-white'
+        : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+    }`}
+  >
+    {link.name}
+  </Link>
               ) : (
                 <button
-                  onClick={() => scrollToSection(link.section!)}
+                  onClick={() => scrollToSection(link.section!, link.page ?? '/')}
                   className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                     isLinkActive(link)
                       ? 'bg-red-600 text-white'

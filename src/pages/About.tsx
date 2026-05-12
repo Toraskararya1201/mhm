@@ -392,7 +392,7 @@ const About = () => {
 
         {/* ════════════ 5. HOSTEL ════════════ */}
         {/* Very soft warm tint — matches Admission enquiry section */}
-        <section className="py-14 relative overflow-hidden" style={{ background:'#fdf8ff' }}>
+        <section id="hostel" className="py-14 relative overflow-hidden" style={{ background:'#fdf8ff' }}>
           {/* Violet blob */}
           <div className="float-a absolute top-0 left-0 w-72 h-72 rounded-full blur-[100px] opacity-50 -translate-x-1/2 -translate-y-1/2 pointer-events-none" style={{ background:'#ede9fe' }}></div>
           {/* Rose blob */}
