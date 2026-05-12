@@ -161,6 +161,7 @@
   },
 
   "about_page": {
+    "tap_to_view_schedule": "Tap heading to view full schedule ↑",
     "est_badge": "Est. 1994",
     "title": "About",
     "title_accent": "Manpadle Highschool",
@@ -371,6 +372,7 @@
 },
 
   "donate_page": {
+
     "pill_our_story": "Our Story",
   "why_heading_main": "Every Rupee Plants a",
   "why_heading_accent": "Seed of Change",

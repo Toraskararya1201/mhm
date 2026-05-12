@@ -531,10 +531,10 @@ const About = () => {
                 </div>
               </div>
               {!hostelRoutineExpanded && (
-                <p className="mt-3 text-[11px] font-semibold uppercase tracking-widest text-center md:hidden" style={{ color:'#f59e0b' }}>
-                  Tap heading to view full schedule ↑
-                </p>
-              )}
+  <p className="mt-3 text-[11px] font-semibold uppercase tracking-widest text-center md:hidden" style={{ color:'#f59e0b' }}>
+    {t('about_page.tap_to_view_schedule')}
+  </p>
+)}
               <p className="mt-5 text-[11px] text-gray-400 font-medium tracking-wide border-t border-gray-100 pt-4">
                 {t('about_page.hostel_routine_note')}
               </p>
