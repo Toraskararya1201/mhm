@@ -349,7 +349,7 @@ html, body {
         {/* 1. HERO */}
         <section
           className="relative py-24 text-white overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, transparent 0%, #0d9488 40%, #134e4a 100%)' }}
+          style={{ background: 'transparent' }}
         >
           <div className="absolute inset-0 z-0">
             <div className="slide1 absolute inset-0">
