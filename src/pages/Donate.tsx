@@ -344,11 +344,11 @@ html, body {
         .faq-accordion-item button { cursor: pointer; }
       `}</style>
 
-      <div className="min-h-screen pt-20 bg-slate-50">
+      <div className="min-h-screen pt-14 bg-slate-50 overflow-hidden">
 
         {/* 1. HERO */}
         <section
-          className="relative py-24 text-white overflow-hidden"
+          className="relative py-12 text-white overflow-hidden"
           style={{ background: 'transparent' }}
         >
           <div className="absolute inset-0 z-0">
@@ -498,9 +498,10 @@ html, body {
         </section>
 
         {/* 5. EXPRESS YOUR INTEREST FORM — pink accent */}
-        <section ref={formSectionRef} className="py-16 scroll-mt-20" style={{ background: '#fdf8ff' }}>
-          <div className="float-a" style={{ position: 'absolute', width: '18rem', height: '18rem', borderRadius: '9999px', filter: 'blur(100px)', opacity: 0.35, background: '#ede9fe', pointerEvents: 'none', transform: 'translate(-50%, -50%)' }}></div>
-          <div className="float-b" style={{ position: 'absolute', bottom: 0, right: 0, width: '24rem', height: '24rem', borderRadius: '9999px', filter: 'blur(120px)', opacity: 0.25, background: '#fce7f0', pointerEvents: 'none', transform: 'translate(33%, 33%)' }}></div>
+// REPLACE WITH:
+<section ref={formSectionRef} className="py-16 scroll-mt-20" style={{ background: '#fdf8ff', position: 'relative', overflow: 'hidden' }}>
+  <div className="float-a" style={{ position: 'absolute', top: 0, left: 0, width: '18rem', height: '18rem', borderRadius: '9999px', filter: 'blur(100px)', opacity: 0.35, background: '#ede9fe', pointerEvents: 'none', transform: 'translate(-50%, -50%)' }}></div>
+  <div className="float-b" style={{ position: 'absolute', bottom: 0, right: 0, width: '24rem', height: '24rem', borderRadius: '9999px', filter: 'blur(120px)', opacity: 0.25, background: '#fce7f0', pointerEvents: 'none', transform: 'translate(33%, 33%)' }}></div>
 
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div ref={formRef as any} className="scroll-animate">
