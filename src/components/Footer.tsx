@@ -69,8 +69,7 @@ const Footer = () => {
             <h4 className="text-white font-semibold mb-4">{t('footer.location')}</h4>
             <div className="rounded-lg overflow-hidden h-40 bg-gray-800">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.59666012345!2d74.3210!3d16.7890!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTbCsDQ3JzIwLjQiTiA3NMKwMTknMTUuNiJF!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
-                width="100%"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3818.960597446557!2d74.22967877412803!3d16.82831071867229!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc10791ab5931cb%3A0x176a8a1c030ebb6f!2sManpadle%20Highschool%2C%20Manpadle!5e0!3m2!1sen!2sin!4v1778676872130!5m2!1sen!2sin"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen

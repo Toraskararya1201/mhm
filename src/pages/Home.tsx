@@ -428,7 +428,7 @@ const Home = () => {
         .card-hover:hover { transform: translateY(-4px) scale(1.01); }
       `}</style>
 
-      <div className="min-h-screen">
+      <div className="min-h-screen overflow-x-hidden">
         {/* Warm soft background matching admission.tsx hero */}
         <div style={{ background: 'linear-gradient(to bottom, #fff0f5 0%, #fff7ed 40%, #fffbeb 70%, #fafaf7 100%)' }}>
 

@@ -171,7 +171,7 @@ const About = () => {
         .facility-card:hover .fac-bar { width:100% }
       `}</style>
 
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-slate-50 overflow-x-hidden">
 
         {/* ════════════ 1. HERO ════════════ */}
         {/* Rose → amber → soft yellow — matches Admission hero */}

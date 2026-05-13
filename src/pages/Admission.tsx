@@ -239,7 +239,7 @@ const Admission = () => {
         .hero-clip { clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%) }
       `}</style>
 
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-slate-50 overflow-x-hidden">
 
         {/* ════════════ 1. HERO ════════════ */}
         {/* Warm rose-to-amber gradient — soft and cheerful */}
