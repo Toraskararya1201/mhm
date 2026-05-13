@@ -52,13 +52,16 @@ const Navbar = () => {
     setActiveSection(null);
   }, [location]);
 
-  // ── After navigating to a new page, scroll to stored section ──
-  // Fires on pathname change (e.g. / → /about), giving page time to render
+  // ── After navigating to a new page, scroll to stored section or top ──
   useEffect(() => {
     const id = sessionStorage.getItem('scrollTo');
     if (id) {
       sessionStorage.removeItem('scrollTo');
       setTimeout(() => {
+        if (id === '__top__') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
         const element = document.getElementById(id);
         if (element) {
           const offset = 80;
@@ -67,16 +70,14 @@ const Navbar = () => {
         }
       }, 600);
     }
-  }, [location.pathname]); // ← key fix: was [location], now [location.pathname]
+  }, [location.pathname]);
 
   // ── Unified scroll-to-section handler ──
   const scrollToSection = (id: string, page = '/') => {
     if (location.pathname !== page) {
-      // Different page: store target and navigate, scroll fires after render
       sessionStorage.setItem('scrollTo', id);
       navigate(page);
     } else {
-      // Already on the right page: scroll directly, no navigation needed
       const element = document.getElementById(id);
       if (element) {
         const offset = 80;
@@ -87,13 +88,25 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
+  // ── Handler for path-based links (Home, About, Admission, Donate) ──
+  const handlePathLinkClick = (path: string) => {
+    if (location.pathname === path) {
+      // Already on this page — scroll to top immediately
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // Navigating to a different page — store intent, scroll after render
+      sessionStorage.setItem('scrollTo', '__top__');
+    }
+    setIsOpen(false);
+  };
+
   // ── Active link logic ──
   const isLinkActive = (link: { path?: string; section?: string; page?: string }) => {
     if (link.path) {
-  if (link.path === '/' && activeSection !== null) return false;
-  if (link.path === '/about' && activeSection !== null) return false;
-  return location.pathname === link.path;
-}
+      if (link.path === '/' && activeSection !== null) return false;
+      if (link.path === '/about' && activeSection !== null) return false;
+      return location.pathname === link.path;
+    }
     if (link.section) {
       return location.pathname === (link.page ?? '/') && activeSection === link.section;
     }
@@ -163,17 +176,17 @@ const Navbar = () => {
             {navLinks.map((link) => (
               <div key={link.name}>
                 {link.path ? (
-  <Link
-    to={link.path}
-    onClick={() => { if (link.path === '/') window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-      isLinkActive(link)
-        ? 'bg-red-600 text-white'
-        : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
-    }`}
-  >
-    {link.name}
-  </Link>
+                  <Link
+                    to={link.path}
+                    onClick={() => handlePathLinkClick(link.path!)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isLinkActive(link)
+                        ? 'bg-red-600 text-white'
+                        : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
                 ) : (
                   <button
                     onClick={() => scrollToSection(link.section!, link.page ?? '/')}
@@ -222,17 +235,17 @@ const Navbar = () => {
           {navLinks.map((link) => (
             <div key={link.name}>
               {link.path ? (
-  <Link
-    to={link.path}
-    onClick={() => { if (link.path === '/') window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-      isLinkActive(link)
-        ? 'bg-red-600 text-white'
-        : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
-    }`}
-  >
-    {link.name}
-  </Link>
+                <Link
+                  to={link.path}
+                  onClick={() => handlePathLinkClick(link.path!)}
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    isLinkActive(link)
+                      ? 'bg-red-600 text-white'
+                      : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+                  }`}
+                >
+                  {link.name}
+                </Link>
               ) : (
                 <button
                   onClick={() => scrollToSection(link.section!, link.page ?? '/')}
