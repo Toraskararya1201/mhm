@@ -436,7 +436,7 @@ const Home = () => {
           <section className="relative h-screen flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0">
               <img
-                src="/school.png"
+                src="/schoolnew.jpeg"
                 alt="School Building"
                 className="w-full h-full object-cover opacity-80"
                 style={{ objectPosition: 'center 30%' }}
