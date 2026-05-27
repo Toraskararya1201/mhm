@@ -13,6 +13,27 @@ const ENTRY = {
   message:      'entry.839337160',
 };
 
+/* ─── Dynamic academic year helper ─── */
+function getAdmissionYear() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1; // 1 = January
+
+  // Indian academic year starts in June.
+  // Only January bumps back to the previous cycle
+  // (admissions for upcoming year open ~Feb onwards).
+  // Jan 2026 → 2025–26  |  Feb–Dec 2026 → 2026–27  |  Jan 2027 → 2026–27
+  const startYear = month === 1 ? year - 1 : year;
+  const endShort  = String(startYear + 1).slice(-2); // "27"
+  const endFull   = startYear + 1;                    // 2027
+
+  return {
+    yearRange:   `${startYear}–${endShort}`, // "2026–27"
+    startYear:   String(startYear),           // "2026"
+    endFullYear: String(endFull),             // "2027"
+  };
+}
+
 /* ─── scroll-reveal hook ─── */
 function useReveal(options = {}) {
   const ref = useRef<HTMLDivElement>(null);
@@ -55,6 +76,8 @@ function AutoReset({ onReset }: { onReset: () => void }) {
 
 const Admission = () => {
   const { t } = useTranslation();
+  const admYear = getAdmissionYear(); // ← dynamic year, updates automatically
+
   const [formData, setFormData] = useState({ student_name: '', email: '', phone: '', message: '' });
   const [errors, setErrors] = useState<Record<string, string | null>>({});
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -156,9 +179,18 @@ const Admission = () => {
   ];
 
   const importantDates = [
-    { event: t('admission_page.date1_event'), date: t('admission_page.date1_date') },
-    { event: t('admission_page.date2_event'), date: t('admission_page.date2_date') },
-    { event: t('admission_page.date3_event'), date: t('admission_page.date3_date') },
+    {
+      event: t('admission_page.date1_event'),
+      date:  t('admission_page.date1_date', { startYear: admYear.startYear }),
+    },
+    {
+      event: t('admission_page.date2_event'),
+      date: t('admission_page.date2_date', { startYear: admYear.startYear }),
+    },
+    {
+      event: t('admission_page.date3_event'),
+      date:  t('admission_page.date3_date'),
+    },
   ];
 
   /* teal accents for dates */
@@ -242,21 +274,20 @@ const Admission = () => {
       <div className="min-h-screen bg-slate-50 overflow-x-hidden">
 
         {/* ════════════ 1. HERO ════════════ */}
-        {/* Warm rose-to-amber gradient — soft and cheerful */}
         <section
           className="hero-clip relative pt-32 pb-24 overflow-hidden"
           style={{ background: 'linear-gradient(135deg, #fff0f5 0%, #fff7ed 50%, #fffbeb 100%)' }}
         >
           <div className="float-a absolute top-0 right-[-8%] w-[35%] h-[400px] rounded-full blur-[100px] pointer-events-none" style={{ background: 'rgba(224,90,138,0.18)' }}></div>
           <div className="float-b absolute bottom-0 left-[-5%] w-[28%] h-[300px] rounded-full blur-[80px] pointer-events-none" style={{ background: 'rgba(251,191,36,0.18)' }}></div>
-          {/* Violet blob top-left */}
           <div className="float-a absolute top-10 left-[10%] w-[18%] h-[200px] rounded-full blur-[80px] pointer-events-none" style={{ background: 'rgba(139,92,246,0.12)' }}></div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <div className="hero-badge inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border px-5 py-2 rounded-full shadow-sm mb-5" style={{ borderColor: '#fce7f0' }}>
               <span className="w-2 h-2 rounded-full" style={{ background: '#e05a8a' }}></span>
+              {/* ✅ Dynamic year range — no more hardcoded "2025–26" */}
               <span className="font-bold uppercase tracking-[0.18em] text-xs" style={{ color: '#c94070' }}>
-                {t('admission_page.hero_badge', 'Admissions Open • 2025–26')}
+                {t('admission_page.hero_badge', { yearRange: admYear.yearRange })}
               </span>
             </div>
             <h1 className="hero-h1 text-4xl md:text-6xl font-black text-gray-900 mb-5 tracking-tighter leading-tight">
@@ -286,7 +317,6 @@ const Admission = () => {
                 </div>
                 <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8 tracking-tighter leading-[1.1]">
                   {t('admission_page.overview_title')}<br />
-                  {/* Amber accent block */}
                   <span className="px-4 py-1 inline-block mt-2 text-white" style={{ background: '#f59e0b' }}>
                     {t('admission_page.overview_title_accent', 'Overview')}
                   </span>
@@ -309,7 +339,6 @@ const Admission = () => {
                   }
                 }}
               >
-                {/* Teal dot pattern */}
                 <div
                   className="absolute -bottom-5 -right-5 w-full h-full rounded-2xl pointer-events-none"
                   style={{
@@ -319,7 +348,6 @@ const Admission = () => {
                     opacity: 0.6,
                   }}
                 />
-                {/* Violet offset border */}
                 <div
                   className="absolute pointer-events-none"
                   style={{
@@ -345,7 +373,6 @@ const Admission = () => {
                     />
                   </div>
                 </div>
-                {/* Rose badge */}
                 <div
                   className="absolute -bottom-4 left-6 z-20 bg-white rounded-xl px-4 py-2 flex items-center gap-2"
                   style={{
@@ -364,7 +391,6 @@ const Admission = () => {
         </section>
 
         {/* ════════════ 3. DOCS + DATES ════════════ */}
-        {/* Light warm cream background */}
         <section className="py-10" style={{ background: '#fafaf7' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -383,7 +409,7 @@ const Admission = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-              {/* Documents card — amber accent */}
+              {/* Documents card */}
               <div ref={docsRef as any} className="card-lift reveal-left group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden">
                 <div className="absolute top-0 left-0 w-1.5 h-full" style={{ background: '#f59e0b' }}></div>
                 <div className="p-8">
@@ -411,7 +437,7 @@ const Admission = () => {
                 </div>
               </div>
 
-              {/* Dates card — teal accent */}
+              {/* Dates card — ✅ dynamic dates via admYear */}
               <div ref={datesRef as any} className="card-lift reveal-right group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden">
                 <div className="absolute top-0 left-0 w-1.5 h-full" style={{ background: '#0d9488' }}></div>
                 <div className="p-8">
@@ -482,7 +508,6 @@ const Admission = () => {
                   onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = step.accentBg; (e.currentTarget as HTMLElement).style.boxShadow = `0 20px 40px -8px ${step.accent}22, 0 6px 12px -4px rgba(0,0,0,0.05)`; }}
                   onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = '#fff'; (e.currentTarget as HTMLElement).style.boxShadow = ''; }}
                 >
-                  {/* Coloured bottom bar */}
                   <div className="card-bottom-bar" style={{ background: `linear-gradient(90deg, ${step.accent}, ${step.accent}99)` }}></div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-5xl font-black select-none leading-none" style={{ color: step.num, WebkitTextStroke: `1px ${step.accent}44` }}>
@@ -495,7 +520,7 @@ const Admission = () => {
                       <step.icon className="w-6 h-6 text-white" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-black text-gray-900 mb-2 tracking-tight transition-colors" style={{}}>
+                  <h3 className="text-xl font-black text-gray-900 mb-2 tracking-tight">
                     {step.title}
                   </h3>
                   <p className="text-gray-500 leading-relaxed text-sm font-medium">{step.description}</p>
@@ -505,7 +530,7 @@ const Admission = () => {
           </div>
         </section>
 
-{/* ════════════ 5. ENQUIRY FORM ════════════ */}
+        {/* ════════════ 5. ENQUIRY FORM ════════════ */}
         <section className="py-14 bg-[#FDFCF6] relative overflow-hidden">
           <div className="float-a absolute top-0 left-0 w-72 h-72 bg-red-50 rounded-full blur-[100px] opacity-60 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
           <div className="float-b absolute bottom-0 right-0 w-96 h-96 bg-red-50 rounded-full blur-[120px] opacity-50 translate-x-1/3 translate-y-1/3 pointer-events-none"></div>

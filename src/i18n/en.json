@@ -291,7 +291,8 @@
   },
 
   "admission_page": {
-  "hero_badge": "ADMISSIONS OPEN • 2025–26",
+    "hero_badge": "ADMISSIONS OPEN • {{yearRange}}",
+
   "hero_title": "Begin Your",
   "hero_title_accent": "Journey Here.",
   "hero_subtitle": "Begin your educational journey with Manpadale High School in an environment of",
@@ -311,18 +312,21 @@
   "details_label": "WHAT YOU NEED",
   "docs_title": "Required Documents",
   "doc1": "Birth Certificate (Original and photocopy)",
-  "doc2": "Transfer Certificate from previous school",
+  "doc2": "Transfer Certificate from previous school if any",
   "doc3": "Academic records of last 2 years",
   "doc4": "Recent passport-size photographs",
   "doc5": "Address proof (Utility bill/Aadhar)",
 
   "dates_title": "Important Dates",
   "date1_event": "Admission Opens",
-  "date1_date": "Application for academic year 2026 are open right now",
+ 
   "date2_event": "Application Deadline",
-  "date2_date": "June 30, 2026",
+ 
   "date3_event": "Admission Confirmation",
   "date3_date": "Within 15 days of applying",
+  "date1_date": "Applications for academic year {{startYear}} are open right now",
+"date2_date": "June 30, {{startYear}}",
+  
 
   "process_label": "HOW TO APPLY",
   "process_title": "Application",
