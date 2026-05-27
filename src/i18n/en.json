@@ -291,7 +291,7 @@
   },
 
   "admission_page": {
-  "hero_badge": "ADMISSIONS OPEN • 2025–26",
+  "hero_badge": "ADMISSIONS OPEN • {{yearRange}}",
   "hero_title": "Begin Your",
   "hero_title_accent": "Journey Here.",
   "hero_subtitle": "Begin your educational journey with Manpadale High School in an environment of",
