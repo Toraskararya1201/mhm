@@ -220,7 +220,7 @@ const About = () => {
                 <div className="relative z-10 rounded-2xl p-3 bg-white"
                      style={{ boxShadow:'0 25px 60px -10px rgba(224,90,138,0.12),0 10px 25px -5px rgba(0,0,0,0.07)', border:'1px solid #fce7f0' }}>
                   <div className="rounded-xl overflow-hidden">
-                    <img src="/mainschool.jpeg" alt="School Campus"
+                    <img src="/schoolneww.jpeg" alt="School Campus"
                          className="w-full h-[400px] object-cover block group-hover:scale-105 transition-transform duration-700" />
                   </div>
                 </div>
