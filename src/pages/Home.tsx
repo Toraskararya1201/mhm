@@ -239,6 +239,7 @@ const Home = () => {
   ];
 
   const activitiesRow1 = [
+    { image: '/act44.jpeg',     title: t('home.activity_c30_title'), description: t('home.activity_c30_desc') },
     { image: '/activity.jpeg',  title: t('home.activity_c1_title'),  description: t('home.activity_c1_desc') },
     { image: '/activity2.jpeg', title: t('home.activity_c2_title'),  description: t('home.activity_c2_desc') },
     { image: '/activity3.jpeg', title: t('home.activity_c3_title'),  description: t('home.activity_c3_desc') },
@@ -246,7 +247,7 @@ const Home = () => {
     { image: '/act1.jpeg',      title: t('home.activity_c5_title'),  description: t('home.activity_c5_desc') },
     { image: '/act2.jpeg',      title: t('home.activity_c6_title'),  description: t('home.activity_c6_desc') },
     { image: '/act20.jpeg',     title: t('home.activity_c7_title'),  description: t('home.activity_c7_desc') },
-    { image: '/act21.jpeg',     title: t('home.activity_c8_title'),  description: t('home.activity_c8_desc') },
+    { image: '/act45.jpeg',     title: t('home.activity_c8_title'),  description: t('home.activity_c8_desc') },
     { image: '/act22.jpeg',     title: t('home.activity_c9_title'),  description: t('home.activity_c9_desc') },
     { image: '/act23.jpeg',     title: t('home.activity_c10_title'), description: t('home.activity_c10_desc') },
     { image: '/act24.jpeg',     title: t('home.activity_c11_title'), description: t('home.activity_c11_desc') },
@@ -256,7 +257,7 @@ const Home = () => {
   const activitiesRow2 = [
     { image: '/act3.jpeg',  title: t('home.activity_c13_title'), description: t('home.activity_c13_desc') },
     { image: '/act4.jpeg',  title: t('home.activity_c14_title'), description: t('home.activity_c14_desc') },
-    { image: '/act5.jpeg',  title: t('home.activity_c15_title'), description: t('home.activity_c15_desc') },
+    { image: '/act46.jpeg',  title: t('home.activity_c15_title'), description: t('home.activity_c15_desc') },
     { image: '/act6.jpeg',  title: t('home.activity_c16_title'), description: t('home.activity_c16_desc') },
     { image: '/act7.jpeg',  title: t('home.activity_c17_title'), description: t('home.activity_c17_desc') },
     { image: '/act8.jpeg',  title: t('home.activity_c18_title'), description: t('home.activity_c18_desc') },
