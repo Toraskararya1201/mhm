@@ -543,7 +543,7 @@ const Home = () => {
                       className="text-7xl md:text-8xl font-black absolute -top-6 left-0 uppercase select-none pointer-events-none whitespace-nowrap"
                       style={{ WebkitTextStroke: '1.5px #fde68a', color: 'transparent' }}
                     >
-                      About Us
+                       {t('home.about_title')}
                     </span>
                     <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5" style={{ background: '#fce7f0', color: '#c94070' }}>
                       {t('home.about_badge')}
