@@ -566,7 +566,7 @@ const Admission = () => {
                     <p className="text-gray-500 text-base">{t('admission_page.success_msg')}</p>
                     <p className="text-gray-400 text-sm mt-2">
                       {t('admission_page.success_urgent')}{' '}
-                      <a href="tel:+91 7588869700" className="text-red-600 font-semibold hover:underline">+91 7588869700</a>
+                      <a href="tel:+91 9507079099" className="text-red-600 font-semibold hover:underline">+91 9507079099</a>
                       {' '}{t('admission_page.success_or_email')}{' '}
                       <a href="mailto:headmaster.mhm@gmail.com" className="text-red-600 font-semibold hover:underline">headmaster.mhm@gmail.com</a>
                     </p>
@@ -657,8 +657,8 @@ const Admission = () => {
                     </Button>
 
                     <div className="pt-5 border-t border-gray-100 flex flex-wrap items-center justify-center gap-5 text-xs text-gray-400 font-medium">
-                      <a href="tel:+917588869700" className="flex items-center gap-1.5 hover:text-red-600 transition-colors">
-                        <Phone className="w-3.5 h-3.5" /> +91 7588869700
+                      <a href="tel:+919507079099" className="flex items-center gap-1.5 hover:text-red-600 transition-colors">
+                        <Phone className="w-3.5 h-3.5" /> +91 9507079099
                       </a>
                       <span className="text-gray-200">|</span>
                       <a href="tel:+919657630464" className="flex items-center gap-1.5 hover:text-red-600 transition-colors">

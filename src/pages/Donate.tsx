@@ -535,7 +535,7 @@ html, body {
                     <p className="text-gray-500 text-base">{t('donate_page.success_msg')}</p>
                     <p className="text-gray-400 text-sm mt-2">
                       {t('donate_page.success_urgent')}{' '}
-                      <a href="tel:+917588869700" className="font-semibold hover:underline" style={{ color: '#e05a8a' }}>+91 7588869700 | +91 9657630464</a>{' '}
+                      <a href="tel:+919507079099" className="font-semibold hover:underline" style={{ color: '#e05a8a' }}>+91 9507079099 | +91 9657630464</a>{' '}
                       {t('donate_page.success_or_email')}{' '}
                       <a href="mailto:headmaster.mhm@gmail.com" className="font-semibold hover:underline" style={{ color: '#e05a8a' }}>headmaster.mhm@gmail.com</a>
                     </p>
@@ -716,12 +716,12 @@ html, body {
                   <span className="font-medium text-gray-900 whitespace-nowrap">{t('footer.email')}</span>
                 </a>
                 <a
-                  href="tel:+917588869700"
+                  href="tel:+919507079099"
                   className="flex items-center justify-center px-8 py-4 bg-white rounded-xl shadow hover:shadow-lg transition-all border min-w-[320px]"
                   style={{ borderColor: '#ccfbf1' }}
                 >
                   <Phone className="w-5 h-5 mr-2 flex-shrink-0" style={{ color: '#0d9488' }} />
-                  <span className="font-medium text-gray-900 whitespace-nowrap">+91 7588869700 | +91 9657630464</span>
+                  <span className="font-medium text-gray-900 whitespace-nowrap">+91 9507079099 | +91 9657630464</span>
                 </a>
               </div>
             </div>

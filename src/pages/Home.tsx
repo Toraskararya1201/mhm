@@ -543,7 +543,7 @@ const Home = () => {
                       className="text-7xl md:text-8xl font-black absolute -top-6 left-0 uppercase select-none pointer-events-none whitespace-nowrap"
                       style={{ WebkitTextStroke: '1.5px #fde68a', color: 'transparent' }}
                     >
-                       {t('home.about_title')}
+                      About Us
                     </span>
                     <span className="pop-in relative inline-block text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5" style={{ background: '#fce7f0', color: '#c94070' }}>
                       {t('home.about_badge')}
@@ -887,7 +887,7 @@ const Home = () => {
                     <p className="text-gray-500 text-base">{t('home.success_msg')}</p>
                     <p className="text-gray-400 text-sm mt-2">
                       {t('home.success_urgent')}{' '}
-                      <a href="tel:+91 7588869700" className="text-[#7F2020] font-semibold hover:underline">+91 7588869700</a>{' '}
+                      <a href="tel:+91 9507079099" className="text-[#7F2020] font-semibold hover:underline">+91 9507079099</a>{' '}
                       {t('home.success_or_email')}{' '}
                       <a href="mailto:headmaster.mhm@gmail.com" className="text-[#7F2020] font-semibold hover:underline">headmaster.mhm@gmail.com</a>
                     </p>
